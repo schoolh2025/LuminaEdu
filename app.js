@@ -3,12 +3,12 @@ import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, g
 
 // 🔥 STEP 1: Firebase configuration keys exchange area layer blocks placeholders
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY_HERE",
-    authDomain: "YOUR_PROJECT.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT.appspot.com",
-    messagingSenderId: "YOUR_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyA1...",
+    authDomain: "luminaedu-portal.firebaseapp.com",
+    projectId: "luminaedu-portal",
+    storageBucket: "luminaedu-portal.appspot.com",
+    messagingSenderId: "1234567890",
+    appId: "1:1234567890:web:abcdef..."
 };
 
 const app = initializeApp(firebaseConfig);
