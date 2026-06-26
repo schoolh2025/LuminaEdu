@@ -3,12 +3,12 @@ import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, g
 
 // 🔥 STEP 1: Apni real Firebase configuration keys yahan dhyan se check karein
 const firebaseConfig = {
-    apiKey: "AIzaSyA1...",
-    authDomain: "luminaedu-portal.firebaseapp.com",
-    projectId: "luminaedu-portal",
-    storageBucket: "luminaedu-portal.appspot.com",
-    messagingSenderId: "1234567890",
-    appId: "1:1234567890:web:abcdef..."
+  apiKey: "AIzaSyDEXmjIN8w2s2uXk0FTzC7ri4HhLetzV4E",
+  authDomain: "luminaedu-ai786.firebaseapp.com",
+  projectId: "luminaedu-ai786",
+  storageBucket: "luminaedu-ai786.firebasestorage.app",
+  messagingSenderId: "35041307389",
+  appId: "1:35041307389:web:846f981017df7ad1382c94"
 };
 
 const app = initializeApp(firebaseConfig);
