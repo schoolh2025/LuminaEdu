@@ -1,58 +1,101 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>🔒 Super Admin Executive Control Engine</title>
+    <title>🔒 सुपर एडमिन पैनल टर्मिनल नियंत्रण | LuminaEdu Core</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Plus Jakarta Sans', sans-serif; }</style>
 </head>
-<body class="bg-slate-900 min-h-screen text-slate-100 p-8 hidden" id="adminBodyShell">
+<body class="bg-gradient-to-tr from-slate-950 via-indigo-950 to-slate-950 min-h-screen flex items-center justify-center p-4">
 
-    <div class="max-w-6xl mx-auto space-y-6">
+    <!-- Screen 1: High End Modern Admin Login Box Gateway Interface -->
+    <div id="adminAuthBoxGate" class="w-full max-w-sm bg-white/5 border border-white/10 p-8 rounded-3xl shadow-2xl relative">
+        <div class="text-center mb-6">
+            <span class="text-[9px] font-black tracking-widest text-emerald-400 bg-emerald-400/10 px-3 py-1 rounded-full border border-emerald-500/20">Authorized Terminal Gate</span>
+            <h2 class="text-xl font-black text-white mt-3">Admin Panel Terminal</h2>
+            <p class="text-xs text-slate-400 mt-0.5">Clearence Security Level Protocol Check</p>
+        </div>
+
+        <div class="space-y-4">
+            <div>
+                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">मास्टर एक्सेस टोकन (Passphrase Token)</label>
+                <div class="relative">
+                    <input type="password" id="adminTokenInput" class="w-full bg-slate-900 border border-slate-700 text-xs p-3 pr-10 rounded-xl text-white outline-none focus:border-indigo-500 font-mono" placeholder="••••••••">
+                    <button type="button" onclick="toggleAdminEyeField('adminTokenInput')" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-white font-bold text-xs">👁️</button>
+                </div>
+            </div>
+            <button onclick="evaluateAdminVerificationChallenge()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs py-3.5 rounded-xl transition-all shadow-lg">टर्मिनल कंसोल अनलॉक करें ⚡</button>
+        </div>
+        <div class="text-center mt-4"><a href="../index.html" class="text-xs font-bold text-slate-500 hover:text-slate-300">← मुख्य पृष्ठ पर लौटें (Back to Home)</a></div>
+    </div>
+
+    <!-- Screen 2: Central Super Admin Core Workstation Assembly Controls Panel (Hidden by Default) -->
+    <div class="max-w-6xl w-full mx-auto space-y-6 hidden" id="adminMasterSystemShell">
         <div class="flex justify-between items-center border-b border-slate-800 pb-4">
-            <h1 class="text-xl font-black text-white uppercase tracking-wider">Master Ledger System Control Core Terminal</h1>
-            <a href="../index.html" class="bg-rose-600 px-4 py-2 text-xs font-bold rounded-xl">Disconnect Base</a>
+            <div>
+                <h1 class="text-lg font-black text-white uppercase tracking-wider">LuminaEdu Central Command Matrix Terminal</h1>
+                <p class="text-xs text-emerald-400 font-bold">Authorized Operations Status: Connected to Live Cluster Database</p>
+            </div>
+            <button onclick="window.location.reload()" class="bg-rose-600 px-4 py-2 text-xs font-bold rounded-xl text-white shadow-md">एक्सेस कनेक्शन बंद करें</button>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <form class="lg:col-span-2 bg-slate-800 p-6 rounded-2xl border border-slate-700 space-y-4" onsubmit="handleDirectBroadcastSubmit(event)">
+            <!-- Form Parameters Configuration Core Control Submissions Pipeline Layout -->
+            <form class="lg:col-span-2 bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4 shadow-xl" onsubmit="handleDirectBroadcastSubmit(event)">
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Target Module Template Routing</label>
-                        <select id="postRoute" class="w-full bg-slate-900 border border-slate-700 text-xs p-3 rounded-xl text-white outline-none">
-                            <option value="job">job.html Layout (Standard Cards Grid)</option>
-                            <option value="yojna">yojna.html Layout (Paisabazaar Rich Content Wiki)</option>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">लक्षित मॉड्यूल रूटिंग टेम्पलेट</label>
+                        <select id="postRoute" class="w-full bg-slate-950 border border-slate-800 text-xs p-3 rounded-xl text-white outline-none">
+                            <option value="job">job.html Template Node (Sarkari Jobs Grid View)</option>
+                            <option value="yojna">yojna.html Template Node (Paisabazaar Copy Wiki View)</option>
+                            <option value="admit-card">admit-card.html Module Template</option>
+                            <option value="result">result.html Module Template</option>
+                            <option value="scholarship">scholarship.html Module Template</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Command Authority Board</label>
-                        <input type="text" id="postAuth" required class="w-full bg-slate-900 border border-slate-700 text-xs p-3 rounded-xl text-white outline-none" placeholder="e.g. Ministry of Finance, India">
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">संस्था / प्राधिकारी बोर्ड</label>
+                        <input type="text" id="postAuth" required class="w-full bg-slate-950 border border-slate-800 text-xs p-3 rounded-xl text-white outline-none" placeholder="e.g. BPSC / Staff Selection Commission">
                     </div>
                 </div>
 
-                <input type="text" id="postTitle" required class="w-full bg-slate-900 border border-slate-700 text-xs p-3 rounded-xl text-white outline-none" placeholder="Enter Full Dynamic Header Information Description">
-                
-                <div class="grid grid-cols-3 gap-3 bg-slate-950 p-4 rounded-xl border border-slate-800">
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">विज्ञापन शीर्षक विवरण (SEO Content optimization Rich Header)</label>
+                    <input type="text" id="postTitle" required class="w-full bg-slate-950 border border-slate-800 text-xs p-3 rounded-xl text-white outline-none" placeholder="Enter High Value Keyword Header Title Text Information">
+                </div>
+
+                <!-- Custom Rendering Targets Image Pipeline Management System Configuration -->
+                <div class="grid grid-cols-3 gap-3 bg-slate-950 p-4 rounded-xl border border-slate-800/80">
                     <div>
-                        <label class="block text-[9px] font-bold text-slate-400 uppercase">Image View Rule Target</label>
-                        <select id="imgViewLoc" class="w-full bg-slate-800 border text-[10px] p-2 rounded-lg text-white"><option value="both">Both (Card & Detail Page)</option><option value="front">Front Card Only</option><option value="post">Post Detail Screen Only</option></select>
+                        <label class="block text-[9px] font-bold text-slate-400 uppercase">इमेज विज़ुअलाइज़ेशन लक्ष्य</label>
+                        <select id="imgViewLoc" class="w-full bg-slate-800 border text-[10px] p-2 rounded-lg text-white"><option value="both">Both (Card Front & Detail)</option><option value="front">Front Card View Only</option><option value="post">Post Detail Screen Only</option></select>
                     </div>
                     <div>
-                        <label class="block text-[9px] font-bold text-slate-400 uppercase">Custom Font Scaling Size</label>
-                        <select id="fontSize" class="w-full bg-slate-800 border text-[10px] p-2 rounded-lg text-white"><option value="15px">15px Base</option><option value="17px" selected>17px Clean Readable</option><option value="20px">20px Strong Accent</option></select>
+                        <label class="block text-[9px] font-bold text-slate-400 uppercase">टेक्स्ट फ़ॉन्ट आकार पैमाना</label>
+                        <select id="fontSize" class="w-full bg-slate-800 border text-[10px] p-2 rounded-lg text-white"><option value="15px">14px Fluid Text</option><option value="17px" selected>17px Standard Readable</option><option value="20px">20px Rich Wiki Accent</option></select>
                     </div>
                     <div>
-                        <label class="block text-[9px] font-bold text-slate-400 uppercase">Dynamic Hex Font Color</label>
+                        <label class="block text-[9px] font-bold text-slate-400 uppercase">डायनामिक हेक्स टेक्स्ट कलर</label>
                         <input type="color" id="fontColor" value="#ffffff" class="w-full h-8 bg-slate-800 border rounded-lg p-1">
                     </div>
                 </div>
 
-                <textarea id="postFees" rows="3" placeholder="Application Fees Matrix Breakdown..." class="w-full bg-slate-900 border border-slate-700 text-xs p-3 rounded-xl text-white outline-none"></textarea>
-                <textarea id="postElig" rows="3" placeholder="Eligibility Criteria Specifications Guidelines..." class="w-full bg-slate-900 border border-slate-700 text-xs p-3 rounded-xl text-white outline-none"></textarea>
+                <!-- Multiple URLs Upload Array Storage Nodes -->
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">मल्टीपल इमेज पाथ लिंक्स (अल्पविराम `,` द्वारा अलग करें)</label>
+                    <input type="text" id="postImages" class="w-full bg-slate-950 border border-slate-800 text-xs p-3 rounded-xl text-white outline-none" placeholder="https://site.com/img1.png, https://site.com/img2.jpg">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <textarea id="postFees" rows="3" placeholder="आवेदन शुल्क संरचना और चालान विवरण..." class="w-full bg-slate-950 border border-slate-800 text-xs p-3 rounded-xl text-white outline-none"></textarea>
+                    <textarea id="postElig" rows="3" placeholder="पात्रता मानदंड, आयु सीमा एवं शैक्षणिक योग्यता दिशानिर्देश..." class="w-full bg-slate-950 border border-slate-800 text-xs p-3 rounded-xl text-white outline-none"></textarea>
+                </div>
                 
-                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs py-3.5 rounded-xl">Broadcast Globally Live Live 🚀</button>
+                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs py-3.5 rounded-xl transition-all shadow-lg">वैश्विक लाइव ब्रॉडकास्ट जारी करें 🚀</button>
             </form>
 
-            <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700"><h3 class="text-xs font-bold uppercase text-slate-400 border-b border-slate-700 pb-2 mb-3">Pending User Approval Queues</h3><div id="approvalLedger" class="space-y-3"></div></div>
+            <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl flex flex-col shadow-xl"><h3 class="text-xs font-bold uppercase text-slate-400 border-b border-slate-800 pb-2 mb-3">लंबित कॉन्ट्रिब्यूटर समीक्षा कतार (Approval Queues)</h3><div id="approvalLedger" class="space-y-3 flex-1 overflow-y-auto"></div></div>
         </div>
     </div>
 
@@ -60,14 +103,19 @@
         import { collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import "../app.js";
 
-        // Secret Challenge Gate Encryption Validation
-        window.addEventListener('DOMContentLoaded', () => {
-            const token = prompt("🚨 HIGH SECURITY CLEARANCE WARNING:\nEnter Secure Admin Authorization Token Key:");
+        window.evaluateAdminVerificationChallenge = function() {
+            const token = document.getElementById('adminTokenInput').value.trim();
             if(token === "Admin@2026") {
-                document.getElementById('adminBodyShell').classList.remove('hidden');
+                document.getElementById('adminAuthBoxGate').classList.add('hidden');
+                document.getElementById('adminMasterSystemShell').classList.remove('hidden');
                 initAdminDashboardRealtimeSync();
-            } else { alert("Breach Deflected. Session Terminated."); window.location.href = "../index.html"; }
-        });
+            } else { alert("अस्वीकृत: अमान्य सुरक्षा एक्सेस टोकन सुरक्षा कुंजी।"); }
+        };
+
+        window.toggleAdminEyeField = function(fid) {
+            const el = document.getElementById(fid);
+            el.type = el.type === 'password' ? 'text' : 'password';
+        };
 
         async function initAdminDashboardRealtimeSync() {
             onSnapshot(collection(window.fbDB, "jobs"), (snapshot) => {
@@ -79,7 +127,7 @@
                         container.innerHTML += `
                             <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2">
                                 <h4 class="text-xs font-bold text-white">${data.title}</h4>
-                                <span class="text-[9px] font-bold text-amber-500 uppercase bg-amber-500/10 px-1.5 py-0.5 border border-amber-500/20 rounded">Pending Writer Node</span>
+                                <span class="text-[9px] font-bold text-amber-500 bg-amber-500/10 px-1.5 border border-amber-500/20 rounded">By: ${data.authorName || 'User Contributor'}</span>
                                 <div class="flex gap-2 pt-1"><button onclick="approveNode('${docSnap.id}')" class="flex-1 bg-emerald-600 text-[10px] font-bold py-1 rounded">✓ Approve</button><button onclick="dropNode('${docSnap.id}')" class="bg-rose-600 text-[10px] px-2 rounded">✕ Drop</button></div>
                             </div>
                         `;
@@ -90,18 +138,23 @@
 
         window.handleDirectBroadcastSubmit = async function(e) {
             e.preventDefault();
+            const imgRaw = document.getElementById('postImages').value.trim();
+            const imagesArray = imgRaw ? imgRaw.split(',').map(s => s.trim()) : [];
+
             await addDoc(collection(window.fbDB, "jobs"), {
                 type: document.getElementById('postRoute').value,
                 authority: document.getElementById('postAuth').value.trim(),
                 title: document.getElementById('postTitle').value.trim(),
+                imageUrls: imagesArray,
                 imgDisplayLocation: document.getElementById('imgViewLoc').value,
                 customFontSize: document.getElementById('fontSize').value,
                 customFontColor: document.getElementById('fontColor').value,
                 feesDetails: document.getElementById('postFees').value.trim(),
                 eligibility: document.getElementById('postElig').value.trim(),
-                approvalStatus: "Live", authorName: "Super Admin"
+                approvalStatus: "Live", authorName: "Super Admin Control Node"
             });
-            alert("Broadcast Completed Successfully!");
+            alert("डेटा अधिकृत किया गया! लाइव प्रसारण पूर्ण।");
+            e.target.reset();
         };
 
         window.approveNode = async function(id) { await updateDoc(doc(window.fbDB, "jobs", id), { approvalStatus: "Live" }); };
