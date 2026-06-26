@@ -2,68 +2,92 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>सरकारी योजना विस्तृत विवरण विंग | LuminaEdu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>सरकारी योजना विवरण केंद्र | LuminaEdu Matrix</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>body { font-family: 'Noto Sans Devanagari', sans-serif; }</style>
 </head>
-<body class="bg-slate-50 min-h-screen text-slate-800">
+<body class="bg-slate-50 min-h-screen text-slate-800 flex flex-col">
 
-    <div class="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-4 gap-8">
+    <!-- Sticky Navigation Bar Header Component -->
+    <header class="h-14 bg-white border-b px-6 flex items-center justify-between sticky top-0 z-50 shadow-sm">
+        <span class="text-sm font-black text-indigo-600 tracking-tight cursor-pointer" onclick="window.location.href='../index.html'">LuminaEdu योजना अनुभाग</span>
+        <a href="../index.html" class="bg-slate-800 text-white font-bold text-xs px-4 py-2 rounded-xl hover:bg-slate-900 transition-all flex items-center gap-1">🏠 मुख्य पृष्ठ पर जाएं (Go to Home)</a>
+    </header>
+
+    <!-- Structural Assembly Layout Framework Workstation View Grid Elements -->
+    <div class="max-w-7xl w-full mx-auto p-4 lg:p-6 flex-1 grid grid-cols-1 lg:grid-cols-4 gap-6">
         
-        <!-- Left Side: Custom Rich Context Reader View Canvas (As per your exact screenshot) -->
-        <div class="lg:col-span-3 bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6" id="yojnaRichContainer">
-            <!-- Super Admin Dynamic Properties Styling Overlays (Custom Controls) Injection Field -->
+        <!-- Left Section Wiki Rendering Component Canvas (Paisabazaar Schema Grid Mapping) -->
+        <main class="lg:col-span-3 bg-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
             <div id="dynamicPostData" style="font-size: 16px; color: #1e293b;">
-                <!-- Target rendering fields -->
+                <p class="text-xs text-indigo-600 font-bold animate-pulse">क्लाउड डेटा से सिमेंटिक कंटेंट स्ट्रक्चर लोड हो रहा है...</p>
             </div>
-        </div>
+        </main>
 
-        <!-- Right Side: Floating Sticky Index Navigation Table Widget (From Paisabazaar Image Mapping) -->
-        <div class="lg:col-span-1">
-            <div class="sticky top-6 bg-indigo-900 text-white p-5 rounded-2xl space-y-4 shadow-xl">
-                <h3 class="font-bold text-sm tracking-wide border-b border-indigo-700 pb-2">महत्वपूर्ण विषय अनुक्रमणिका (Navigation)</h3>
-                <nav class="flex flex-col gap-2.5 text-xs text-indigo-200 font-semibold">
-                    <a href="#intro" class="hover:text-white transition-all">1. प्रधान मंत्री आवास योजना क्या है?</a>
-                    <a href="#eligibility" class="hover:text-white transition-all">2. आवश्यक पात्रता और मानदंड मैट्रिक्स</a>
-                    <a href="#documents" class="hover:text-white transition-all">3. जरूरी दस्तावेज एवं पहचान प्रमाण पत्र</a>
-                    <a href="#online-apply" class="hover:text-white transition-all">4. ऑनलाइन आवेदन प्रक्रिया चरण-दर-चरण</a>
+        <!-- Right Section: Floating Index Indexing Widget Assembly Module Component Links Box -->
+        <aside class="lg:col-span-1">
+            <div class="sticky top-20 bg-indigo-900 text-white p-5 rounded-2xl space-y-4 shadow-xl border border-indigo-950">
+                <h3 class="font-extrabold text-xs tracking-wider border-b border-indigo-700 pb-2">📑 विषय सूची (Table of Contents)</h3>
+                <nav class="flex flex-col gap-2.5 text-xs text-indigo-200 font-bold">
+                    <a href="#intro" class="hover:text-white transition-all">1. मुख्य योजना विवरण रूपरेखा</a>
+                    <a href="#eligibility" class="hover:text-white transition-all">2. आवश्यक पात्रता मानदंड सारणी</a>
+                    <a href="#sidebarFeeds" class="hover:text-white transition-all text-amber-300">🔥 अन्य महत्वपूर्ण सक्रिय योजनाएं</a>
                 </nav>
+                <div id="sideShortLinksCluster" class="pt-3 border-t border-indigo-800 space-y-2 text-[11px] text-slate-300 font-semibold"></div>
             </div>
-        </div>
+        </aside>
     </div>
 
+    <!-- Layout Structural Isolation Footer Element Component -->
+    <footer class="bg-white border-t p-4 text-center text-xs text-slate-400 font-bold mt-12">
+        <p>© 2026 LuminaEdu Digital Base Channels. <a href="../index.html" class="text-indigo-600 hover:underline">मुख्य पोर्टल</a></p>
+    </footer>
+
     <script type="module">
-        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import "../app.js";
 
         async function loadYojnaPostContent() {
             const urlParams = new URLSearchParams(window.location.search);
-            const postId = urlParams.get('id') || "default_node_id";
+            const postId = urlParams.get('id');
             const db = window.fbDB;
+            if(!postId) return;
             
             const docSnap = await getDoc(doc(db, "jobs", postId));
             if(docSnap.exists()) {
-                const data = docSnap.exists() ? docSnap.data() : {};
+                const data = docSnap.data();
                 const target = document.getElementById('dynamicPostData');
                 
-                // Injecting configured dynamic styling constraints directly from Super Admin variables
                 target.style.fontSize = data.customFontSize || "16px";
                 target.style.color = data.customFontColor || "#1e293b";
                 
                 let imagesHTML = "";
-                // Handling multiple image locations mapping system pipelines explicitly
-                if(data.imageUrls && (data.imgDisplayLocation === 'post' || data.imgDisplayLocation === 'both')) {
-                    imagesHTML = data.imageUrls.map(url => `<img src="${url}" class="w-full max-h-96 object-cover rounded-xl border my-4 shadow-sm" alt="Data Media Grid">`).join('');
+                if(data.imageUrls && data.imageUrls.length > 0 && (data.imgDisplayLocation === 'post' || data.imgDisplayLocation === 'both')) {
+                    imagesHTML = data.imageUrls.map(url => `<img src="${url}" class="w-full max-h-80 object-cover rounded-xl border my-4 shadow-sm" alt="Media Asset Grid">`).join('');
                 }
 
                 target.innerHTML = `
-                    <h1 class="text-3xl font-black text-slate-900 border-b pb-4 mb-4" style="color:${data.customFontColor}">${data.title}</h1>
+                    <h1 class="text-2xl md:text-3xl font-black text-slate-900 border-b pb-4 mb-4 leading-tight">${data.title}</h1>
+                    <p class="text-xs text-slate-400 font-bold mb-3">🏛️ विभाग/बोर्ड प्राधिकारी: ${data.authority}</p>
                     ${imagesHTML}
-                    <div id="intro" class="scroll-mt-6 my-6"><h2 class="text-xl font-bold mb-2 text-indigo-700">1. योजना विवरण</h2><p>${data.eligibility || 'विवरण प्रक्रिया के अधीन है।'}</p></div>
-                    <div id="eligibility" class="scroll-mt-6 my-6"><h2 class="text-xl font-bold mb-2 text-indigo-700">2. पात्रता मानदंड</h2><p>${data.feesDetails || 'सभी भारतीय नागरिक इसके पात्र हैं।'}</p></div>
+                    <div id="intro" class="scroll-mt-20 my-6"><h2 class="text-lg font-black mb-2 text-indigo-700 border-l-4 border-indigo-600 pl-2">1. योजना विवरण रूपरेखा</h2><p class="leading-relaxed font-normal">${data.eligibility || 'दस्तावेज़ विनिर्देश प्रक्रिया के अधीन हैं।'}</p></div>
+                    <div id="eligibility" class="scroll-mt-20 my-6"><h2 class="text-lg font-black mb-2 text-indigo-700 border-l-4 border-indigo-600 pl-2">2. आवश्यक पात्रता मानदंड सारणी</h2><p class="leading-relaxed font-normal">${data.feesDetails || 'सभी नागरिक पात्रता विवरणों की जांच करने के लिए अधिकृत हैं।'}</p></div>
                 `;
             }
+
+            // Populate Table of Contents Links Realtime Grid
+            onSnapshot(collection(db, "jobs"), (snapshot) => {
+                const sc = document.getElementById('sideShortLinksCluster');
+                if(!sc) return; sc.innerHTML = "";
+                snapshot.forEach(d => {
+                    const j = d.data();
+                    if(d.id !== postId && j.approvalStatus === 'Live' && j.type.toLowerCase() === 'yojna') {
+                        sc.innerHTML += `<a href="yojna.html?id=${d.id}" class="block truncate hover:text-white">• ${j.title}</a>`;
+                    }
+                });
+            });
         }
         window.addEventListener('DOMContentLoaded', loadYojnaPostContent);
     </script>
