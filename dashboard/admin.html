@@ -1,1 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Super Admin System Master Core Control Matrix</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 min-h-screen text-slate-100 p-8">
 
+    <div class="max-w-6xl mx-auto space-y-8">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+            <div>
+                <h1 class="text-2xl font-black text-white">Master System Central Ledger Engine 🔒</h1>
+                <p class="text-xs text-emerald-400 font-bold">Identity Verification Protocol Check: Clearance level Level-0</p>
+            </div>
+            <button onclick="window.logoutSessionNode()" class="bg-rose-600 px-4 py-2 text-xs font-bold rounded-xl">Terminate Session Connection</button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left Panel Form Controller Framework Systems Configuration -->
+            <form class="lg:col-span-2 bg-slate-800 border border-slate-700 p-6 rounded-2xl space-y-4" onsubmit="handleAdminBroadcastPipeline(event)">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 border-b border-slate-700 pb-2">Inject System Data Transaction Entry</h3>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-400 mb-1">Target Page Routing System</label>
+                        <select id="admRouting" class="w-full bg-slate-900 border border-slate-700 text-xs p-3 rounded-xl outline-none text-white">
+                            <option value="job">job.html (Standard Cards Feed View)</option>
+                            <option value="yojna">yojna.html (Long Wiki View - Paisabazaar Framework Layout)</option>
+                            <option value="admit-card">admit-card.html Node Routing</option>
+                            <option value="result">result.html Node Routing</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-400 mb-1">Authority Cluster</label>
+                        <input type="text" id="admAuth" required class="w-full bg-slate-900 border border-slate-700 text-xs p-3 rounded-xl outline-none text-white" placeholder="e.g. Government of India / Housing Ministry">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-400 mb-1">Broadcast Entry Heading Title</label>
+                    <input type="text" id="admTitle" required class="w-full bg-slate-900 border border-slate-700 text-xs p-3 rounded-xl outline-none text-white" placeholder="Enter Full Dynamic Header Information Description">
+                </div>
+
+                <!-- Multiple Image URLs Parsing Arrays Input Elements Nodes -->
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-400 mb-1">Multiple Image Storage Node URLs (Comma Separated paths strings for asset grids)</label>
+                    <input type="text" id="admImages" class="w-full bg-slate-900 border border-slate-700 text-xs p-3 rounded-xl outline-none text-white" placeholder="https://url1.com/img.jpg, https://url2.com/photo.png">
+                </div>
+
+                <!-- Custom Rendering Targets Image Pipeline Management System Configuration -->
+                <div class="grid grid-cols-3 gap-4 bg-slate-900/60 p-3 rounded-xl border border-slate-700/60">
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 mb-1">Image Rendering Target Node</label>
+                        <select id="admImgLoc" class="w-full bg-slate-800 border text-[11px] p-2 rounded-lg text-white">
+                            <option value="both">Render On Both (Front & Post Detail Page)</option>
+                            <option value="front">Render Only On Card Frontpage</option>
+                            <option value="post">Render Only On Target Post Page</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 mb-1">Core Custom Text Scaling Font Size</label>
+                        <select id="admFontSize" class="w-full bg-slate-800 border text-[11px] p-2 rounded-lg text-white">
+                            <option value="14px">14px Micro Fluidity</option>
+                            <option value="16px" selected>16px Standard Readability</option>
+                            <option value="18px">18px Prominent Wiki Style</option>
+                            <option value="22px">22px Structural Emphasis Size</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 mb-1">Core Hex Font Color Value</label>
+                        <input type="color" id="admFontColor" value="#ffffff" class="w-full h-9 bg-slate-800 border rounded-lg p-1">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <textarea id="admFees" rows="3" placeholder="Application Fees Details / Parameter Scales..." class="w-full bg-slate-900 border border-slate-700 text-xs p-3 rounded-xl text-white"></textarea>
+                    <textarea id="admElig" rows="3" placeholder="Eligibility Matrix Layout Rules Descriptions..." class="w-full bg-slate-900 border border-slate-700 text-xs p-3 rounded-xl text-white"></textarea>
+                </div>
+
+                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs py-3.5 rounded-xl shadow-lg transition-all">Broadcast Secure Entity Entry Globally Live 🚀</button>
+            </form>
+
+            <!-- Right Panel: Pending Review Matrix Pipelines Lock Grid Systems -->
+            <div class="bg-slate-800 border border-slate-700 p-5 rounded-2xl">
+                <h3 class="text-xs font-bold uppercase text-slate-400 border-b border-slate-700 pb-2 mb-4">Pending Contributor Review Queues</h3>
+                <div id="adminApprovalLedger" class="space-y-3">
+                    <!-- Dynamic validation rendering loop lists fields -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import "../app.js";
+
+        window.handleAdminBroadcastPipeline = async function(e) {
+            e.preventDefault();
+            const db = window.fbDB;
+            const imgRaw = document.getElementById('admImages').value.trim();
+            const imageUrlsArray = imgRaw ? imgRaw.split(',').map(s => s.trim()) : [];
+
+            await addDoc(collection(db, "jobs"), {
+                type: document.getElementById('admRouting').value,
+                authority: document.getElementById('admAuth').value.trim(),
+                title: document.getElementById('admTitle').value.trim(),
+                imageUrls: imageUrlsArray,
+                imgDisplayLocation: document.getElementById('admImgLoc').value,
+                customFontSize: document.getElementById('admFontSize').value,
+                customFontColor: document.getElementById('admFontColor').value,
+                feesDetails: document.getElementById('admFees').value.trim(),
+                eligibility: document.getElementById('admElig').value.trim(),
+                approvalStatus: "Live", // Direct Super Admin Entry is pre-approved
+                authorName: "Super Admin Control Node"
+            });
+            alert("Entry Authorized & Successfully Broadcasted!");
+        };
+
+        // Realtime User Contributor Submissions Pipeline Approval Monitor Engine Link Listener
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                const db = window.fbDB;
+                onSnapshot(collection(db, "jobs"), (snapshot) => {
+                    const ledger = document.getElementById('adminApprovalLedger');
+                    ledger.innerHTML = "";
+                    snapshot.forEach(docSnap => {
+                        const data = docSnap.data();
+                        if(data.approvalStatus === 'Pending for Approval') {
+                            ledger.innerHTML += `
+                                <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 space-y-2">
+                                    <h4 class="text-xs font-bold text-white">${data.title}</h4>
+                                    <p class="text-[10px] font-bold text-amber-400">By: ${data.authorName}</p>
+                                    <div class="flex gap-2">
+                                        <button onclick="approveEntryNode('${docSnap.id}')" class="flex-1 bg-emerald-600 text-[10px] font-bold py-1 rounded">✓ Approve & Live</button>
+                                        <button onclick="rejectEntryNode('${docSnap.id}')" class="bg-rose-600 text-[10px] text-white px-2 rounded">✕ Drop</button>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    });
+                });
+            }, 1000);
+        });
+
+        window.approveEntryNode = async function(id) { await updateDoc(doc(window.fbDB, "jobs", id), { approvalStatus: "Live" }); };
+        window.rejectEntryNode = async function(id) { await deleteDoc(doc(window.fbDB, "jobs", id)); };
+    </script>
+</body>
+</html>
