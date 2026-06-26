@@ -2,14 +2,13 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebas
 import { getFirestore, collection, addDoc, doc, updateDoc, deleteDoc, onSnapshot, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-// 🔥 APNI REAL FIREBASE WEB KEYS YAHAN EXACTLY FILL KAREIN:
 const firebaseConfig = {
-    apiKey: "YOUR_FIREBASE_API_KEY",
-    authDomain: "luminaedu-ai786.firebaseapp.com",
-    projectId: "luminaedu-ai786",
-    storageBucket: "luminaedu-ai786.appspot.com",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyDEXmjIN8w2s2uXk0FTzC7ri4HhLetzV4E",
+  authDomain: "luminaedu-ai786.firebaseapp.com",
+  projectId: "luminaedu-ai786",
+  storageBucket: "luminaedu-ai786.firebasestorage.app",
+  messagingSenderId: "35041307389",
+  appId: "1:35041307389:web:846f981017df7ad1382c94"
 };
 
 const app = initializeApp(firebaseConfig);
