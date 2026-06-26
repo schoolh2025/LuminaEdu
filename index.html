@@ -2,27 +2,52 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>LuminaEdu - Educational & Sarkari Portal Platform</title>
+    <title>LuminaEdu - Ultimate Sarkari Job & Yojna Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <style>body { font-family: 'Plus Jakarta Sans', sans-serif; }</style>
 </head>
-<body class="bg-gradient-to-tr from-sky-100 via-indigo-50 to-pink-100 min-h-screen">
+<body class="bg-gradient-to-tr from-sky-100 via-indigo-50 to-pink-100 min-h-screen flex flex-col">
 
     <header class="h-16 bg-white/40 backdrop-blur-md border-b border-white/30 px-6 flex items-center justify-between sticky top-0 z-50">
-        <h1 class="text-xl font-black text-slate-800 tracking-tight">LuminaEdu</h1>
-        <button onclick="toggleAuthOverlay(true)" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-4 py-2 rounded-xl shadow-lg shadow-indigo-100 transition-all">
+        <h1 class="text-xl font-black text-slate-800 tracking-tight cursor-pointer" onclick="window.location.reload()">LuminaEdu</h1>
+        <button onclick="toggleAuthOverlay(true)" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-4 py-2 rounded-xl shadow-lg transition-all">
             Join / Sign In as Contributor 🚀
         </button>
     </header>
 
-    <main class="max-w-7xl mx-auto p-6">
-        <div class="mb-6 flex gap-2" id="categoryFilterContainer">
+    <main class="max-w-7xl w-full mx-auto p-6 flex-1">
+        <div class="mb-6 flex flex-wrap gap-2" id="categoryFilterContainer">
             </div>
+
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="publicCardsFeed">
+            <div class="col-span-full text-center py-12 text-xs font-bold text-indigo-600 animate-pulse">
+                Connecting to Secure Cloud Database Core...
             </div>
+        </div>
     </main>
+
+    <footer class="w-full bg-white/50 backdrop-blur-md border-t border-white/30 p-6 mt-12">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 text-xs font-medium text-slate-600">
+            <div>
+                <h4 class="font-bold text-slate-800 uppercase tracking-wider mb-2">About LuminaEdu</h4>
+                <p class="leading-relaxed">LuminaEdu is a premium live matrix aggregator for verified sarkari jobs, admit cards, exam results, and long-form wiki yojna layouts.</p>
+            </div>
+            <div class="flex flex-col items-center justify-center space-y-2">
+                <h4 class="font-bold text-slate-800 uppercase tracking-wider">Quick Information Channels</h4>
+                <div class="flex gap-4 font-bold text-indigo-600">
+                    <button onclick="alert('LuminaEdu Version 4.0 Core Architecture Active (2026).')" class="hover:underline">System About</button>
+                    <button onclick="alert('Official Admin Node Mail: support@luminaedu.live')" class="hover:underline">Contact Desk</button>
+                </div>
+            </div>
+            <div class="md:text-right">
+                <h4 class="font-bold text-slate-800 uppercase tracking-wider mb-2">Technical Directives</h4>
+                <p>© 2026 LuminaEdu Node Network. Operating under safe cloud cryptographic clearance protocols.</p>
+            </div>
+        </div>
+    </footer>
 
     <div id="authModalOverlay" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-all duration-300">
         <div class="bg-white/80 backdrop-blur-xl border border-white/50 max-w-sm w-full m-4 p-6 rounded-3xl shadow-2xl relative">
@@ -36,15 +61,15 @@
             <div class="space-y-3">
                 <div id="regNameBlock" class="hidden">
                     <label class="block text-[10px] font-bold text-slate-500 uppercase">Your Full Name</label>
-                    <input type="text" id="usrName" class="w-full bg-white/70 border text-xs p-2.5 rounded-xl outline-none" placeholder="Alex Mercer">
+                    <input type="text" id="usrName" class="w-full bg-white border text-xs p-2.5 rounded-xl outline-none" placeholder="Alex Mercer">
                 </div>
                 <div>
                     <label class="block text-[10px] font-bold text-slate-500 uppercase">Email Destination</label>
-                    <input type="email" id="usrEmail" class="w-full bg-white/70 border text-xs p-2.5 rounded-xl outline-none" placeholder="name@domain.com">
+                    <input type="email" id="usrEmail" class="w-full bg-white border text-xs p-2.5 rounded-xl outline-none" placeholder="name@domain.com">
                 </div>
                 <div>
                     <label class="block text-[10px] font-bold text-slate-500 uppercase">Secure Password</label>
-                    <input type="password" id="usrPass" class="w-full bg-white/70 border text-xs p-2.5 rounded-xl outline-none" placeholder="••••••••">
+                    <input type="password" id="usrPass" class="w-full bg-white border text-xs p-2.5 rounded-xl outline-none" placeholder="••••••••">
                 </div>
                 <button onclick="executeAuthActionPipeline()" class="w-full bg-indigo-600 text-white font-bold text-xs py-3 rounded-xl shadow-md">Execute Verification ⚡</button>
                 <button onclick="executeForgotRemapPipeline()" class="w-full text-center text-[10px] text-slate-400 font-bold hover:underline">Forgot Password? (Remap Node)</button>
