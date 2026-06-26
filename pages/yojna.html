@@ -1,1 +1,71 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <title>सरकारी योजना विस्तृत विवरण विंग | LuminaEdu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Noto Sans Devanagari', sans-serif; }</style>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800">
 
+    <div class="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-4 gap-8">
+        
+        <!-- Left Side: Custom Rich Context Reader View Canvas (As per your exact screenshot) -->
+        <div class="lg:col-span-3 bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6" id="yojnaRichContainer">
+            <!-- Super Admin Dynamic Properties Styling Overlays (Custom Controls) Injection Field -->
+            <div id="dynamicPostData" style="font-size: 16px; color: #1e293b;">
+                <!-- Target rendering fields -->
+            </div>
+        </div>
+
+        <!-- Right Side: Floating Sticky Index Navigation Table Widget (From Paisabazaar Image Mapping) -->
+        <div class="lg:col-span-1">
+            <div class="sticky top-6 bg-indigo-900 text-white p-5 rounded-2xl space-y-4 shadow-xl">
+                <h3 class="font-bold text-sm tracking-wide border-b border-indigo-700 pb-2">महत्वपूर्ण विषय अनुक्रमणिका (Navigation)</h3>
+                <nav class="flex flex-col gap-2.5 text-xs text-indigo-200 font-semibold">
+                    <a href="#intro" class="hover:text-white transition-all">1. प्रधान मंत्री आवास योजना क्या है?</a>
+                    <a href="#eligibility" class="hover:text-white transition-all">2. आवश्यक पात्रता और मानदंड मैट्रिक्स</a>
+                    <a href="#documents" class="hover:text-white transition-all">3. जरूरी दस्तावेज एवं पहचान प्रमाण पत्र</a>
+                    <a href="#online-apply" class="hover:text-white transition-all">4. ऑनलाइन आवेदन प्रक्रिया चरण-दर-चरण</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import "../app.js";
+
+        async function loadYojnaPostContent() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const postId = urlParams.get('id') || "default_node_id";
+            const db = window.fbDB;
+            
+            const docSnap = await getDoc(doc(db, "jobs", postId));
+            if(docSnap.exists()) {
+                const data = docSnap.exists() ? docSnap.data() : {};
+                const target = document.getElementById('dynamicPostData');
+                
+                // Injecting configured dynamic styling constraints directly from Super Admin variables
+                target.style.fontSize = data.customFontSize || "16px";
+                target.style.color = data.customFontColor || "#1e293b";
+                
+                let imagesHTML = "";
+                // Handling multiple image locations mapping system pipelines explicitly
+                if(data.imageUrls && (data.imgDisplayLocation === 'post' || data.imgDisplayLocation === 'both')) {
+                    imagesHTML = data.imageUrls.map(url => `<img src="${url}" class="w-full max-h-96 object-cover rounded-xl border my-4 shadow-sm" alt="Data Media Grid">`).join('');
+                }
+
+                target.innerHTML = `
+                    <h1 class="text-3xl font-black text-slate-900 border-b pb-4 mb-4" style="color:${data.customFontColor}">${data.title}</h1>
+                    ${imagesHTML}
+                    <div id="intro" class="scroll-mt-6 my-6"><h2 class="text-xl font-bold mb-2 text-indigo-700">1. योजना विवरण</h2><p>${data.eligibility || 'विवरण प्रक्रिया के अधीन है।'}</p></div>
+                    <div id="eligibility" class="scroll-mt-6 my-6"><h2 class="text-xl font-bold mb-2 text-indigo-700">2. पात्रता मानदंड</h2><p>${data.feesDetails || 'सभी भारतीय नागरिक इसके पात्र हैं।'}</p></div>
+                `;
+            }
+        }
+        window.addEventListener('DOMContentLoaded', loadYojnaPostContent);
+    </script>
+</body>
+</html>
