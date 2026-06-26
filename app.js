@@ -3,13 +3,14 @@ import { getFirestore, collection, addDoc, doc, setDoc, onSnapshot } from "https
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDEXmjIN8w2s2uXk0FTzC7ri4HhLetzV4E",
-  authDomain: "luminaedu-ai786.firebaseapp.com",
-  projectId: "luminaedu-ai786",
-  storageBucket: "luminaedu-ai786.firebasestorage.app",
-  messagingSenderId: "35041307389",
-  appId: "1:35041307389:web:846f981017df7ad1382c94"
+    apiKey: "YOUR_REAL_FIREBASE_API_KEY_HERE",
+    authDomain: "luminaedu-ai786.firebaseapp.com",
+    projectId: "luminaedu-ai786",
+    storageBucket: "luminaedu-ai786.appspot.com",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID"
 };
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
@@ -18,7 +19,6 @@ window.fbDB = db;
 let selectedCategoryFilter = 'All';
 let cachedJobsArray = [];
 
-// USER MANAGEMENT IDENTITY FLOW PIPELINES
 window.registerNewUserNode = async function(email, password, fullname) {
     if(!email || !password || !fullname) return alert("सभी फ़ील्ड भरना अनिवार्य है।");
     try {
@@ -45,7 +45,6 @@ window.triggerForgotRecoveryNode = async function(email) {
     } catch(err) { alert(err.message); }
 };
 
-// DYNAMIC SEPARATE PAGE ROUTING ENGINE BINDINGS
 window.setJobFilter = function(categoryName) {
     selectedCategoryFilter = categoryName;
     executeUIRenderPipeline();
@@ -63,12 +62,12 @@ function executeUIRenderPipeline() {
     });
 
     if(filtered.length === 0) {
-        feed.innerHTML = `<div class="col-span-full text-center py-10 text-xs font-bold text-slate-500 bg-white/40 border p-4 rounded-2xl">"${selectedCategoryFilter}" श्रेणी में वर्तमान में कोई लाइव विज्ञापन सक्रिय नहीं है।</div>`;
+        feed.innerHTML = `<div class="col-span-full text-center py-10 text-sm font-bold text-slate-500 bg-white/40 border p-4 rounded-2xl">"${selectedCategoryFilter}" श्रेणी में वर्तमान में कोई लाइव विज्ञापन सक्रिय नहीं है।</div>`;
         return;
     }
 
+    // UPDATED CARDS RENDERER (Clean, highly readable and clear fonts size)
     feed.innerHTML = filtered.map(j => {
-        // Dynamic Target Routing Modules to minimize crashes (Discrete Page Allocation)
         let routeType = j.type.toLowerCase();
         let targetPage = 'pages/job.html';
         if(routeType === 'yojna') targetPage = 'pages/yojna.html';
@@ -77,20 +76,20 @@ function executeUIRenderPipeline() {
         else if(routeType === 'scholarship') targetPage = 'pages/scholarship.html';
         
         let displayImg = (j.imageUrls && j.imageUrls.length > 0 && (j.imgDisplayLocation === 'both' || j.imgDisplayLocation === 'front')) 
-            ? `<img src="${j.imageUrls[0]}" class="w-full h-36 object-cover rounded-xl mb-3 border border-slate-100" alt="Banner">` : "";
+            ? `<img src="${j.imageUrls[0]}" class="w-full h-44 object-cover rounded-xl mb-4 border border-slate-100 shadow-sm" alt="Banner">` : "";
 
         return `
-            <div class="bg-white/70 backdrop-blur-md p-5 rounded-2xl border border-white/50 flex flex-col justify-between shadow-sm hover:shadow-md transition-all">
+            <div class="bg-white/80 backdrop-blur-md p-6 rounded-2xl border border-white/60 flex flex-col justify-between shadow-sm hover:shadow-md transition-all">
                 <div>
                     ${displayImg}
-                    <div class="flex justify-between items-center">
-                        <span class="text-[9px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 uppercase border border-indigo-100">${j.type}</span>
-                        <span class="text-[10px] font-bold text-slate-400">📅 अंतिम तिथि: ${j.lastDate || 'सक्रिय'}</span>
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-xs font-extrabold px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 uppercase border border-indigo-100">${j.type}</span>
+                        <span class="text-xs font-bold text-slate-500">📅 अंतिम तिथि: ${j.lastDate || 'सक्रिय'}</span>
                     </div>
-                    <h3 class="font-extrabold text-slate-800 text-sm mt-2.5 line-clamp-2 leading-snug">${j.title}</h3>
-                    <p class="text-[11px] text-slate-500 font-semibold mt-1">🏛️ बोर्ड: ${j.authority}</p>
+                    <h3 class="font-extrabold text-slate-900 text-base md:text-lg leading-snug tracking-tight mb-2">${j.title}</h3>
+                    <p class="text-sm text-slate-600 font-bold">🏛️ बोर्ड/संस्था: ${j.authority}</p>
                 </div>
-                <a href="${targetPage}?id=${j.id}" class="w-full bg-indigo-600 text-white text-xs font-bold text-center py-2.5 rounded-xl mt-4 block hover:bg-indigo-700 transition-all shadow-sm">पूर्ण विवरण एवं लिंक देखें →</a>
+                <a href="${targetPage}?id=${j.id}" class="w-full bg-indigo-600 text-white text-sm font-bold text-center py-3 rounded-xl mt-4 block hover:bg-indigo-700 transition-all shadow-md tracking-wide">पूर्ण विवरण एवं लिंक देखें →</a>
             </div>
         `;
     }).join('');
@@ -104,7 +103,7 @@ function executeUIRenderPipeline() {
             else if(rt === 'admit-card') p = 'pages/admit-card.html';
             else if(rt === 'result') p = 'pages/result.html';
             else if(rt === 'scholarship') p = 'pages/scholarship.html';
-            return `<a href="${p}?id=${t.id}" class="block hover:text-indigo-800 truncate py-1 border-b border-dashed border-slate-100">🔥 ${t.title}</a>`;
+            return `<a href="${p}?id=${t.id}" class="block hover:text-indigo-800 tracking-tight py-1.5 border-b border-dashed border-slate-200 font-bold text-slate-700">👉 ${t.title}</a>`;
         }).join('');
     }
 }
@@ -115,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const coreCategories = ['All', 'Job', 'Admit-Card', 'Result', 'Yojna', 'Scholarship'];
         if(filterBox) {
             filterBox.innerHTML = coreCategories.map(cat => `
-                <button onclick="window.setJobFilter('${cat}')" class="px-3.5 py-1.5 text-xs font-bold rounded-xl border bg-white/60 border-white text-slate-600 hover:bg-slate-800 hover:text-white transition-all shadow-sm focus:bg-slate-800 focus:text-white">
+                <button onclick="window.setJobFilter('${cat}')" class="px-4 py-2 text-sm font-bold rounded-xl border bg-white/60 border-white text-slate-700 hover:bg-slate-800 hover:text-white transition-all shadow-sm focus:bg-slate-800 focus:text-white">
                     ${cat}
                 </button>
             `).join('');
