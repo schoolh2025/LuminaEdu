@@ -1,3 +1,4 @@
+/* Custom glassmorphism visual design overrides */
 .glass-panel {
     background: rgba(255, 255, 255, 0.45);
     backdrop-filter: blur(16px);
@@ -7,9 +8,5 @@
 .glass-card {
     background: rgba(255, 255, 255, 0.55);
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-}
-.glass-input {
-    background: rgba(255, 255, 255, 0.5);
     border: 1px solid rgba(255, 255, 255, 0.3);
 }
