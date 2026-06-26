@@ -8,6 +8,8 @@
     <meta name="keywords" content="LuminaEdu, Sarkari Result, Sarkari Job, Admit Card, PM Yojana List, सरकारी नौकरी, रिजल्ट, स्कॉलरशिप">
     <meta name="robots" content="index, follow">
     
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Noto+Sans+Devanagari:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
@@ -15,7 +17,6 @@
 </head>
 <body class="bg-gradient-to-tr from-sky-100 via-indigo-50 to-pink-100 min-h-screen flex flex-col text-slate-800">
 
-    <!-- Top Navigation Block -->
     <header class="h-16 bg-white/50 backdrop-blur-md border-b border-white/30 px-6 flex items-center justify-between sticky top-0 z-50 shadow-sm">
         <h1 class="text-2xl font-black text-indigo-700 tracking-tight cursor-pointer" onclick="window.location.reload()">LuminaEdu</h1>
         <button onclick="toggleAuthOverlay(true)" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm px-5 py-2.5 rounded-xl shadow-lg transition-all">
@@ -23,45 +24,27 @@
         </button>
     </header>
 
-    <!-- All-In-One SEO Slogan Widget Ribbon (Highly Visible text) -->
     <section class="bg-indigo-900 text-white py-4 px-6 text-center shadow-inner border-b border-indigo-950">
         <p class="text-sm md:text-base font-extrabold tracking-wide max-w-4xl mx-auto drop-shadow-sm leading-relaxed">
             🏛️ LuminaEdu: शिक्षा, रोज़गार और सरकारी योजनाएं – सटीक सूचना, सबसे तेज़ समाधान।
         </p>
     </section>
 
-    <!-- Structural Grid Architecture Layout -->
-    <div class="max-w-7xl w-full mx-auto p-4 lg:p-6 flex-1 grid grid-cols-1 lg:grid-cols-4 gap-6">
-        
-        <!-- Center Feed Layout Modules Canvas -->
-        <main class="lg:col-span-3 space-y-6">
-            <div class="flex flex-wrap gap-2.5 bg-white/30 p-3 rounded-2xl border border-white/40 shadow-sm" id="categoryFilterContainer"></div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="publicCardsFeed">
-                <div class="col-span-full text-center py-12 text-sm font-bold text-indigo-600 animate-pulse">डेटाबेस सिंक्रोनाइजेशन लोड हो रहा है...</div>
-            </div>
-        </main>
+    <section class="max-w-7xl w-full mx-auto px-4 lg:px-6 pt-6">
+        <div class="bg-white/40 backdrop-blur-md p-4 rounded-2xl border border-white/60 shadow-sm space-y-3">
+            <h2 class="text-sm font-extrabold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">🔍 श्रेणी अनुसार खोजें (Filter by Category)</h2>
+            <div class="flex flex-wrap gap-2.5" id="categoryFilterContainer"></div>
+        </div>
+    </section>
 
-        <!-- Sidebar Section Components (Enlarged Visible Fonts) -->
-        <aside class="lg:col-span-1 space-y-6">
-            <div class="bg-white/60 backdrop-blur-md p-6 rounded-2xl border border-white/40 shadow-sm space-y-4">
-                <h3 class="font-extrabold text-sm text-slate-900 uppercase tracking-wider border-b pb-2 flex items-center gap-1.5">📌 मुख्य नेविगेशन पैनल</h3>
-                <div class="flex flex-col gap-3">
-                    <button onclick="window.setJobFilter('All')" class="text-left text-sm font-bold text-slate-700 hover:text-indigo-600 transition-all py-1.5 border-b border-dashed border-slate-200">🏠 मुख्य पृष्ठ (Go To Home)</button>
-                    <button onclick="window.setJobFilter('Yojna')" class="text-left text-sm font-bold text-slate-700 hover:text-indigo-600 transition-all py-1.5 border-b border-dashed border-slate-200">🏛️ सरकारी योजनाएं</button>
-                    <button onclick="window.setJobFilter('Job')" class="text-left text-sm font-bold text-slate-700 hover:text-indigo-600 transition-all py-1.5 border-b border-dashed border-slate-200">💼 सरकारी नौकरियां</button>
-                </div>
+    <main class="max-w-7xl w-full mx-auto p-4 lg:p-6 flex-1">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="publicCardsFeed">
+            <div class="col-span-full text-center py-12 text-sm font-bold text-indigo-600 animate-pulse">
+                डेटाबेस सिंक्रोनाइजेशन लोड हो रहा है...
             </div>
+        </div>
+    </main>
 
-            <div class="bg-white/60 backdrop-blur-md p-6 rounded-2xl border border-white/40 shadow-sm space-y-4">
-                <h3 class="font-extrabold text-sm text-slate-900 uppercase tracking-wider border-b pb-2">🔥 अन्य महत्वपूर्ण लिंक्स</h3>
-                <div id="sidebarTrendingCluster" class="space-y-3 text-sm text-indigo-600 font-bold leading-snug"></div>
-            </div>
-        </aside>
-    </div>
-
-    <!-- Production Footer Section -->
-   <!-- Production Footer Section (Isse replace karein) -->
     <footer class="bg-white/50 backdrop-blur-md border-t border-white/30 p-6 mt-12 text-sm font-semibold text-slate-700">
         <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
@@ -69,10 +52,9 @@
                 <p class="leading-relaxed font-normal text-slate-600">नवीनतम भर्ती परीक्षा बोर्ड सूचना केंद्र प्रणाली। बिना किसी विज्ञापन के त्वरित समाधान।</p>
             </div>
             <div class="flex flex-col md:items-center justify-center space-y-1">
-                <h4 class="font-bold text-slate-900 uppercase mb-1.5">त्वरित नेविगेशन (AdSense Policy Compliance)</h4>
-                <!-- 🔥 YAHAN SAARE LINKS EK SAATH ADD HO GAYE HAIN -->
+                <h4 class="font-bold text-slate-900 uppercase mb-1.5">महत्वपूर्ण नीतियां (Legal Pages)</h4>
                 <div class="flex flex-wrap gap-3 text-indigo-600 justify-center">
-                    <button onclick="window.setJobFilter('All')" class="hover:underline">Home Hub</button> | 
+                    <button onclick="window.setJobFilter('All')" class="hover:underline">Home</button> | 
                     <a href="pages/privacy.html" class="hover:underline">Privacy Policy</a> | 
                     <a href="pages/terms.html" class="hover:underline">Terms & Conditions</a> | 
                     <a href="pages/disclaimer.html" class="hover:underline">Disclaimer</a> | 
@@ -80,12 +62,11 @@
                 </div>
             </div>
             <div class="md:text-right">
-                <p>© 2026 LuminaEdu Digital Network. सुरक्षित सर्ver क्लाउड अनुक्रमणिका सक्रिय है।</p>
+                <p>© 2026 LuminaEdu Digital Network. सुरक्षित सर्वर क्लाउड अनुक्रमणिका सक्रिय है।</p>
             </div>
         </div>
     </footer>
 
-    <!-- User Auth Popup Modular Window -->
     <div id="authModalOverlay" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-all duration-300">
         <div class="bg-white/80 backdrop-blur-xl border border-white/50 max-w-sm w-full m-4 p-6 rounded-3xl shadow-2xl relative">
             <button onclick="toggleAuthOverlay(false)" class="absolute top-4 right-4 text-slate-400 font-bold hover:text-slate-600">✕</button>
