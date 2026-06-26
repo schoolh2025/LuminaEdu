@@ -1,4 +1,4 @@
-/* Universal High-End Glassmorphic Rules */
+/* Universal Glassmorphism Structural Design System */
 .glass-panel {
     background: rgba(255, 255, 255, 0.45);
     backdrop-filter: blur(16px);
@@ -7,19 +7,26 @@
 }
 
 .glass-card {
-    background: rgba(255, 255, 255, 0.55);
+    background: rgba(255, 255, 255, 0.6);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.35);
 }
 
-/* Custom layout visibility smooth transition animations */
+/* Modal overlays smoothness layouts animations */
 #authModalOverlay {
     transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-/* Form text elements custom scaling standard layout rules */
+/* Enlarged readable fonts layout properties overrides */
 input, select, textarea {
     font-size: 14px !important;
     color: #1e293b;
+}
+
+/* Category buttons style active effects states indicators */
+#categoryFilterContainer button:focus {
+    background-color: #1e1b4b !important;
+    color: #ffffff !important;
+    border-color: #1e1b4b !important;
 }
