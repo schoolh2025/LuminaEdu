@@ -139,17 +139,24 @@ function executeUIRenderPipeline() {
 }
 
 // ==========================================
-// 📡 SECURE MOUNT DATA LISTENERS CHANNELS
+// 📡 SECURE MOUNT DATA LISTENERS CHANNELS (UPDATED & FIXED)
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
+    // Check if we are on the main front page
     if(document.getElementById('publicCardsFeed')) {
-        // Core background live connection to active firebase stream channels
+        
+        // Active Firestore Network Connection Channel
         onSnapshot(collection(db, "jobs"), (snapshot) => {
             cachedJobsArray = [];
             snapshot.forEach(docSnap => { 
                 cachedJobsArray.push({ id: docSnap.id, ...docSnap.data() }); 
             });
+            
+            // 🔥 FIXED: Direct explicit calling of the UI pipeline matrix
             executeUIRenderPipeline();
         });
     }
 });
+
+// Windows binding to prevent isolation crashes
+window.executeUIRenderPipeline = executeUIRenderPipeline;
