@@ -1,16 +1,18 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, collection, addDoc, doc, setDoc, onSnapshot, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-// 🚨 APNI ASLI BACKEND CONFIGURATION KEYS DIKHTE HI YAHAN FILL KAREIN:
+// 🚨 YAHAN APNI REAL FIREBASE CONSOLE VALI KEYS REPLACE KAREIN:
 const firebaseConfig = {
-  apiKey: "AIzaSyDEXmjIN8w2s2uXk0FTzC7ri4HhLetzV4E",
-  authDomain: "luminaedu-ai786.firebaseapp.com",
-  projectId: "luminaedu-ai786",
-  storageBucket: "luminaedu-ai786.firebasestorage.app",
-  messagingSenderId: "35041307389",
-  appId: "1:35041307389:web:846f981017df7ad1382c94"
+    apiKey: "AIzaSyDEXmjIN8w2s2uXk0FTzC7ri4HhLetzV4E",
+    authDomain: "luminaedu-ai786.firebaseapp.com",
+    projectId: "luminaedu-ai786",
+    storageBucket: "luminaedu-ai786.firebasestorage.app",
+    messagingSenderId: "35041307389",
+    appId: "1:35041307389:web:846f981017df7ad1382c94"
 };
+
+// Initialize Firebase Secure Matrix
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
@@ -18,33 +20,32 @@ const auth = getAuth(app);
 window.fbDB = db;
 let selectedCategoryFilter = 'All';
 let cachedJobsArray = [];
-let layoutGridColumnsSetting = 'lg:grid-cols-3'; // Safe default template fallback
-let maxCardsToDisplayLimit = 6; // Safe default card limit boundary
+let layoutGridColumnsSetting = 'lg:grid-cols-3'; 
+let maxCardsToDisplayLimit = 6; 
 
-// USER ACCESS MANAGEMENT FLOW
+// USER PIPELINES BINDINGS
 window.registerNewUserNode = async function(email, password, fullname) {
-    if(!email || !password || !fullname) return alert("सभी फ़ील्ड्स भरना अनिवार्य है।");
+    if(!email || !password || !fullname) return alert("सभी फ़ील्ड्स आवश्यक हैं।");
     try {
         const credential = await createUserWithEmailAndPassword(auth, email, password);
         await setDoc(doc(db, "users", credential.user.uid), { name: fullname, role: "UserContributor", email: email });
-        alert("🎉 रजिस्ट्रेशन सफल! बोर्ड लोड हो रहा है।");
-        window.location.href = "dashboard/user.html";
+        alert("🎉 रजिस्ट्रेशन सफल!"); window.location.href = "dashboard/user.html";
     } catch(err) { alert(err.message); }
 };
 
 window.loginUserNode = async function(email, password) {
     try {
         await signInWithEmailAndPassword(auth, email, password);
-        alert("एक्सेस स्वीकृत!"); window.location.href = "dashboard/user.html";
+        alert("लॉगिन सफल!"); window.location.href = "dashboard/user.html";
     } catch(err) { alert("Access Denied: " + err.message); }
 };
 
 window.triggerForgotRecoveryNode = async function(email) {
-    if(!email) return alert("कृपया ईमेल पता दर्ज करें।");
+    if(!email) return alert("ईमेल दर्ज करें।");
     try { await sendPasswordResetEmail(auth, email); alert("रीसेट लिंक भेज दिया गया है।"); } catch(err) { alert(err.message); }
 };
 
-// CATEGORY CHIPS VISUAL BUILDER CONFIGURATION
+// COLOR CATEGORIES BUTTONS MAPPER
 const buttonStyles = [
     { name: 'All', active: 'bg-slate-900 text-white border-slate-900', inactive: 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200' },
     { name: 'Job', active: 'bg-blue-600 text-white border-blue-600 shadow-md', inactive: 'bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200' },
@@ -56,8 +57,6 @@ const buttonStyles = [
 
 window.setJobFilter = function(categoryName) {
     selectedCategoryFilter = categoryName;
-    const mDropdown = document.getElementById('mobileCategoryDropdown');
-    if(mDropdown) { mDropdown.value = categoryName; }
     renderMulticolorCategoryChips();
     executeUIRenderPipeline();
 };
@@ -68,18 +67,16 @@ function renderMulticolorCategoryChips() {
     box.innerHTML = buttonStyles.map(b => {
         let isActive = selectedCategoryFilter.toLowerCase() === b.name.toLowerCase();
         let targetClass = isActive ? b.active : b.inactive;
-        return `<button onclick="window.setJobFilter('${b.name}')" class="px-4 py-2 text-xs md:text-sm font-extrabold rounded-xl border transition-all duration-200 tracking-wide ${targetClass}">${b.name}</button>`;
+        return `<button onclick="window.setJobFilter('${b.name}')" class="px-4 py-2 text-xs md:text-sm font-extrabold rounded-xl border transition-all duration-200 ${targetClass}">${b.name}</button>`;
     }).join('');
 }
 
-// MAIN CONTENT STREAM DISPATCH RENDER ENGINE
+// MAIN RENDER ENGINE PIPELINE
 function executeUIRenderPipeline() {
     const feed = document.getElementById('publicCardsFeed');
     if(!feed) return;
 
-    // Apply layout mapping styles variables directly
     feed.className = `grid grid-cols-1 md:grid-cols-2 ${layoutGridColumnsSetting} gap-8`;
-
     const filtered = cachedJobsArray.filter(j => {
         if(j.approvalStatus !== 'Live') return false;
         if(selectedCategoryFilter === 'All') return true;
@@ -101,19 +98,15 @@ function executeUIRenderPipeline() {
         else if(routeType === 'result') targetPage = 'pages/result.html';
         else if(routeType === 'scholarship') targetPage = 'pages/scholarship.html';
         
-        let gridSpanProperty = (j.cardSizeLayout === 'featured') 
-            ? 'md:col-span-2 lg:col-span-2 bg-gradient-to-tr from-white via-white to-slate-50/50 border-l-4 border-l-indigo-600' 
-            : 'col-span-1 bg-white';
-        
-        let displayImg = (j.imageUrls && j.imageUrls.length > 0 && (j.imgDisplayLocation === 'both' || j.imgDisplayLocation === 'front')) 
-            ? `<img src="${j.imageUrls[0]}" class="w-full h-48 object-cover rounded-xl mb-4 border border-slate-100 shadow-sm" alt="Banner">` : "";
+        let gridSpanProperty = (j.cardSizeLayout === 'featured') ? 'md:col-span-2 lg:col-span-2 border-l-4 border-l-indigo-600' : 'col-span-1';
+        let displayImg = (j.imageUrls && j.imageUrls.length > 0 && (j.imgDisplayLocation === 'both' || j.imgDisplayLocation === 'front')) ? `<img src="${j.imageUrls[0]}" class="w-full h-48 object-cover rounded-xl mb-4" alt="Banner">` : "";
 
         let badgeStyle = 'bg-slate-100 text-slate-700 border-slate-200';
-        if(j.type === 'Job') badgeStyle = 'bg-blue-50 text-blue-700 border border-blue-100';
-        else if(j.type === 'Admit-Card') badgeStyle = 'bg-orange-50 text-orange-700 border border-orange-100';
-        else if(j.type === 'Result') badgeStyle = 'bg-emerald-50 text-emerald-700 border border-emerald-100';
-        else if(j.type === 'Yojna') badgeStyle = 'bg-green-50 text-green-700 border border-green-100';
-        else if(j.type === 'Scholarship') badgeStyle = 'bg-purple-50 text-purple-700 border border-purple-100';
+        if(j.type === 'Job') badgeStyle = 'bg-blue-50 text-blue-700 border-blue-100';
+        else if(j.type === 'Admit-Card') badgeStyle = 'bg-orange-50 text-orange-700 border-orange-100';
+        else if(j.type === 'Result') badgeStyle = 'bg-emerald-50 text-emerald-700 border-emerald-100';
+        else if(j.type === 'Yojna') badgeStyle = 'bg-green-50 text-green-700 border-green-100';
+        else if(j.type === 'Scholarship') badgeStyle = 'bg-purple-50 text-purple-700 border-purple-100';
 
         return `
             <div class="premium-card flex flex-col justify-between ${gridSpanProperty}">
@@ -123,7 +116,7 @@ function executeUIRenderPipeline() {
                         <span class="text-xs font-extrabold px-3 py-1 rounded-full uppercase border ${badgeStyle}">${j.type}</span>
                         <span class="text-xs font-bold text-slate-500">📅 अंतिम तिथि: ${j.lastDate || 'सक्रिय'}</span>
                     </div>
-                    <h3 class="font-extrabold text-slate-900 text-base md:text-lg leading-snug tracking-tight mb-2">${j.title}</h3>
+                    <h3 class="font-extrabold text-slate-900 text-base md:text-lg mb-2">${j.title}</h3>
                     <p class="text-sm text-slate-600 font-bold">🏛️ बोर्ड: ${j.authority}</p>
                 </div>
                 <a href="${targetPage}?id=${j.id}" class="w-full bg-indigo-600 text-white text-sm font-bold text-center py-3 rounded-xl mt-4 block hover:bg-indigo-700 transition-all shadow-md">विवरण एवं लिंक देखें →</a>
@@ -132,33 +125,32 @@ function executeUIRenderPipeline() {
     }).join('');
 }
 
-// INITIAL PIPELINE EVENT CHANNELS LISTENERS
-document.addEventListener('DOMContentLoaded', () => {
-    if(document.getElementById('publicCardsFeed')) {
-        renderMulticolorCategoryChips();
+// SECURE BACKGROUND ENGINE START
+function startApplicationCoreEngine() {
+    renderMulticolorCategoryChips();
 
-        // 🔥 CRITICAL UPGRADE: Error-resistant snapshot listener with immediate fallback logic bounds
-        onSnapshot(doc(db, "app_settings", "grid_layout"), (docSnap) => {
-            if(docSnap.exists()) {
-                const d = docSnap.data();
-                layoutGridColumnsSetting = d.columnsClass || 'lg:grid-cols-3';
-                maxCardsToDisplayLimit = d.maxLimitCards || 6;
-            }
-            executeUIRenderPipeline();
-        }, (err) => {
-            console.log("Settings initialization bypassed. Loading cards standard framework data streams.");
-            executeUIRenderPipeline();
-        });
+    // Safe standalone fetch layout settings
+    onSnapshot(doc(db, "app_settings", "grid_layout"), (docSnap) => {
+        if(docSnap.exists()) {
+            const d = docSnap.data();
+            layoutGridColumnsSetting = d.columnsClass || 'lg:grid-cols-3';
+            maxCardsToDisplayLimit = d.maxLimitCards || 6;
+        }
+        executeUIRenderPipeline();
+    }, (err) => {
+        executeUIRenderPipeline(); // Fallback trigger on error
+    });
 
-        // Background core query listener for active cards
-        onSnapshot(collection(db, "jobs"), (snapshot) => {
-            cachedJobsArray = [];
-            snapshot.forEach(docSnap => { cachedJobsArray.push({ id: docSnap.id, ...docSnap.data() }); });
-            executeUIRenderPipeline();
-        }, (err) => {
-            console.error("Firestore database connection failed. Re-verify active configurations parameters.", err);
-        });
-    }
-});
+    // Realtime stream monitor for cards data channel
+    onSnapshot(collection(db, "jobs"), (snapshot) => {
+        cachedJobsArray = [];
+        snapshot.forEach(docSnap => { cachedJobsArray.push({ id: docSnap.id, ...docSnap.data() }); });
+        executeUIRenderPipeline();
+    }, (err) => {
+        console.log("Database fetch failed.");
+    });
+}
 
+// Window load mounting controller
+window.addEventListener('load', startApplicationCoreEngine);
 window.executeUIRenderPipeline = executeUIRenderPipeline;
