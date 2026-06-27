@@ -1,9 +1,9 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, collection, addDoc, doc, setDoc, onSnapshot, getDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, doc, setDoc, onSnapshot, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+import { getStorage } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
-// 🚨 APNI REAL CONFIGURATION MATRIX VALUES KI STRINGS YAHAN DHYAN SE FILL KAREIN:
+// 🚨 FILL YOUR REAL CONFIGURATION PARAMETERS MATRIX HERE EXACTLY:
 const firebaseConfig = {
   apiKey: "AIzaSyDEXmjIN8w2s2uXk0FTzC7ri4HhLetzV4E",
   authDomain: "luminaedu-ai786.firebaseapp.com",
@@ -37,7 +37,26 @@ let activeDynamicCategoriesList = [
 ];
 
 // ==========================================
-// 🎨 DYNAMIC MULTICOLOR CATEGORIES BUILDER
+// 🔐 AUTH OPERATIONS PORTS
+// ==========================================
+window.registerNewUserNode = async function(email, password, fullname) {
+    if(!email || !password || !fullname) return alert("सभी फ़ील्ड्स आवश्यक हैं।");
+    try {
+        const credential = await createUserWithEmailAndPassword(auth, email, password);
+        await setDoc(doc(db, "users", credential.user.uid), { name: fullname, role: "UserContributor", email: email });
+        alert("🎉 रजिस्ट्रेशन सफल!"); window.location.href = "dashboard/user.html";
+    } catch(err) { alert(err.message); }
+};
+
+window.loginUserNode = async function(email, password) {
+    try {
+        await signInWithEmailAndPassword(auth, email, password);
+        alert("लॉगिन सफल!"); window.location.href = "dashboard/user.html";
+    } catch(err) { alert("Access Denied: " + err.message); }
+};
+
+// ==========================================
+// 🎨 CATEGORY CHIPS BUILDER ENGINE
 // ==========================================
 window.setJobFilter = function(categoryName) {
     selectedCategoryFilter = categoryName;
@@ -49,7 +68,7 @@ window.setJobFilter = function(categoryName) {
 
 function renderMulticolorCategoryChips() {
     const box = document.getElementById('categoryFilterContainer');
-    if(!box) return;
+    if(!box) return; // Breaks if target element doesn't exist (like on admin pages)
     
     box.innerHTML = activeDynamicCategoriesList.map(b => {
         let isActive = selectedCategoryFilter.toLowerCase() === b.name.toLowerCase();
@@ -59,11 +78,11 @@ function renderMulticolorCategoryChips() {
 }
 
 // ==========================================
-// 🚀 MAIN PORTAL UI DATA RENDERING ENGINE
+// 🚀 DYNAMIC POST RENDERING RENDERING ENGINE
 // ==========================================
 function executeUIRenderPipeline() {
     const feed = document.getElementById('publicCardsFeed');
-    if(!feed) return; // AGAR MAIN PAGE NAHI HAI TOH YAHAN SE RETURN HO JAYEGA
+    if(!feed) return; // Safe exit point if page is admin panel
 
     feed.className = `grid grid-cols-1 md:grid-cols-2 ${layoutGridColumnsSetting} gap-8`;
     
@@ -88,19 +107,26 @@ function executeUIRenderPipeline() {
         else if(routeType === 'result') targetPage = 'pages/result.html';
         else if(routeType === 'scholarship') targetPage = 'pages/scholarship.html';
         
-        let gridSpanProperty = (j.cardSizeLayout === 'featured') ? 'md:col-span-2 lg:col-span-2 border-l-4 border-l-indigo-600' : 'col-span-1';
+        let gridSpanProperty = (j.cardSizeLayout === 'featured') ? 'md:col-span-2 lg:col-span-2 border-l-4 border-l-indigo-600 shadow-md' : 'col-span-1';
         
         let displayImg = "";
         if(globalImageVisibilitySetting === 'show' && j.imageUrls && j.imageUrls.length > 0 && (j.imgDisplayLocation === 'both' || j.imgDisplayLocation === 'front')) {
             displayImg = `<img src="${j.imageUrls[0]}" class="w-full h-48 object-cover rounded-xl mb-4 border border-slate-100" alt="Banner">`;
         }
 
+        let badgeStyle = 'bg-slate-100 text-slate-700 border-slate-200';
+        if(j.type === 'Job') badgeStyle = 'bg-blue-50 text-blue-700 border-blue-100';
+        else if(j.type === 'Admit-Card') badgeStyle = 'bg-orange-50 text-orange-700 border-orange-100';
+        else if(j.type === 'Result') badgeStyle = 'bg-emerald-50 text-emerald-700 border-emerald-100';
+        else if(j.type === 'Yojna') badgeStyle = 'bg-green-50 text-green-700 border-green-100';
+        else if(j.type === 'Scholarship') badgeStyle = 'bg-purple-50 text-purple-700 border-purple-100';
+
         return `
             <div class="premium-card flex flex-col justify-between ${gridSpanProperty}">
                 <div>
                     ${displayImg}
                     <div class="flex justify-between items-center mb-3">
-                        <span class="text-xs font-extrabold px-3 py-1 rounded-full uppercase border bg-indigo-50 text-indigo-700">${j.type}</span>
+                        <span class="text-xs font-extrabold px-3 py-1 rounded-full uppercase border ${badgeStyle}">${j.type}</span>
                         <span class="text-xs font-bold text-slate-500">📅 अंतिम तिथि: ${j.lastDate || 'सक्रिय'}</span>
                     </div>
                     <h3 class="font-extrabold text-slate-900 text-base md:text-lg mb-2">${j.title}</h3>
@@ -113,21 +139,23 @@ function executeUIRenderPipeline() {
 }
 
 // ==========================================
-// 📡 REALTIME DOM MOUNT CONNECTORS LOGIC CHANNELS
+// 📡 CORE ENGINE LIFECYCLE LISTENERS
 // ==========================================
 function startApplicationCoreEngine() {
-    // Sync Dynamic Categories List
-    onSnapshot(collection(db, "categories"), (snapshot) => {
-        if(!snapshot.empty) {
-            activeDynamicCategoriesList = [{ id: 'all', name: 'All', colorClass: 'bg-slate-100 text-slate-700 border-slate-200' }];
-            snapshot.forEach(docSnap => {
-                activeDynamicCategoriesList.push({ id: docSnap.id, name: docSnap.data().name, colorClass: docSnap.data().colorClass || 'bg-slate-50 text-slate-700 border-slate-200' });
-            });
-        }
-        renderMulticolorCategoryChips();
-    });
+    // 1. Fetch Dynamic Categories Only If Target Filter Container Exists
+    if (document.getElementById('categoryFilterContainer')) {
+        onSnapshot(collection(db, "categories"), (snapshot) => {
+            if(!snapshot.empty) {
+                activeDynamicCategoriesList = [{ id: 'all', name: 'All', colorClass: 'bg-slate-100 text-slate-700 border-slate-200' }];
+                snapshot.forEach(docSnap => {
+                    activeDynamicCategoriesList.push({ id: docSnap.id, name: docSnap.data().name, colorClass: docSnap.data().colorClass || 'bg-slate-50 text-slate-700 border-slate-200' });
+                });
+            }
+            renderMulticolorCategoryChips();
+        });
+    }
 
-    // Sync Settings Metadata
+    // 2. Fetch Layout Settings Settings
     onSnapshot(doc(db, "app_settings", "grid_layout"), (docSnap) => {
         if(docSnap.exists()) {
             const d = docSnap.data();
@@ -135,22 +163,16 @@ function startApplicationCoreEngine() {
             maxCardsToDisplayLimit = d.maxLimitCards || 6;
             globalImageVisibilitySetting = d.imageVisibility || 'show';
         }
-        if(document.getElementById('publicCardsFeed')) {
-            executeUIRenderPipeline();
-        }
+        executeUIRenderPipeline();
     }, (err) => {
-        if(document.getElementById('publicCardsFeed')) {
-            executeUIRenderPipeline();
-        }
+        executeUIRenderPipeline();
     });
 
-    // Sync Main Jobs Feed
+    // 3. Fetch Realtime Jobs Feed Collection Loop
     onSnapshot(collection(db, "jobs"), (snapshot) => {
         cachedJobsArray = [];
         snapshot.forEach(docSnap => { cachedJobsArray.push({ id: docSnap.id, ...docSnap.data() }); });
-        if(document.getElementById('publicCardsFeed')) {
-            executeUIRenderPipeline();
-        }
+        executeUIRenderPipeline();
     });
 }
 
