@@ -5,12 +5,12 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstati
 
 // 🚨 APNI REAL CONFIGURATION MATRIX VALUES KI STRINGS YAHAN DHYAN SE FILL KAREIN:
 const firebaseConfig = {
-    apiKey: "AIzaSyDEXmjIN8w2s2uXk0FTzC7ri4HhLetzV4E",
-    authDomain: "luminaedu-ai786.firebaseapp.com",
-    projectId: "luminaedu-ai786",
-    storageBucket: "luminaedu-ai786.firebasestorage.app",
-    messagingSenderId: "35041307389",
-    appId: "1:35041307389:web:846f981017df7ad1382c94"
+  apiKey: "AIzaSyDEXmjIN8w2s2uXk0FTzC7ri4HhLetzV4E",
+  authDomain: "luminaedu-ai786.firebaseapp.com",
+  projectId: "luminaedu-ai786",
+  storageBucket: "luminaedu-ai786.firebasestorage.app",
+  messagingSenderId: "35041307389",
+  appId: "1:35041307389:web:846f981017df7ad1382c94"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -25,16 +25,15 @@ let selectedCategoryFilter = 'All';
 let cachedJobsArray = [];
 let layoutGridColumnsSetting = 'lg:grid-cols-3'; 
 let maxCardsToDisplayLimit = 6; 
-let globalImageVisibilitySetting = 'show'; // 'show' ya 'hide' global visibility parameter
+let globalImageVisibilitySetting = 'show'; 
 
-// Default fallback categories block list map
 let activeDynamicCategoriesList = [
-    { id: 'all', name: 'All', colorClass: 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200' },
-    { id: 'job', name: 'Job', colorClass: 'bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200' },
-    { id: 'admit-card', name: 'Admit-Card', colorClass: 'bg-orange-50 hover:bg-orange-100 text-orange-700 border-orange-200' },
-    { id: 'result', name: 'Result', colorClass: 'bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border-emerald-200' },
-    { id: 'yojna', name: 'Yojna', colorClass: 'bg-green-50 hover:bg-green-100 text-green-700 border-green-200' },
-    { id: 'scholarship', name: 'Scholarship', colorClass: 'bg-purple-50 hover:bg-purple-100 text-purple-700 border-purple-200' }
+    { id: 'all', name: 'All', colorClass: 'bg-slate-100 text-slate-700 border-slate-200' },
+    { id: 'job', name: 'Job', colorClass: 'bg-blue-50 text-blue-700 border-blue-200' },
+    { id: 'admit-card', name: 'Admit-Card', colorClass: 'bg-orange-50 text-orange-700 border-orange-200' },
+    { id: 'result', name: 'Result', colorClass: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
+    { id: 'yojna', name: 'Yojna', colorClass: 'bg-green-50 text-green-700 border-green-200' },
+    { id: 'scholarship', name: 'Scholarship', colorClass: 'bg-purple-50 text-purple-700 border-purple-200' }
 ];
 
 // ==========================================
@@ -60,11 +59,11 @@ function renderMulticolorCategoryChips() {
 }
 
 // ==========================================
-// 🚀 MAIN PORTAL UI DATA RENDER RENDERING ENGINE
+// 🚀 MAIN PORTAL UI DATA RENDERING ENGINE
 // ==========================================
 function executeUIRenderPipeline() {
     const feed = document.getElementById('publicCardsFeed');
-    if(!feed) return;
+    if(!feed) return; // AGAR MAIN PAGE NAHI HAI TOH YAHAN SE RETURN HO JAYEGA
 
     feed.className = `grid grid-cols-1 md:grid-cols-2 ${layoutGridColumnsSetting} gap-8`;
     
@@ -91,7 +90,6 @@ function executeUIRenderPipeline() {
         
         let gridSpanProperty = (j.cardSizeLayout === 'featured') ? 'md:col-span-2 lg:col-span-2 border-l-4 border-l-indigo-600' : 'col-span-1';
         
-        // 🖼️ Admin Config Global Rule: Hide/Show image evaluation conditional
         let displayImg = "";
         if(globalImageVisibilitySetting === 'show' && j.imageUrls && j.imageUrls.length > 0 && (j.imgDisplayLocation === 'both' || j.imgDisplayLocation === 'front')) {
             displayImg = `<img src="${j.imageUrls[0]}" class="w-full h-48 object-cover rounded-xl mb-4 border border-slate-100" alt="Banner">`;
@@ -118,9 +116,7 @@ function executeUIRenderPipeline() {
 // 📡 REALTIME DOM MOUNT CONNECTORS LOGIC CHANNELS
 // ==========================================
 function startApplicationCoreEngine() {
-    if(!document.getElementById('publicCardsFeed')) return;
-
-    // Realtime Sync for Categories block list array mapping setup
+    // Sync Dynamic Categories List
     onSnapshot(collection(db, "categories"), (snapshot) => {
         if(!snapshot.empty) {
             activeDynamicCategoriesList = [{ id: 'all', name: 'All', colorClass: 'bg-slate-100 text-slate-700 border-slate-200' }];
@@ -131,7 +127,7 @@ function startApplicationCoreEngine() {
         renderMulticolorCategoryChips();
     });
 
-    // Realtime Sync for global grid settings parameters mapping metadata layout
+    // Sync Settings Metadata
     onSnapshot(doc(db, "app_settings", "grid_layout"), (docSnap) => {
         if(docSnap.exists()) {
             const d = docSnap.data();
@@ -139,16 +135,22 @@ function startApplicationCoreEngine() {
             maxCardsToDisplayLimit = d.maxLimitCards || 6;
             globalImageVisibilitySetting = d.imageVisibility || 'show';
         }
-        executeUIRenderPipeline();
+        if(document.getElementById('publicCardsFeed')) {
+            executeUIRenderPipeline();
+        }
     }, (err) => {
-        executeUIRenderPipeline();
+        if(document.getElementById('publicCardsFeed')) {
+            executeUIRenderPipeline();
+        }
     });
 
-    // Realtime Stream connection matrix tracker channel payload loop
+    // Sync Main Jobs Feed
     onSnapshot(collection(db, "jobs"), (snapshot) => {
         cachedJobsArray = [];
         snapshot.forEach(docSnap => { cachedJobsArray.push({ id: docSnap.id, ...docSnap.data() }); });
-        executeUIRenderPipeline();
+        if(document.getElementById('publicCardsFeed')) {
+            executeUIRenderPipeline();
+        }
     });
 }
 
