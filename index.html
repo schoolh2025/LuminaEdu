@@ -40,32 +40,20 @@
 </head>
 <body class="min-h-screen flex flex-col">
 
-    <header class="glass-header sticky top-0 z-50 px-6 lg:px-10 py-3.5 flex flex-col md:flex-row items-center justify-between gap-4 shadow-sm">
-        <div class="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto text-center md:text-left">
+    <header class="glass-header sticky top-0 z-50 px-6 lg:px-10 py-3.5 flex flex-col lg:flex-row items-center justify-between gap-4 shadow-sm">
+        <div class="flex flex-col md:flex-row items-center gap-4 w-full lg:w-auto text-center md:text-left">
             <h1 class="text-2xl font-extrabold text-indigo-700 tracking-tight cursor-pointer" onclick="window.location.reload()">LuminaEdu</h1>
-            <div class="text-slate-600 text-sm font-bold border-l-0 md:border-l-2 border-slate-300 pl-0 md:pl-4 py-0.5 max-w-2xl">
+            <div class="text-slate-600 text-sm font-bold border-l-0 md:border-l-2 border-slate-300 pl-0 md:pl-4 py-0.5 max-w-xl">
                 📋 शिक्षा, रोज़गार और सरकारी योजनाएं – सटीक सूचना, सबसे तेज़ समाधान।
             </div>
         </div>
 
-        <div class="flex items-center gap-4 w-full md:w-auto justify-between md:justify-end">
-            <div class="block md:hidden relative w-48 z-40">
-                <select id="mobileCategoryDropdown" onchange="window.setJobFilter(this.value)" class="w-full bg-white border border-slate-300 text-slate-700 font-bold text-sm px-3 py-2.5 rounded-xl outline-none">
-                    <option value="All">🔍 सभी श्रेणियां (All)</option>
-                    <option value="Job">💼 सरकारी नौकरी (Job)</option>
-                    <option value="Admit-Card">🎟️ एडमिट कार्ड (Admit)</option>
-                    <option value="Result">📊 परीक्षा परिणाम (Result)</option>
-                    <option value="Yojna">🏛️ सरकारी योजना (Yojna)</option>
-                    <option value="Scholarship">🎓 स्कॉलरशिप (Scholarship)</option>
-                </select>
+        <div class="flex flex-wrap items-center gap-2 justify-center" id="categoryFilterContainer">
             </div>
 
-            <div class="hidden md:flex items-center gap-2" id="categoryFilterContainer"></div>
-
-            <button onclick="toggleAuthOverlay(true)" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm px-5 py-2.5 rounded-xl shadow-md transition-all">
-                Join Us 🚀
-            </button>
-        </div>
+        <button onclick="toggleAuthOverlay(true)" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm px-5 py-2.5 rounded-xl shadow-md transition-all whitespace-nowrap">
+            Join Us 🚀
+        </button>
     </header>
 
     <main class="max-w-[92%] w-full mx-auto p-4 lg:p-8 flex-1">
@@ -76,22 +64,20 @@
         </div>
     </main>
 
-    <footer class="bg-white border-t border-slate-200/60 p-8 text-sm text-slate-600">
-        <div class="max-w-[92%] w-full mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
+    <footer class="bg-white border-t border-slate-200/60 p-6 text-sm text-slate-600 mt-12">
+        <div class="max-w-[92%] w-full mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
             <div>
-                <h4 class="font-black text-slate-900 uppercase tracking-wide text-base">LUMINAEDU</h4>
-                <p class="font-semibold text-slate-500 text-sm mt-0.5">सटीक सूचना एवं त्वरित समाधान नेटवर्क। © 2026</p>
+                <h4 class="font-black text-slate-900 uppercase tracking-wide">LUMINAEDU</h4>
+                <p class="font-semibold text-slate-500 text-xs mt-0.5">सटीक सूचना एवं त्वरित समाधान नेटवर्क। © 2026</p>
             </div>
-            <div class="hidden md:block">
-                <div class="flex flex-wrap gap-4 text-indigo-600 font-bold text-sm justify-center">
-                    <button onclick="window.setJobFilter('All')" class="hover:underline">Home</button> | 
-                    <a href="pages/privacy.html" class="hover:underline">Privacy Policy</a> | 
-                    <a href="pages/terms.html" class="hover:underline">Terms & Conditions</a> | 
-                    <a href="pages/disclaimer.html" class="hover:underline">Disclaimer</a> | 
-                    <a href="pages/contact.html" class="hover:underline">Contact Us</a>
-                </div>
+            <div class="flex flex-wrap gap-4 text-indigo-600 font-bold text-xs justify-center">
+                <button onclick="window.setJobFilter('All')" class="hover:underline">Home Hub</button> | 
+                <a href="pages/privacy.html" class="hover:underline">Privacy Policy</a> | 
+                <a href="pages/terms.html" class="hover:underline">Terms & Conditions</a> | 
+                <a href="pages/disclaimer.html" class="hover:underline">Disclaimer</a> | 
+                <a href="pages/contact.html" class="hover:underline">Contact Us</a>
             </div>
-            <div class="font-bold text-xs text-slate-400">Cryptographic Security Layer Active v4.2</div>
+            <div class="font-bold text-xs text-slate-400">Security Shield Verification Active v4.5</div>
         </div>
     </footer>
 
