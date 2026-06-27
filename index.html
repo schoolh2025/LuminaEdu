@@ -36,10 +36,25 @@
             box-shadow: 0 20px 25px -5px rgba(148, 163, 184, 0.15);
             border-color: rgba(79, 70, 229, 0.3);
         }
+        /* Premium Floating Toast Alert CSS Animation */
+        #premiumToastNotification {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
+    <!-- 🔥 NEW CORE MODULE: ULTRA PREMIUM FLOATING ALERTS MODAL (Replaces Cheap Browser Popups) -->
+    <div id="premiumToastNotification" class="fixed top-5 left-1/2 transform -translate-x-1/2 z-[100] max-w-sm w-full mx-4 bg-white/90 backdrop-blur-xl border p-4 rounded-2xl shadow-2xl flex items-start gap-3 opacity-0 pointer-events-none translate-y-[-20px]">
+        <div id="toastIconSlot" class="text-xl">🔔</div>
+        <div class="flex-1">
+            <h4 id="toastTitleSlot" class="text-xs font-black uppercase tracking-wider text-slate-900">System Alert</h4>
+            <p id="toastMessageSlot" class="text-xs font-bold text-slate-600 mt-0.5 leading-relaxed"></p>
+        </div>
+        <button onclick="dismissPremiumToastNotification()" class="text-slate-400 hover:text-slate-600 font-bold text-xs">✕</button>
+    </div>
+
+    <!-- Top Navigation Block -->
     <header class="glass-header sticky top-0 z-50 px-4 lg:px-10 py-3 flex flex-row items-center justify-between gap-4 shadow-sm">
         <div class="flex items-center gap-3">
             <h1 class="text-xl md:text-2xl font-extrabold text-indigo-700 tracking-tight cursor-pointer" onclick="window.location.reload()">LuminaEdu</h1>
@@ -55,13 +70,15 @@
         </button>
     </header>
 
+    <!-- Slogan Banner for Mobile -->
     <section class="block md:hidden bg-indigo-900 text-white text-center py-2 px-4 text-[11px] font-bold">
         📋 शिक्षा, रोज़गार और सरकारी योजनाएं – सटीक सूचना, सबसे तेज़ समाधान।
     </section>
 
+    <!-- Mobile Category Dropdown Selector -->
     <section class="block lg:hidden max-w-[92%] w-full mx-auto px-2 pt-4">
         <div class="bg-white border border-slate-200 p-3 rounded-2xl shadow-sm flex flex-col gap-1.5">
-            <label class="text-[11px] font-extrabold text-slate-500 uppercase tracking-wider">🔍 श्रेणी अनुसार खोजें (Filter by Category)</label>
+            <label class="text-[11px] font-extrabold text-slate-500 uppercase tracking-wider">🔍 श्रेणी अनुसार खोजें</label>
             <select id="mobileCategoryDropdown" onchange="window.setJobFilter(this.value)" class="w-full bg-slate-50 border border-slate-200 text-slate-800 font-bold text-sm p-3 rounded-xl outline-none shadow-inner">
                 <option value="All">🔍 सभी श्रेणियां (All Categories)</option>
                 <option value="Job">💼 सरकारी नौकरी (Sarkari Job)</option>
@@ -73,10 +90,12 @@
         </div>
     </section>
 
+    <!-- Main Feed Content Grid -->
     <main class="max-w-[92%] w-full mx-auto p-4 lg:p-8 flex-1">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="publicCardsFeed"></div>
     </main>
 
+    <!-- Footer Links Section -->
     <footer class="bg-white border-t border-slate-200/60 p-6 text-sm text-slate-600 mt-12">
         <div class="max-w-[92%] w-full mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
             <div>
@@ -94,8 +113,9 @@
         </div>
     </footer>
 
+    <!-- User Authentication Modal Layer (WITH REFRESH COUNTER SECURITY RESET) -->
     <div id="authModalOverlay" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-all duration-300">
-        <div class="bg-white max-w-sm w-full m-4 p-6 rounded-3xl shadow-2xl relative">
+        <div class="bg-white max-w-sm w-full m-4 p-6 rounded-3xl shadow-2xl relative border border-slate-100">
             <button onclick="toggleAuthOverlay(false)" class="absolute top-4 right-4 text-slate-400 font-bold hover:text-slate-600">✕</button>
             <div class="flex border-b text-sm font-bold mb-4">
                 <button id="tabLogin" onclick="switchAuthForm('login')" class="flex-1 pb-2 border-b-2 border-indigo-600 text-indigo-600">यूजर लॉगिन</button>
@@ -104,16 +124,17 @@
             <div class="space-y-4">
                 <div id="regNameBlock" class="hidden">
                     <label class="block text-xs font-bold text-slate-600 uppercase">पूरा नाम दर्ज करें</label>
-                    <input type="text" id="usrName" class="w-full bg-slate-50 border text-sm p-3 rounded-xl outline-none" placeholder="आपका नाम">
+                    <!-- autocomplete="off" maps prevent browser caching forms inputs -->
+                    <input type="text" id="usrName" autocomplete="off" class="w-full bg-slate-50 border text-sm p-3 rounded-xl outline-none" placeholder="आपका नाम">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-600 uppercase">ईमेल एड्रेस</label>
-                    <input type="email" id="usrEmail" class="w-full bg-slate-50 border text-sm p-3 rounded-xl outline-none" placeholder="name@domain.com">
+                    <input type="email" id="usrEmail" autocomplete="off" class="w-full bg-slate-50 border text-sm p-3 rounded-xl outline-none" placeholder="name@domain.com">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-600 uppercase">सुरक्षित पासवर्ड (Dots View)</label>
                     <div class="relative">
-                        <input type="password" id="usrPass" class="w-full bg-slate-50 border text-sm p-3 pr-10 rounded-xl outline-none font-mono" placeholder="••••••••">
+                        <input type="password" id="usrPass" autocomplete="new-password" class="w-full bg-slate-50 border text-sm p-3 pr-10 rounded-xl outline-none font-mono" placeholder="••••••••">
                         <button type="button" onclick="togglePasswordVisibility('usrPass')" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-indigo-600 font-bold text-sm">👁️</button>
                     </div>
                 </div>
@@ -126,45 +147,79 @@
     <script type="module" src="app.js"></script>
     <script>
         let currentAuthMode = 'login';
+        
+        // 🔥 HIGH SECURITY RULE: Instantly purges memory entries on page mount/reload sequences
+        window.addEventListener('load', () => { clearIdentityFieldsData(); });
+
+        function clearIdentityFieldsData() {
+            if(document.getElementById('usrName')) document.getElementById('usrName').value = "";
+            if(document.getElementById('usrEmail')) document.getElementById('usrEmail').value = "";
+            if(document.getElementById('usrPass')) document.getElementById('usrPass').value = "";
+        }
+
+        // Custom High-End Dynamic Toast System Dispatcher
+        window.spawnPremiumToastAlert = function(title, message, type) {
+            const toast = document.getElementById('premiumToastNotification');
+            const icon = document.getElementById('toastIconSlot');
+            const tTitle = document.getElementById('toastTitleSlot');
+            const tMsg = document.getElementById('toastMessageSlot');
+            
+            tTitle.innerText = title;
+            tMsg.innerText = message;
+            
+            if(type === 'error') {
+                icon.innerText = "❌";
+                toast.className = toast.className.replace(/border-[a-z]*/g, '') + " border-rose-200 bg-rose-50/95";
+            } else {
+                icon.innerText = "✨";
+                toast.className = toast.className.replace(/border-[a-z]*/g, '') + " border-emerald-200 bg-emerald-50/95";
+            }
+            
+            toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
+            toast.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
+            
+            setTimeout(() => { dismissPremiumToastNotification(); }, 5000);
+        };
+
+        window.dismissPremiumToastNotification = function() {
+            const toast = document.getElementById('premiumToastNotification');
+            if(toast) {
+                toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
+                toast.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
+            }
+        };
+
         window.toggleAuthOverlay = function(show) {
             const overlay = document.getElementById('authModalOverlay');
+            clearIdentityFieldsData(); // Force-clear on close/open window sequences
             if(show) { overlay.classList.remove('hidden'); setTimeout(() => { overlay.classList.remove('opacity-0'); }, 10); }
             else { overlay.classList.add('opacity-0'); setTimeout(() => { overlay.classList.add('hidden'); }, 300); }
         };
+
         window.switchAuthForm = function(mode) {
             currentAuthMode = mode;
+            clearIdentityFieldsData();
             document.getElementById('regNameBlock').classList.toggle('hidden', mode === 'login');
             document.getElementById('tabLogin').className = mode === 'login' ? 'flex-1 pb-2 border-b-2 border-indigo-600 text-indigo-600' : 'flex-1 pb-2 text-slate-400';
             document.getElementById('tabReg').className = mode === 'reg' ? 'flex-1 pb-2 border-b-2 border-indigo-600 text-indigo-600' : 'flex-1 pb-2 text-slate-400';
         };
         
-        // 🔥 FIXED GATEWAY WRAPPER FLOW: Perfectly interfaces index UI inputs with app.js core functions
         window.executeAuthActionPipeline = function() {
             const email = document.getElementById('usrEmail').value.trim();
             const pass = document.getElementById('usrPass').value.trim();
-            if(!email || !pass) return alert("ईमेल और पासवर्ड दर्ज करना अनिवार्य है।");
+            if(!email || !pass) return window.spawnPremiumToastAlert("Validation Error", "ईमेल और पासवर्ड फ़ील्ड भरना अनिवार्य है।", "error");
             
             if(currentAuthMode === 'login') { 
-                if(typeof window.loginUserNode === "function") {
-                    window.loginUserNode(email, pass); 
-                } else {
-                    alert("System Synced Wait: Database connecting, please try again in 2 seconds.");
-                }
+                if(typeof window.loginUserNode === "function") { window.loginUserNode(email, pass); }
             } else { 
                 const name = document.getElementById('usrName').value.trim();
-                if(typeof window.registerNewUserNode === "function") {
-                    window.registerNewUserNode(email, pass, name); 
-                } else {
-                    alert("System Synced Wait: Database connecting, please try again in 2 seconds.");
-                }
+                if(typeof window.registerNewUserNode === "function") { window.registerNewUserNode(email, pass, name); }
             }
         };
         
         window.executeForgotRemapPipeline = function() { 
             const email = document.getElementById('usrEmail').value.trim();
-            if(typeof window.triggerForgotRecoveryNode === "function") {
-                window.triggerForgotRecoveryNode(email);
-            }
+            if(typeof window.triggerForgotRecoveryNode === "function") { window.triggerForgotRecoveryNode(email); }
         };
         
         window.togglePasswordVisibility = function(fieldId) {
