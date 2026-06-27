@@ -2,7 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebas
 import { getFirestore, collection, addDoc, doc, setDoc, onSnapshot, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-// 🔥 FIREBASE STABLE MODULE PARAMS INITIALIZATION
+// 🚨 APNI ASLI BACKEND CONFIGURATION KEYS DIKHTE HI YAHAN FILL KAREIN:
 const firebaseConfig = {
   apiKey: "AIzaSyDEXmjIN8w2s2uXk0FTzC7ri4HhLetzV4E",
   authDomain: "luminaedu-ai786.firebaseapp.com",
@@ -11,7 +11,6 @@ const firebaseConfig = {
   messagingSenderId: "35041307389",
   appId: "1:35041307389:web:846f981017df7ad1382c94"
 };
-
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
@@ -19,18 +18,16 @@ const auth = getAuth(app);
 window.fbDB = db;
 let selectedCategoryFilter = 'All';
 let cachedJobsArray = [];
-let layoutGridColumnsSetting = 'lg:grid-cols-3'; // Default fallback grid structure
-let maxCardsToDisplayLimit = 6; // Default fallback row display limitation bounds
+let layoutGridColumnsSetting = 'lg:grid-cols-3'; // Safe default template fallback
+let maxCardsToDisplayLimit = 6; // Safe default card limit boundary
 
-// ==========================================
-// 🔐 AUTH OPERATIONS CONNECTORS PIPELINES
-// ==========================================
+// USER ACCESS MANAGEMENT FLOW
 window.registerNewUserNode = async function(email, password, fullname) {
     if(!email || !password || !fullname) return alert("सभी फ़ील्ड्स भरना अनिवार्य है।");
     try {
         const credential = await createUserWithEmailAndPassword(auth, email, password);
         await setDoc(doc(db, "users", credential.user.uid), { name: fullname, role: "UserContributor", email: email });
-        alert("🎉 रजिस्ट्रेशन सफल! स्टूडियो राइटिंग बोर्ड लोड हो रहा है।");
+        alert("🎉 रजिस्ट्रेशन सफल! बोर्ड लोड हो रहा है।");
         window.location.href = "dashboard/user.html";
     } catch(err) { alert(err.message); }
 };
@@ -44,12 +41,10 @@ window.loginUserNode = async function(email, password) {
 
 window.triggerForgotRecoveryNode = async function(email) {
     if(!email) return alert("कृपया ईमेल पता दर्ज करें।");
-    try { await sendPasswordResetEmail(auth, email); alert("रीसेट लिंक ईमेल भेज दिया गया है।"); } catch(err) { alert(err.message); }
+    try { await sendPasswordResetEmail(auth, email); alert("रीसेट लिंक भेज दिया गया है।"); } catch(err) { alert(err.message); }
 };
 
-// ==========================================
-// 🎨 DYNAMIC MULTICOLOR CATEGORIES ENGINE CONFIG
-// ==========================================
+// CATEGORY CHIPS VISUAL BUILDER CONFIGURATION
 const buttonStyles = [
     { name: 'All', active: 'bg-slate-900 text-white border-slate-900', inactive: 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200' },
     { name: 'Job', active: 'bg-blue-600 text-white border-blue-600 shadow-md', inactive: 'bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200' },
@@ -61,19 +56,15 @@ const buttonStyles = [
 
 window.setJobFilter = function(categoryName) {
     selectedCategoryFilter = categoryName;
-    
-    // Sync Mobile Dropdown Selector values element to avoid clashing
     const mDropdown = document.getElementById('mobileCategoryDropdown');
     if(mDropdown) { mDropdown.value = categoryName; }
-
     renderMulticolorCategoryChips();
     executeUIRenderPipeline();
 };
 
 function renderMulticolorCategoryChips() {
     const box = document.getElementById('categoryFilterContainer');
-    if(!box) return; // Guard clause to prevent rendering errors on sub-pages
-    
+    if(!box) return;
     box.innerHTML = buttonStyles.map(b => {
         let isActive = selectedCategoryFilter.toLowerCase() === b.name.toLowerCase();
         let targetClass = isActive ? b.active : b.inactive;
@@ -81,14 +72,12 @@ function renderMulticolorCategoryChips() {
     }).join('');
 }
 
-// ==========================================
-// 🚀 RENDERING USER INTERFACE DATA CORE PIPELINE
-// ==========================================
+// MAIN CONTENT STREAM DISPATCH RENDER ENGINE
 function executeUIRenderPipeline() {
     const feed = document.getElementById('publicCardsFeed');
     if(!feed) return;
 
-    // Apply layout density selectors rules classes directly from database properties stream values
+    // Apply layout mapping styles variables directly
     feed.className = `grid grid-cols-1 md:grid-cols-2 ${layoutGridColumnsSetting} gap-8`;
 
     const filtered = cachedJobsArray.filter(j => {
@@ -97,7 +86,6 @@ function executeUIRenderPipeline() {
         return j.type.toLowerCase() === selectedCategoryFilter.toLowerCase();
     });
 
-    // Slicing arrays to respect admin row density controller settings
     const limitedDataPool = filtered.slice(0, maxCardsToDisplayLimit);
 
     if(limitedDataPool.length === 0) {
@@ -113,7 +101,6 @@ function executeUIRenderPipeline() {
         else if(routeType === 'result') targetPage = 'pages/result.html';
         else if(routeType === 'scholarship') targetPage = 'pages/scholarship.html';
         
-        // Single card span layout logic matrix configuration
         let gridSpanProperty = (j.cardSizeLayout === 'featured') 
             ? 'md:col-span-2 lg:col-span-2 bg-gradient-to-tr from-white via-white to-slate-50/50 border-l-4 border-l-indigo-600' 
             : 'col-span-1 bg-white';
@@ -145,14 +132,12 @@ function executeUIRenderPipeline() {
     }).join('');
 }
 
-// ==========================================
-// 📡 ASYNC INITIAL DOM CHANNEL SETUP LISTENERS
-// ==========================================
+// INITIAL PIPELINE EVENT CHANNELS LISTENERS
 document.addEventListener('DOMContentLoaded', () => {
     if(document.getElementById('publicCardsFeed')) {
         renderMulticolorCategoryChips();
 
-        // Safe dynamic listener maps custom grid configurations values from cloud server nodes
+        // 🔥 CRITICAL UPGRADE: Error-resistant snapshot listener with immediate fallback logic bounds
         onSnapshot(doc(db, "app_settings", "grid_layout"), (docSnap) => {
             if(docSnap.exists()) {
                 const d = docSnap.data();
@@ -160,16 +145,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 maxCardsToDisplayLimit = d.maxLimitCards || 6;
             }
             executeUIRenderPipeline();
-        }, (error) => {
-            console.log("Settings cluster uninitialized or locked. Fallback parameters engaged.");
+        }, (err) => {
+            console.log("Settings initialization bypassed. Loading cards standard framework data streams.");
             executeUIRenderPipeline();
         });
 
-        // Realtime main loop network stream channels data pull execution
+        // Background core query listener for active cards
         onSnapshot(collection(db, "jobs"), (snapshot) => {
             cachedJobsArray = [];
             snapshot.forEach(docSnap => { cachedJobsArray.push({ id: docSnap.id, ...docSnap.data() }); });
             executeUIRenderPipeline();
+        }, (err) => {
+            console.error("Firestore database connection failed. Re-verify active configurations parameters.", err);
         });
     }
 });
