@@ -1,176 +1,177 @@
-<!DOCTYPE html>
-<html lang="hi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LuminaEdu | नवीनतम सरकारी नौकरी, एडमिट कार्ड, रिजल्ट और सरकारी योजनाएं</title>
-    <meta name="description" content="LuminaEdu (सर्कुलर हब): भारत का सबसे भरोसेमंद रोजगार और सरकारी योजना सूचना केंद्र।">
-    <meta name="keywords" content="LuminaEdu, Sarkari Result, Sarkari Job, Admit Card, PM Yojana List">
-    <meta name="robots" content="index, follow">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getFirestore, collection, addDoc, doc, setDoc, onSnapshot, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getStorage } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+
+// 🚨 APNI REAL CONFIGURATION PARAMS STRINGS YAHAN DHYAN SE FILL KAREIN:
+const firebaseConfig = {
+  apiKey: "AIzaSyDEXmjIN8w2s2uXk0FTzC7ri4HhLetzV4E",
+  authDomain: "luminaedu-ai786.firebaseapp.com",
+  projectId: "luminaedu-ai786",
+  storageBucket: "luminaedu-ai786.firebasestorage.app",
+  messagingSenderId: "35041307389",
+  appId: "1:35041307389:web:846f981017df7ad1382c94"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+const storage = getStorage(app);
+
+window.fbDB = db;
+window.fbStorage = storage;
+
+let selectedCategoryFilter = 'All';
+let cachedJobsArray = [];
+let layoutGridColumnsSetting = 'lg:grid-cols-3'; 
+let maxCardsToDisplayLimit = 6; 
+let globalImageVisibilitySetting = 'show'; 
+
+let activeDynamicCategoriesList = [
+    { id: 'all', name: 'All', colorClass: 'bg-slate-100 text-slate-700 border-slate-200' },
+    { id: 'job', name: 'Job', colorClass: 'bg-blue-50 text-blue-700 border-blue-200' },
+    { id: 'admit-card', name: 'Admit-Card', colorClass: 'bg-orange-50 text-orange-700 border-orange-200' },
+    { id: 'result', name: 'Result', colorClass: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
+    { id: 'yojna', name: 'Yojna', colorClass: 'bg-green-50 text-green-700 border-green-200' },
+    { id: 'scholarship', name: 'Scholarship', colorClass: 'bg-purple-50 text-purple-700 border-purple-200' }
+];
+
+// ==========================================
+// 🔐 AUTH PIPELINES WIRED TO GLOBAL WINDOW
+// ==========================================
+window.registerNewUserNode = async function(email, password, fullname) {
+    if(!email || !password || !fullname) return alert("सभी फ़ील्ड्स आवश्यक हैं।");
+    try {
+        const credential = await createUserWithEmailAndPassword(auth, email, password);
+        await setDoc(doc(db, "users", credential.user.uid), { name: fullname, role: "UserContributor", email: email });
+        alert("🎉 रजिस्ट्रेशन सफल! आपका योगदानकर्ता अकाउंट सक्रिय हो गया है।");
+        window.location.href = "dashboard/user.html";
+    } catch(err) { alert("Registration Error: " + err.message); }
+};
+
+window.loginUserNode = async function(email, password) {
+    try {
+        await signInWithEmailAndPassword(auth, email, password);
+        alert("🎉 लॉगिन सफल! स्वागत है।");
+        window.location.href = "dashboard/user.html";
+    } catch(err) { alert("Access Denied: " + err.message); }
+};
+
+window.triggerForgotRecoveryNode = async function(email) {
+    if(!email) return alert("ईमेल दर्ज करें।");
+    try { await sendPasswordResetEmail(auth, email); alert("पासवर्ड रीसेट लिंक आपके ईमेल पर भेज दिया गया है।"); } catch(err) { alert(err.message); }
+};
+
+// ==========================================
+// 🎨 CATEGORY CHIPS VISUALIZER RENDERING ENGINE
+// ==========================================
+window.setJobFilter = function(categoryName) {
+    selectedCategoryFilter = categoryName;
+    const mDropdown = document.getElementById('mobileCategoryDropdown');
+    if(mDropdown) { mDropdown.value = categoryName; }
+    renderMulticolorCategoryChips();
+    executeUIRenderPipeline();
+};
+
+function renderMulticolorCategoryChips() {
+    const box = document.getElementById('categoryFilterContainer');
+    if(!box) return;
     
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Noto+Sans+Devanagari:wght@400;600;700;800&display=swap" rel="stylesheet">
+    box.innerHTML = activeDynamicCategoriesList.map(b => {
+        let isActive = selectedCategoryFilter.toLowerCase() === b.name.toLowerCase();
+        let targetStyle = isActive ? 'bg-slate-900 text-white border-slate-900 shadow-md' : b.colorClass;
+        return `<button onclick="window.setJobFilter('${b.name}')" class="px-4 py-2 text-xs md:text-sm font-extrabold rounded-xl border transition-all duration-200 ${targetStyle}">${b.name}</button>`;
+    }).join('');
+}
+
+// ==========================================
+// 🚀 MAIN FEED CORE RENDERING PIPELINE
+// ==========================================
+function executeUIRenderPipeline() {
+    const feed = document.getElementById('publicCardsFeed');
+    if(!feed) return;
+
+    feed.className = `grid grid-cols-1 md:grid-cols-2 ${layoutGridColumnsSetting} gap-8`;
     
-    <style>
-        body { 
-            font-family: 'Plus Jakarta Sans', 'Noto Sans Devanagari', sans-serif; 
-            background: linear-gradient(135deg, #f3f8fc 0%, #f4fefe 100%);
+    const filtered = cachedJobsArray.filter(j => {
+        if(j.approvalStatus !== 'Live') return false;
+        if(selectedCategoryFilter === 'All') return true;
+        return j.type.toLowerCase() === selectedCategoryFilter.toLowerCase();
+    });
+
+    const limitedDataPool = filtered.slice(0, maxCardsToDisplayLimit);
+
+    if(limitedDataPool.length === 0) {
+        feed.innerHTML = `<div class="col-span-full text-center py-16 text-sm font-bold text-slate-500 bg-white/60 border p-6 rounded-2xl shadow-sm">"${selectedCategoryFilter}" श्रेणी में कोई विज्ञापन सक्रिय नहीं है।</div>`;
+        return;
+    }
+
+    feed.innerHTML = limitedDataPool.map(j => {
+        let routeType = j.type.toLowerCase();
+        let targetPage = 'pages/job.html';
+        if(routeType === 'yojna') targetPage = 'pages/yojna.html';
+        else if(routeType === 'admit-card') targetPage = 'pages/admit-card.html';
+        else if(routeType === 'result') targetPage = 'pages/result.html';
+        else if(routeType === 'scholarship') targetPage = 'pages/scholarship.html';
+        
+        let gridSpanProperty = (j.cardSizeLayout === 'featured') ? 'md:col-span-2 lg:col-span-2 border-l-4 border-l-indigo-600 shadow-md' : 'col-span-1';
+        
+        let displayImg = "";
+        if(globalImageVisibilitySetting === 'show' && j.imageUrls && j.imageUrls.length > 0 && (j.imgDisplayLocation === 'both' || j.imgDisplayLocation === 'front')) {
+            displayImg = `<img src="${j.imageUrls[0]}" class="w-full h-48 object-cover rounded-xl mb-4 border border-slate-100" alt="Banner">`;
         }
-        .glass-header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(226, 232, 240, 0.9);
-        }
-        .premium-card {
-            background: #ffffff;
-            border: 1px solid rgba(226, 232, 240, 0.8);
-            border-radius: 1.5rem;
-            padding: 1.5rem;
-            box-shadow: 0 4px 20px -2px rgba(148, 163, 184, 0.06);
-            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .premium-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 25px -5px rgba(148, 163, 184, 0.15);
-            border-color: rgba(79, 70, 229, 0.3);
-        }
-    </style>
-</head>
-<body class="min-h-screen flex flex-col">
 
-    <header class="glass-header sticky top-0 z-50 px-4 lg:px-10 py-3 flex flex-row items-center justify-between gap-4 shadow-sm">
-        <div class="flex items-center gap-3">
-            <h1 class="text-xl md:text-2xl font-extrabold text-indigo-700 tracking-tight cursor-pointer" onclick="window.location.reload()">LuminaEdu</h1>
-            <div class="hidden md:block text-slate-600 text-sm font-bold border-l-2 border-slate-300 pl-4 py-0.5 max-w-xl">
-                📋 शिक्षा, रोज़गार और सरकारी योजनाएं – सटीक सूचना, सबसे तेज़ समाधान।
-            </div>
-        </div>
-
-        <div class="hidden lg:flex items-center gap-2" id="categoryFilterContainer"></div>
-
-        <button onclick="toggleAuthOverlay(true)" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs md:text-sm px-4 py-2 md:py-2.5 rounded-xl shadow-md transition-all whitespace-nowrap">
-            Join Us 🚀
-        </button>
-    </header>
-
-    <section class="block md:hidden bg-indigo-900 text-white text-center py-2 px-4 text-[11px] font-bold">
-        📋 शिक्षा, रोज़गार और सरकारी योजनाएं – सटीक सूचना, सबसे तेज़ समाधान।
-    </section>
-
-    <section class="block lg:hidden max-w-[92%] w-full mx-auto px-2 pt-4">
-        <div class="bg-white border border-slate-200 p-3 rounded-2xl shadow-sm flex flex-col gap-1.5">
-            <label class="text-[11px] font-extrabold text-slate-500 uppercase tracking-wider">🔍 श्रेणी अनुसार खोजें (Filter by Category)</label>
-            <select id="mobileCategoryDropdown" onchange="window.setJobFilter(this.value)" class="w-full bg-slate-50 border border-slate-200 text-slate-800 font-bold text-sm p-3 rounded-xl outline-none shadow-inner">
-                <option value="All">🔍 सभी श्रेणियां (All Categories)</option>
-                <option value="Job">💼 सरकारी नौकरी (Sarkari Job)</option>
-                <option value="Admit-Card">🎟️ एडमिट कार्ड (Admit Card)</option>
-                <option value="Result">📊 परीक्षा परिणाम (Sarkari Result)</option>
-                <option value="Yojna">🏛️ सरकारी योजना (Sarkari Yojna)</option>
-                <option value="Scholarship">🎓 स्कॉलरशिप (Scholarship)</option>
-            </select>
-        </div>
-    </section>
-
-    <main class="max-w-[92%] w-full mx-auto p-4 lg:p-8 flex-1">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="publicCardsFeed"></div>
-    </main>
-
-    <footer class="bg-white border-t border-slate-200/60 p-6 text-sm text-slate-600 mt-12">
-        <div class="max-w-[92%] w-full mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
-            <div>
-                <h4 class="font-black text-slate-900 uppercase tracking-wide">LUMINAEDU</h4>
-                <p class="font-semibold text-slate-500 text-xs mt-0.5">सटीक सूचना एवं त्वरित समाधान नेटवर्क। © 2026</p>
-            </div>
-            <div class="hidden md:flex flex-wrap gap-4 text-indigo-600 font-bold text-xs justify-center">
-                <button onclick="window.setJobFilter('All')" class="hover:underline">Home Hub</button> | 
-                <a href="pages/privacy.html" class="hover:underline">Privacy Policy</a> | 
-                <a href="pages/terms.html" class="hover:underline">Terms & Conditions</a> | 
-                <a href="pages/disclaimer.html" class="hover:underline">Disclaimer</a> | 
-                <a href="pages/contact.html" class="hover:underline">Contact Us</a>
-            </div>
-            <div class="font-bold text-xs text-slate-400">Security Shield Verification Active v4.8</div>
-        </div>
-    </footer>
-
-    <div id="authModalOverlay" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-all duration-300">
-        <div class="bg-white max-w-sm w-full m-4 p-6 rounded-3xl shadow-2xl relative">
-            <button onclick="toggleAuthOverlay(false)" class="absolute top-4 right-4 text-slate-400 font-bold hover:text-slate-600">✕</button>
-            <div class="flex border-b text-sm font-bold mb-4">
-                <button id="tabLogin" onclick="switchAuthForm('login')" class="flex-1 pb-2 border-b-2 border-indigo-600 text-indigo-600">यूजर लॉगिन</button>
-                <button id="tabReg" onclick="switchAuthForm('reg')" class="flex-1 pb-2 text-slate-400">यूजर रजिस्ट्रेशन</button>
-            </div>
-            <div class="space-y-4">
-                <div id="regNameBlock" class="hidden">
-                    <label class="block text-xs font-bold text-slate-600 uppercase">पूरा नाम दर्ज करें</label>
-                    <input type="text" id="usrName" class="w-full bg-slate-50 border text-sm p-3 rounded-xl outline-none" placeholder="आपका नाम">
-                </div>
+        return `
+            <div class="premium-card flex flex-col justify-between ${gridSpanProperty}">
                 <div>
-                    <label class="block text-xs font-bold text-slate-600 uppercase">ईमेल एड्रेस</label>
-                    <input type="email" id="usrEmail" class="w-full bg-slate-50 border text-sm p-3 rounded-xl outline-none" placeholder="name@domain.com">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-600 uppercase">सुरक्षित पासवर्ड (Dots View)</label>
-                    <div class="relative">
-                        <input type="password" id="usrPass" class="w-full bg-slate-50 border text-sm p-3 pr-10 rounded-xl outline-none font-mono" placeholder="••••••••">
-                        <button type="button" onclick="togglePasswordVisibility('usrPass')" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-indigo-600 font-bold text-sm">👁️</button>
+                    ${displayImg}
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-xs font-extrabold px-3 py-1 rounded-full uppercase border bg-indigo-50 text-indigo-700">${j.type}</span>
+                        <span class="text-xs font-bold text-slate-500">📅 अंतिम तिथि: ${j.lastDate || 'सक्रिय'}</span>
                     </div>
+                    <h3 class="font-extrabold text-slate-900 text-base md:text-lg mb-2">${j.title}</h3>
+                    <p class="text-sm text-slate-600 font-bold">🏛️ बोर्ड: ${j.authority}</p>
                 </div>
-                <button onclick="executeAuthActionPipeline()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm py-3.5 rounded-xl shadow-md">सत्यापन निष्पादित करें ⚡</button>
-                <button onclick="executeForgotRemapPipeline()" class="w-full text-center text-xs text-slate-500 font-bold hover:underline">पासवर्ड भूल गए? (Forgot Password)</button>
+                <a href="${targetPage}?id=${j.id}" class="w-full bg-indigo-600 text-white text-sm font-bold text-center py-3 rounded-xl mt-4 block hover:bg-indigo-700 transition-all shadow-md">विवरण एवं लिंक देखें →</a>
             </div>
-        </div>
-    </div>
+        `;
+    }).join('');
+}
 
-    <script type="module" src="app.js"></script>
-    <script>
-        let currentAuthMode = 'login';
-        window.toggleAuthOverlay = function(show) {
-            const overlay = document.getElementById('authModalOverlay');
-            if(show) { overlay.classList.remove('hidden'); setTimeout(() => { overlay.classList.remove('opacity-0'); }, 10); }
-            else { overlay.classList.add('opacity-0'); setTimeout(() => { overlay.classList.add('hidden'); }, 300); }
-        };
-        window.switchAuthForm = function(mode) {
-            currentAuthMode = mode;
-            document.getElementById('regNameBlock').classList.toggle('hidden', mode === 'login');
-            document.getElementById('tabLogin').className = mode === 'login' ? 'flex-1 pb-2 border-b-2 border-indigo-600 text-indigo-600' : 'flex-1 pb-2 text-slate-400';
-            document.getElementById('tabReg').className = mode === 'reg' ? 'flex-1 pb-2 border-b-2 border-indigo-600 text-indigo-600' : 'flex-1 pb-2 text-slate-400';
-        };
-        
-        // 🔥 FIXED GATEWAY WRAPPER FLOW: Perfectly interfaces index UI inputs with app.js core functions
-        window.executeAuthActionPipeline = function() {
-            const email = document.getElementById('usrEmail').value.trim();
-            const pass = document.getElementById('usrPass').value.trim();
-            if(!email || !pass) return alert("ईमेल और पासवर्ड दर्ज करना अनिवार्य है।");
-            
-            if(currentAuthMode === 'login') { 
-                if(typeof window.loginUserNode === "function") {
-                    window.loginUserNode(email, pass); 
-                } else {
-                    alert("System Synced Wait: Database connecting, please try again in 2 seconds.");
-                }
-            } else { 
-                const name = document.getElementById('usrName').value.trim();
-                if(typeof window.registerNewUserNode === "function") {
-                    window.registerNewUserNode(email, pass, name); 
-                } else {
-                    alert("System Synced Wait: Database connecting, please try again in 2 seconds.");
-                }
+// ==========================================
+// 📡 APPLICATION EVENT CHANNELS LIFECYCLE
+// ==========================================
+function startApplicationCoreEngine() {
+    if (document.getElementById('categoryFilterContainer')) {
+        onSnapshot(collection(db, "categories"), (snapshot) => {
+            if(!snapshot.empty) {
+                activeDynamicCategoriesList = [{ id: 'all', name: 'All', colorClass: 'bg-slate-100 text-slate-700 border-slate-200' }];
+                snapshot.forEach(docSnap => {
+                    activeDynamicCategoriesList.push({ id: docSnap.id, name: docSnap.data().name, colorClass: docSnap.data().colorClass || 'bg-slate-50 text-slate-700 border-slate-200' });
+                });
             }
-        };
-        
-        window.executeForgotRemapPipeline = function() { 
-            const email = document.getElementById('usrEmail').value.trim();
-            if(typeof window.triggerForgotRecoveryNode === "function") {
-                window.triggerForgotRecoveryNode(email);
-            }
-        };
-        
-        window.togglePasswordVisibility = function(fieldId) {
-            const input = document.getElementById(fieldId);
-            input.type = input.type === 'password' ? 'text' : 'password';
-        };
-    </script>
-</body>
-</html>
+            renderMulticolorCategoryChips();
+        });
+    }
+
+    onSnapshot(doc(db, "app_settings", "grid_layout"), (docSnap) => {
+        if(docSnap.exists()) {
+            const d = docSnap.data();
+            layoutGridColumnsSetting = d.columnsClass || 'lg:grid-cols-3';
+            maxCardsToDisplayLimit = d.maxLimitCards || 6;
+            globalImageVisibilitySetting = d.imageVisibility || 'show';
+        }
+        executeUIRenderPipeline();
+    }, (err) => {
+        executeUIRenderPipeline();
+    });
+
+    onSnapshot(collection(db, "jobs"), (snapshot) => {
+        cachedJobsArray = [];
+        snapshot.forEach(docSnap => { cachedJobsArray.push({ id: docSnap.id, ...docSnap.data() }); });
+        executeUIRenderPipeline();
+    });
+}
+
+window.addEventListener('load', startApplicationCoreEngine);
+window.executeUIRenderPipeline = executeUIRenderPipeline;
