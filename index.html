@@ -40,7 +40,6 @@
 </head>
 <body class="min-h-screen flex flex-col">
 
-    <!-- Top Navigation Block -->
     <header class="glass-header sticky top-0 z-50 px-4 lg:px-10 py-3 flex flex-row items-center justify-between gap-4 shadow-sm">
         <div class="flex items-center gap-3">
             <h1 class="text-xl md:text-2xl font-extrabold text-indigo-700 tracking-tight cursor-pointer" onclick="window.location.reload()">LuminaEdu</h1>
@@ -49,7 +48,6 @@
             </div>
         </div>
 
-        <!-- Desktop Buttons Grid Section (Auto Managed via app.js) -->
         <div class="hidden lg:flex items-center gap-2" id="categoryFilterContainer"></div>
 
         <button onclick="toggleAuthOverlay(true)" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs md:text-sm px-4 py-2 md:py-2.5 rounded-xl shadow-md transition-all whitespace-nowrap">
@@ -57,12 +55,10 @@
         </button>
     </header>
 
-    <!-- Slogan Banner for Mobile Screen Ratio Layout -->
     <section class="block md:hidden bg-indigo-900 text-white text-center py-2 px-4 text-[11px] font-bold">
         📋 शिक्षा, रोज़गार और सरकारी योजनाएं – सटीक सूचना, सबसे तेज़ समाधान।
     </section>
 
-    <!-- Mobile Category Dropdown Selector Panel Layout -->
     <section class="block lg:hidden max-w-[92%] w-full mx-auto px-2 pt-4">
         <div class="bg-white border border-slate-200 p-3 rounded-2xl shadow-sm flex flex-col gap-1.5">
             <label class="text-[11px] font-extrabold text-slate-500 uppercase tracking-wider">🔍 श्रेणी अनुसार खोजें (Filter by Category)</label>
@@ -77,13 +73,10 @@
         </div>
     </section>
 
-    <!-- Main Cards Post Feed Grid Architecture Canvas -->
     <main class="max-w-[92%] w-full mx-auto p-4 lg:p-8 flex-1">
-        <!-- Direct clean dynamic target feed container -->
-        <div id="publicCardsFeed"></div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="publicCardsFeed"></div>
     </main>
 
-    <!-- Global Compliance Semantic Footer Links Area -->
     <footer class="bg-white border-t border-slate-200/60 p-6 text-sm text-slate-600 mt-12">
         <div class="max-w-[92%] w-full mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
             <div>
@@ -97,11 +90,10 @@
                 <a href="pages/disclaimer.html" class="hover:underline">Disclaimer</a> | 
                 <a href="pages/contact.html" class="hover:underline">Contact Us</a>
             </div>
-            <div class="font-bold text-xs text-slate-400">Security Shield Verification Active v4.7</div>
+            <div class="font-bold text-xs text-slate-400">Security Shield Verification Active v4.8</div>
         </div>
     </footer>
 
-    <!-- User Authentication Form Box Modal Layer Matrix -->
     <div id="authModalOverlay" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-all duration-300">
         <div class="bg-white max-w-sm w-full m-4 p-6 rounded-3xl shadow-2xl relative">
             <button onclick="toggleAuthOverlay(false)" class="absolute top-4 right-4 text-slate-400 font-bold hover:text-slate-600">✕</button>
