@@ -102,10 +102,23 @@
                 <button id="tabReg" onclick="switchAuthForm('reg')" class="flex-1 pb-2 text-slate-400">यूजर रजिस्ट्रेशन</button>
             </div>
             <div class="space-y-4">
-                <div id="regNameBlock" class="hidden"><label class="block text-xs font-bold text-slate-600 uppercase">पूरा नाम दर्ज करें</label><input type="text" id="usrName" class="w-full bg-slate-50 border text-sm p-3 rounded-xl outline-none" placeholder="आपका नाम"></div>
-                <div><label class="block text-xs font-bold text-slate-600 uppercase">ईमेल एड्रेस</label><input type="email" id="usrEmail" class="w-full bg-slate-50 border text-sm p-3 rounded-xl outline-none" placeholder="name@domain.com"></div>
-                <div><label class="block text-xs font-bold text-slate-600 uppercase">सुरक्षित पासवर्ड</label><div class="relative"><input type="password" id="usrPass" class="w-full bg-slate-50 border text-sm p-3 pr-10 rounded-xl outline-none font-mono" placeholder="••••••••"><button type="button" onclick="togglePasswordVisibility('usrPass')" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-indigo-600 font-bold text-sm">👁️</button></div></div>
-                <button onclick="executeAuthActionPipeline()" class="w-full bg-indigo-600 text-white font-bold text-sm py-3.5 rounded-xl shadow-md">सत्यापन निष्पादित करें ⚡</button>
+                <div id="regNameBlock" class="hidden">
+                    <label class="block text-xs font-bold text-slate-600 uppercase">पूरा नाम दर्ज करें</label>
+                    <input type="text" id="usrName" class="w-full bg-slate-50 border text-sm p-3 rounded-xl outline-none" placeholder="आपका नाम">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 uppercase">ईमेल एड्रेस</label>
+                    <input type="email" id="usrEmail" class="w-full bg-slate-50 border text-sm p-3 rounded-xl outline-none" placeholder="name@domain.com">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 uppercase">सुरक्षित पासवर्ड (Dots View)</label>
+                    <div class="relative">
+                        <input type="password" id="usrPass" class="w-full bg-slate-50 border text-sm p-3 pr-10 rounded-xl outline-none font-mono" placeholder="••••••••">
+                        <button type="button" onclick="togglePasswordVisibility('usrPass')" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-indigo-600 font-bold text-sm">👁️</button>
+                    </div>
+                </div>
+                <button onclick="executeAuthActionPipeline()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm py-3.5 rounded-xl shadow-md">सत्यापन निष्पादित करें ⚡</button>
+                <button onclick="executeForgotRemapPipeline()" class="w-full text-center text-xs text-slate-500 font-bold hover:underline">पासवर्ड भूल गए? (Forgot Password)</button>
             </div>
         </div>
     </div>
@@ -124,12 +137,36 @@
             document.getElementById('tabLogin').className = mode === 'login' ? 'flex-1 pb-2 border-b-2 border-indigo-600 text-indigo-600' : 'flex-1 pb-2 text-slate-400';
             document.getElementById('tabReg').className = mode === 'reg' ? 'flex-1 pb-2 border-b-2 border-indigo-600 text-indigo-600' : 'flex-1 pb-2 text-slate-400';
         };
+        
+        // 🔥 FIXED GATEWAY WRAPPER FLOW: Perfectly interfaces index UI inputs with app.js core functions
         window.executeAuthActionPipeline = function() {
             const email = document.getElementById('usrEmail').value.trim();
             const pass = document.getElementById('usrPass').value.trim();
-            if(currentAuthMode === 'login') { window.loginUserNode(email, pass); } 
-            else { window.registerNewUserNode(email, pass, document.getElementById('usrName').value.trim()); }
+            if(!email || !pass) return alert("ईमेल और पासवर्ड दर्ज करना अनिवार्य है।");
+            
+            if(currentAuthMode === 'login') { 
+                if(typeof window.loginUserNode === "function") {
+                    window.loginUserNode(email, pass); 
+                } else {
+                    alert("System Synced Wait: Database connecting, please try again in 2 seconds.");
+                }
+            } else { 
+                const name = document.getElementById('usrName').value.trim();
+                if(typeof window.registerNewUserNode === "function") {
+                    window.registerNewUserNode(email, pass, name); 
+                } else {
+                    alert("System Synced Wait: Database connecting, please try again in 2 seconds.");
+                }
+            }
         };
+        
+        window.executeForgotRemapPipeline = function() { 
+            const email = document.getElementById('usrEmail').value.trim();
+            if(typeof window.triggerForgotRecoveryNode === "function") {
+                window.triggerForgotRecoveryNode(email);
+            }
+        };
+        
         window.togglePasswordVisibility = function(fieldId) {
             const input = document.getElementById(fieldId);
             input.type = input.type === 'password' ? 'text' : 'password';
