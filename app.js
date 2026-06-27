@@ -1,9 +1,9 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, collection, addDoc, doc, setDoc, onSnapshot, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { getStorage } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
-// 🚨 APNI REAL CONFIGURATION PARAMS STRINGS YAHAN DHYAN SE FILL KAREIN:
+// 🚨 RE-PASTE YOUR VALUABLE SECURE STRINGS CONFIGURATION VALUES MATRIX HERE:
 const firebaseConfig = {
   apiKey: "AIzaSyDEXmjIN8w2s2uXk0FTzC7ri4HhLetzV4E",
   authDomain: "luminaedu-ai786.firebaseapp.com",
@@ -37,33 +37,41 @@ let activeDynamicCategoriesList = [
 ];
 
 // ==========================================
-// 🔐 AUTH PIPELINES WIRED TO GLOBAL WINDOW
+// 🔐 PREMIUM INTERFACED IDENTITY CONSOLE PORTS
 // ==========================================
 window.registerNewUserNode = async function(email, password, fullname) {
-    if(!email || !password || !fullname) return alert("सभी फ़ील्ड्स आवश्यक हैं।");
+    if(!email || !password || !fullname) return window.spawnPremiumToastAlert("Error", "सभी फ़ील्ड्स आवश्यक हैं।", "error");
     try {
         const credential = await createUserWithEmailAndPassword(auth, email, password);
         await setDoc(doc(db, "users", credential.user.uid), { name: fullname, role: "UserContributor", email: email });
-        alert("🎉 रजिस्ट्रेशन सफल! आपका योगदानकर्ता अकाउंट सक्रिय हो गया है।");
-        window.location.href = "dashboard/user.html";
-    } catch(err) { alert("Registration Error: " + err.message); }
+        window.spawnPremiumToastAlert("Success", "🎉 रजिस्ट्रेशन सफल! आपका अकाउंट एक्टिव हो गया है।", "success");
+        setTimeout(() => { window.location.href = "dashboard/user.html"; }, 2000);
+    } catch(err) { 
+        // Handles auth/configuration-not-found natively via custom rich luxury modal interfaces
+        window.spawnPremiumToastAlert("Firebase Authentication Error", err.message, "error"); 
+    }
 };
 
 window.loginUserNode = async function(email, password) {
     try {
         await signInWithEmailAndPassword(auth, email, password);
-        alert("🎉 लॉगिन सफल! स्वागत है।");
-        window.location.href = "dashboard/user.html";
-    } catch(err) { alert("Access Denied: " + err.message); }
+        window.spawnPremiumToastAlert("Access Granted", "🎉 लॉगिन सफल! डैशबोर्ड लोड हो रहा है...", "success");
+        setTimeout(() => { window.location.href = "dashboard/user.html"; }, 1500);
+    } catch(err) { 
+        window.spawnPremiumToastAlert("Authentication Denied", err.message, "error"); 
+    }
 };
 
 window.triggerForgotRecoveryNode = async function(email) {
-    if(!email) return alert("ईमेल दर्ज करें।");
-    try { await sendPasswordResetEmail(auth, email); alert("पासवर्ड रीसेट लिंक आपके ईमेल पर भेज दिया गया है।"); } catch(err) { alert(err.message); }
+    if(!email) return window.spawnPremiumToastAlert("Input Missing", "कृपया ईमेल दर्ज करें।", "error");
+    try { 
+        await sendPasswordResetEmail(auth, email); 
+        window.spawnPremiumToastAlert("Email Dispatched", "पासवर्ड रीसेट लिंक आपके ईमेल पर भेज दिया गया है।", "success"); 
+    } catch(err) { window.spawnPremiumToastAlert("Reset Error", err.message, "error"); }
 };
 
 // ==========================================
-// 🎨 CATEGORY CHIPS VISUALIZER RENDERING ENGINE
+// 🎨 LAYOUT RENDERING FUNCTIONS ENGINE
 // ==========================================
 window.setJobFilter = function(categoryName) {
     selectedCategoryFilter = categoryName;
@@ -84,15 +92,11 @@ function renderMulticolorCategoryChips() {
     }).join('');
 }
 
-// ==========================================
-// 🚀 MAIN FEED CORE RENDERING PIPELINE
-// ==========================================
 function executeUIRenderPipeline() {
     const feed = document.getElementById('publicCardsFeed');
     if(!feed) return;
 
     feed.className = `grid grid-cols-1 md:grid-cols-2 ${layoutGridColumnsSetting} gap-8`;
-    
     const filtered = cachedJobsArray.filter(j => {
         if(j.approvalStatus !== 'Live') return false;
         if(selectedCategoryFilter === 'All') return true;
@@ -115,18 +119,24 @@ function executeUIRenderPipeline() {
         else if(routeType === 'scholarship') targetPage = 'pages/scholarship.html';
         
         let gridSpanProperty = (j.cardSizeLayout === 'featured') ? 'md:col-span-2 lg:col-span-2 border-l-4 border-l-indigo-600 shadow-md' : 'col-span-1';
-        
         let displayImg = "";
         if(globalImageVisibilitySetting === 'show' && j.imageUrls && j.imageUrls.length > 0 && (j.imgDisplayLocation === 'both' || j.imgDisplayLocation === 'front')) {
             displayImg = `<img src="${j.imageUrls[0]}" class="w-full h-48 object-cover rounded-xl mb-4 border border-slate-100" alt="Banner">`;
         }
+
+        let badgeStyle = 'bg-slate-100 text-slate-700 border-slate-200';
+        if(j.type === 'Job') badgeStyle = 'bg-blue-50 text-blue-700 border-blue-100';
+        else if(j.type === 'Admit-Card') badgeStyle = 'bg-orange-50 text-orange-700 border-orange-100';
+        else if(j.type === 'Result') badgeStyle = 'bg-emerald-50 text-emerald-700 border-emerald-100';
+        else if(j.type === 'Yojna') badgeStyle = 'bg-green-50 text-green-700 border-green-100';
+        else if(j.type === 'Scholarship') badgeStyle = 'bg-purple-50 text-purple-700 border-purple-100';
 
         return `
             <div class="premium-card flex flex-col justify-between ${gridSpanProperty}">
                 <div>
                     ${displayImg}
                     <div class="flex justify-between items-center mb-3">
-                        <span class="text-xs font-extrabold px-3 py-1 rounded-full uppercase border bg-indigo-50 text-indigo-700">${j.type}</span>
+                        <span class="text-xs font-extrabold px-3 py-1 rounded-full uppercase border ${badgeStyle}">${j.type}</span>
                         <span class="text-xs font-bold text-slate-500">📅 अंतिम तिथि: ${j.lastDate || 'सक्रिय'}</span>
                     </div>
                     <h3 class="font-extrabold text-slate-900 text-base md:text-lg mb-2">${j.title}</h3>
@@ -138,9 +148,6 @@ function executeUIRenderPipeline() {
     }).join('');
 }
 
-// ==========================================
-// 📡 APPLICATION EVENT CHANNELS LIFECYCLE
-// ==========================================
 function startApplicationCoreEngine() {
     if (document.getElementById('categoryFilterContainer')) {
         onSnapshot(collection(db, "categories"), (snapshot) => {
@@ -162,9 +169,7 @@ function startApplicationCoreEngine() {
             globalImageVisibilitySetting = d.imageVisibility || 'show';
         }
         executeUIRenderPipeline();
-    }, (err) => {
-        executeUIRenderPipeline();
-    });
+    }, (err) => { executeUIRenderPipeline(); });
 
     onSnapshot(collection(db, "jobs"), (snapshot) => {
         cachedJobsArray = [];
