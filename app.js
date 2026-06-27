@@ -2,7 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebas
 import { getFirestore, collection, addDoc, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-// 🚨 YAHAN APNI REAL FIREBASE CONSOLE VALI KEYS REPLACE KAREIN:
+// 🚨 APNI REAL FIREBASE VALI KEYS YAHAN EXACT FILL KAREIN:
 const firebaseConfig = {
     apiKey: "AIzaSyDEXmjIN8w2s2uXk0FTzC7ri4HhLetzV4E",
     authDomain: "luminaedu-ai786.firebaseapp.com",
@@ -12,7 +12,6 @@ const firebaseConfig = {
     appId: "1:35041307389:web:846f981017df7ad1382c94"
 };
 
-// Initialize Firebase Secure Matrix
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
@@ -23,7 +22,7 @@ let cachedJobsArray = [];
 let layoutGridColumnsSetting = 'lg:grid-cols-3'; 
 let maxCardsToDisplayLimit = 6; 
 
-// USER PIPELINES BINDINGS
+// USER MANAGEMENT PIPELINES
 window.registerNewUserNode = async function(email, password, fullname) {
     if(!email || !password || !fullname) return alert("सभी फ़ील्ड्स आवश्यक हैं।");
     try {
@@ -45,7 +44,7 @@ window.triggerForgotRecoveryNode = async function(email) {
     try { await sendPasswordResetEmail(auth, email); alert("रीसेट लिंक भेज दिया गया है।"); } catch(err) { alert(err.message); }
 };
 
-// COLOR CATEGORIES BUTTONS MAPPER
+// MULTICOLOR CHIPS STYLES CONFIGURATION
 const buttonStyles = [
     { name: 'All', active: 'bg-slate-900 text-white border-slate-900', inactive: 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200' },
     { name: 'Job', active: 'bg-blue-600 text-white border-blue-600 shadow-md', inactive: 'bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200' },
@@ -57,6 +56,8 @@ const buttonStyles = [
 
 window.setJobFilter = function(categoryName) {
     selectedCategoryFilter = categoryName;
+    const mDropdown = document.getElementById('mobileCategoryDropdown');
+    if(mDropdown) { mDropdown.value = categoryName; }
     renderMulticolorCategoryChips();
     executeUIRenderPipeline();
 };
@@ -71,7 +72,7 @@ function renderMulticolorCategoryChips() {
     }).join('');
 }
 
-// MAIN RENDER ENGINE PIPELINE
+// MAIN RENDER TUNNEL
 function executeUIRenderPipeline() {
     const feed = document.getElementById('publicCardsFeed');
     if(!feed) return;
@@ -125,11 +126,10 @@ function executeUIRenderPipeline() {
     }).join('');
 }
 
-// SECURE BACKGROUND ENGINE START
+// INITIALIZER LISTENERS
 function startApplicationCoreEngine() {
     renderMulticolorCategoryChips();
 
-    // Safe standalone fetch layout settings
     onSnapshot(doc(db, "app_settings", "grid_layout"), (docSnap) => {
         if(docSnap.exists()) {
             const d = docSnap.data();
@@ -138,19 +138,17 @@ function startApplicationCoreEngine() {
         }
         executeUIRenderPipeline();
     }, (err) => {
-        executeUIRenderPipeline(); // Fallback trigger on error
+        executeUIRenderPipeline(); 
     });
 
-    // Realtime stream monitor for cards data channel
     onSnapshot(collection(db, "jobs"), (snapshot) => {
         cachedJobsArray = [];
         snapshot.forEach(docSnap => { cachedJobsArray.push({ id: docSnap.id, ...docSnap.data() }); });
         executeUIRenderPipeline();
     }, (err) => {
-        console.log("Database fetch failed.");
+        console.log("Collection listener failed.");
     });
 }
 
-// Window load mounting controller
 window.addEventListener('load', startApplicationCoreEngine);
 window.executeUIRenderPipeline = executeUIRenderPipeline;
