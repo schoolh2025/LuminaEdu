@@ -9,51 +9,48 @@
     <meta name="robots" content="index, follow">
     
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
-    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Noto+Sans+Devanagari:wght@400;600;700;800&display=swap" rel="stylesheet">
     
     <style>
         body { 
             font-family: 'Plus Jakarta Sans', 'Noto Sans Devanagari', sans-serif; 
-            background: linear-gradient(135deg, #f0f7ff 0%, #eeffff 100%);
+            background: linear-gradient(135deg, #f3f8fc 0%, #f4fefe 100%);
         }
         .glass-header {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.9);
         }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            border-radius: 1.25rem;
+        .premium-card {
+            background: #ffffff;
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 1.5rem;
             padding: 1.5rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 20px -2px rgba(148, 163, 184, 0.06);
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .glass-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 20px -3px rgba(0, 0, 0, 0.08);
+        .premium-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(148, 163, 184, 0.15);
+            border-color: rgba(79, 70, 229, 0.3);
         }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
-    <header class="glass-header sticky top-0 z-50 px-4 lg:px-6 py-3 flex flex-col md:flex-row items-center justify-between gap-4 shadow-sm">
-        
-        <div class="flex flex-col md:flex-row items-center gap-3 w-full md:w-auto text-center md:text-left">
-            <h1 class="text-2xl font-black text-indigo-700 tracking-tight cursor-pointer" onclick="window.location.reload()">LuminaEdu</h1>
-            <div class="text-slate-700 text-xs md:text-sm font-bold border-l-0 md:border-l-2 border-slate-300 pl-0 md:pl-3 py-0.5 max-w-xl">
+    <header class="glass-header sticky top-0 z-50 px-6 lg:px-10 py-3.5 flex flex-col md:flex-row items-center justify-between gap-4 shadow-sm">
+        <div class="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto text-center md:text-left">
+            <h1 class="text-2xl font-extrabold text-indigo-700 tracking-tight cursor-pointer" onclick="window.location.reload()">LuminaEdu</h1>
+            <div class="text-slate-600 text-sm font-bold border-l-0 md:border-l-2 border-slate-300 pl-0 md:pl-4 py-0.5 max-w-2xl">
                 📋 शिक्षा, रोज़गार और सरकारी योजनाएं – सटीक सूचना, सबसे तेज़ समाधान।
             </div>
         </div>
 
-        <div class="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end">
-            
+        <div class="flex items-center gap-4 w-full md:w-auto justify-between md:justify-end">
             <div class="block md:hidden relative w-48 z-40">
-                <select id="mobileCategoryDropdown" onchange="window.setJobFilter(this.value)" class="w-full bg-white border border-slate-300 text-slate-700 font-bold text-sm px-3 py-2 rounded-xl outline-none shadow-sm focus:border-indigo-500">
+                <select id="mobileCategoryDropdown" onchange="window.setJobFilter(this.value)" class="w-full bg-white border border-slate-300 text-slate-700 font-bold text-sm px-3 py-2.5 rounded-xl outline-none">
                     <option value="All">🔍 सभी श्रेणियां (All)</option>
                     <option value="Job">💼 सरकारी नौकरी (Job)</option>
                     <option value="Admit-Card">🎟️ एडमिट कार्ड (Admit)</option>
@@ -63,33 +60,30 @@
                 </select>
             </div>
 
-            <div class="hidden md:flex items-center gap-2" id="categoryFilterContainer">
-                </div>
+            <div class="hidden md:flex items-center gap-2" id="categoryFilterContainer"></div>
 
-            <button onclick="toggleAuthOverlay(true)" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs md:text-sm px-4 md:px-5 py-2 rounded-xl shadow-sm transition-all whitespace-nowrap">
+            <button onclick="toggleAuthOverlay(true)" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm px-5 py-2.5 rounded-xl shadow-md transition-all">
                 Join Us 🚀
             </button>
         </div>
     </header>
 
-    <main class="max-w-7xl w-full mx-auto p-4 lg:p-6 flex-1">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="publicCardsFeed">
-            <div class="col-span-full text-center py-20 text-base font-bold text-indigo-600 animate-pulse">
-                क्लाउड सर्वर से जुड़ रहे हैं...
+    <main class="max-w-[92%] w-full mx-auto p-4 lg:p-8 flex-1">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="publicCardsFeed">
+            <div class="col-span-full text-center py-24 text-base font-bold text-indigo-600 animate-pulse">
+                क्लाउड सर्वर सुरक्षा नोड से सिंक किया जा रहा है...
             </div>
         </div>
     </main>
 
-    <footer class="bg-white/90 backdrop-blur-md border-t border-slate-200 p-6 mt-12 text-sm text-slate-600">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
-            
+    <footer class="bg-white border-t border-slate-200/60 p-8 text-sm text-slate-600">
+        <div class="max-w-[92%] w-full mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
             <div>
-                <h4 class="font-extrabold text-slate-900 uppercase tracking-wider mb-0.5">LUMINAEDU</h4>
-                <p class="font-medium text-slate-500 text-xs">सटीक सूचना एवं त्वरित समाधान नेटवर्क। © 2026</p>
+                <h4 class="font-black text-slate-900 uppercase tracking-wide text-base">LUMINAEDU</h4>
+                <p class="font-semibold text-slate-500 text-sm mt-0.5">सटीक सूचना एवं त्वरित समाधान नेटवर्क। © 2026</p>
             </div>
-            
             <div class="hidden md:block">
-                <div class="flex flex-wrap gap-3 text-indigo-600 font-bold text-xs justify-center">
+                <div class="flex flex-wrap gap-4 text-indigo-600 font-bold text-sm justify-center">
                     <button onclick="window.setJobFilter('All')" class="hover:underline">Home</button> | 
                     <a href="pages/privacy.html" class="hover:underline">Privacy Policy</a> | 
                     <a href="pages/terms.html" class="hover:underline">Terms & Conditions</a> | 
@@ -97,40 +91,22 @@
                     <a href="pages/contact.html" class="hover:underline">Contact Us</a>
                 </div>
             </div>
-            
-            <div class="font-bold text-xs text-slate-400">
-                <p>Cryptographic Security Layer Active v4.0</p>
-            </div>
+            <div class="font-bold text-xs text-slate-400">Cryptographic Security Layer Active v4.2</div>
         </div>
     </footer>
 
     <div id="authModalOverlay" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-all duration-300">
         <div class="bg-white max-w-sm w-full m-4 p-6 rounded-3xl shadow-2xl relative">
             <button onclick="toggleAuthOverlay(false)" class="absolute top-4 right-4 text-slate-400 font-bold hover:text-slate-600">✕</button>
-            
             <div class="flex border-b text-sm font-bold mb-4">
                 <button id="tabLogin" onclick="switchAuthForm('login')" class="flex-1 pb-2 border-b-2 border-indigo-600 text-indigo-600">यूजर लॉगिन</button>
                 <button id="tabReg" onclick="switchAuthForm('reg')" class="flex-1 pb-2 text-slate-400">यूजर रजिस्ट्रेशन</button>
             </div>
-
             <div class="space-y-4">
-                <div id="regNameBlock" class="hidden">
-                    <label class="block text-xs font-bold text-slate-600 uppercase">पूरा नाम दर्ज करें</label>
-                    <input type="text" id="usrName" class="w-full bg-slate-50 border text-sm p-3 rounded-xl outline-none" placeholder="आपका नाम">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-600 uppercase">ईमेल एड्रेस</label>
-                    <input type="email" id="usrEmail" class="w-full bg-slate-50 border text-sm p-3 rounded-xl outline-none" placeholder="name@domain.com">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-600 uppercase">सुरक्षित पासवर्ड</label>
-                    <div class="relative">
-                        <input type="password" id="usrPass" class="w-full bg-slate-50 border text-sm p-3 pr-10 rounded-xl outline-none font-mono" placeholder="••••••••">
-                        <button type="button" onclick="togglePasswordVisibility('usrPass')" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-indigo-600 font-bold text-sm">👁️</button>
-                    </div>
-                </div>
+                <div id="regNameBlock" class="hidden"><label class="block text-xs font-bold text-slate-600 uppercase">पूरा नाम दर्ज करें</label><input type="text" id="usrName" class="w-full bg-slate-50 border text-sm p-3 rounded-xl outline-none" placeholder="आपका नाम"></div>
+                <div><label class="block text-xs font-bold text-slate-600 uppercase">ईमेल एड्रेस</label><input type="email" id="usrEmail" class="w-full bg-slate-50 border text-sm p-3 rounded-xl outline-none" placeholder="name@domain.com"></div>
+                <div><label class="block text-xs font-bold text-slate-600 uppercase">सुरक्षित पासवर्ड</label><div class="relative"><input type="password" id="usrPass" class="w-full bg-slate-50 border text-sm p-3 pr-10 rounded-xl outline-none font-mono" placeholder="••••••••"><button type="button" onclick="togglePasswordVisibility('usrPass')" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-indigo-600 font-bold text-sm">👁️</button></div></div>
                 <button onclick="executeAuthActionPipeline()" class="w-full bg-indigo-600 text-white font-bold text-sm py-3.5 rounded-xl shadow-md">सत्यापन निष्पादित करें ⚡</button>
-                <button onclick="executeForgotRemapPipeline()" class="w-full text-center text-xs text-slate-500 font-bold hover:underline">पासওয়ার্ড भूल गए? (Forgot Password)</button>
             </div>
         </div>
     </div>
@@ -138,29 +114,6 @@
     <script type="module" src="app.js"></script>
     <script>
         let currentAuthMode = 'login';
-        
-        // Dynamic Colorful Categories Setup Node Configuration
-        document.addEventListener('DOMContentLoaded', () => {
-            const container = document.getElementById('categoryFilterContainer');
-            if(container) {
-                // Color configuration mapping setup directly
-                const buttonStyles = [
-                    { name: 'All', bg: 'bg-slate-100 hover:bg-slate-800 text-slate-700 hover:text-white border-slate-200' },
-                    { name: 'Job', bg: 'bg-blue-50 hover:bg-blue-600 text-blue-700 hover:text-white border-blue-200' },
-                    { name: 'Admit-Card', bg: 'bg-orange-50 hover:bg-orange-600 text-orange-700 hover:text-white border-orange-200' },
-                    { name: 'Result', bg: 'bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white border-emerald-200' },
-                    { name: 'Yojna', bg: 'bg-green-50 hover:bg-green-600 text-green-700 hover:text-white border-green-200' },
-                    { name: 'Scholarship', bg: 'bg-purple-50 hover:bg-purple-600 text-purple-700 hover:text-white border-purple-200' }
-                ];
-                
-                container.innerHTML = buttonStyles.map(b => `
-                    <button onclick="window.setJobFilter('${b.name}')" class="px-3.5 py-1.5 text-xs font-extrabold rounded-xl border transition-all shadow-sm ${b.bg}">
-                        ${b.name}
-                    </button>
-                `).join('');
-            }
-        });
-
         window.toggleAuthOverlay = function(show) {
             const overlay = document.getElementById('authModalOverlay');
             if(show) { overlay.classList.remove('hidden'); setTimeout(() => { overlay.classList.remove('opacity-0'); }, 10); }
@@ -178,7 +131,6 @@
             if(currentAuthMode === 'login') { window.loginUserNode(email, pass); } 
             else { window.registerNewUserNode(email, pass, document.getElementById('usrName').value.trim()); }
         };
-        window.executeForgotRemapPipeline = function() { window.triggerForgotRecoveryNode(document.getElementById('usrEmail').value.trim()); };
         window.togglePasswordVisibility = function(fieldId) {
             const input = document.getElementById(fieldId);
             input.type = input.type === 'password' ? 'text' : 'password';
