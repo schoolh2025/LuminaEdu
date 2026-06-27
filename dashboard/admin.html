@@ -2,7 +2,7 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>🔒 Super Admin Executive Dashboard Terminal</title>
+    <title>🔒 Super Admin Master Console Workspace - LuminaEdu</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }</style>
@@ -11,40 +11,49 @@
 
     <div id="adminAuthBoxGate" class="w-full max-w-md bg-white border border-slate-200 p-8 rounded-3xl shadow-xl transition-all duration-300">
         <div class="text-center mb-6">
-            <span class="text-[11px] font-black tracking-widest text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100">SUPER CLEARANCE SECURITY</span>
-            <h2 class="text-2xl font-black text-slate-900 mt-3 tracking-tight">Master Console Gate</h2>
+            <span class="text-[11px] font-black tracking-widest text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100">AUTHENTICATION COMPLIANCE</span>
+            <h2 class="text-2xl font-black text-slate-900 mt-3 tracking-tight">Master Console Unlock</h2>
         </div>
         <div class="space-y-4">
-            <div>
-                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Passphrase Token Key</label>
-                <div class="relative">
-                    <input type="password" id="adminTokenInput" class="w-full bg-slate-50 border border-slate-200 text-sm p-3 pr-10 rounded-xl text-slate-900 outline-none font-mono" placeholder="••••••••">
-                    <button type="button" onclick="toggleLocalEyeField('adminTokenInput')" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 font-bold text-xs">👁️</button>
-                </div>
-            </div>
-            <button onclick="evaluateAdminVerificationChallenge()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm py-3.5 rounded-xl shadow-md">Unlock System Engine ⚡</button>
+            <input type="password" id="adminTokenInput" class="w-full bg-slate-50 border border-slate-200 text-sm p-3 rounded-xl outline-none text-slate-950 font-mono" placeholder="••••••••">
+            <button onclick="evaluateAdminVerificationChallenge()" class="w-full bg-slate-900 text-white font-bold text-sm py-3.5 rounded-xl shadow-md">Unlock System Engine ⚡</button>
         </div>
     </div>
 
     <div class="max-w-[94%] w-full mx-auto space-y-6 hidden" id="adminMasterSystemShell">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-200 pb-4 gap-4">
             <div>
-                <h1 class="text-2xl font-black text-slate-900 tracking-tight">Master Control Workstation</h1>
-                <p class="text-sm text-indigo-600 font-bold">Authorized Pipeline Mode: Pure SEO Optimized Light Interface</p>
+                <h1 class="text-2xl font-black text-slate-900 tracking-tight">Master Control Core Center</h1>
+                <p class="text-sm text-indigo-600 font-bold">Clearance Level Verified: Layout Grid Customizer Engines Activated</p>
             </div>
-            <button onclick="window.location.reload()" class="bg-rose-600 hover:bg-rose-700 text-white px-5 py-2.5 text-sm font-bold rounded-xl shadow-sm transition-all">Logout Session Connection</button>
+            <button onclick="window.location.reload()" class="bg-rose-600 hover:bg-rose-700 text-white px-5 py-2.5 text-sm font-bold rounded-xl transition-all shadow-sm">Terminate Session</button>
+        </div>
+
+        <div class="bg-white border border-slate-200 p-5 rounded-3xl shadow-sm grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+            <div>
+                <h3 class="font-extrabold text-slate-900 text-base">⚙️ मुख्य पृष्ठ ग्रिड लेआउट विन्यास (Frontpage Grid Column Customizer)</h3>
+                <p class="text-xs text-slate-500 font-medium mt-0.5">चुनें कि फ्रंटपेज पर कंप्यूटर स्क्रीन पर एक लाइन में अधिकतम कितने कार्ड दिखाने हैं।</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <select id="frontpageGridConfigSelector" class="flex-1 bg-slate-50 border border-slate-200 text-sm p-3 rounded-xl font-bold text-slate-800 outline-none">
+                    <option value="lg:grid-cols-2">↔️ 2 Columns Grid View (Bade Blocks / Less Rows)</option>
+                    <option value="lg:grid-cols-3" selected>🔄 3 Columns Grid View (Standard Corporate Size Layout)</option>
+                    <option value="lg:grid-cols-4">↔️ 4 Columns Grid View (Chote Cards / Dense Layout)</option>
+                </select>
+                <button onclick="updateGlobalFrontpageGridLayoutConfig()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs md:text-sm px-5 py-3 rounded-xl shadow-sm transition-all whitespace-nowrap">Save Grid Layout ⚡</button>
+            </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <form class="lg:col-span-2 bg-white border border-slate-200 p-6 md:p-8 rounded-3xl space-y-5 shadow-sm" onsubmit="handleDirectBroadcastSubmit(event)">
-                <h3 class="text-sm font-black uppercase text-slate-900 tracking-wider border-b border-slate-100 pb-2 flex items-center gap-2">✍️ Inject System Entry Transaction</h3>
+                <h3 class="text-sm font-black uppercase text-slate-900 tracking-wider border-b border-slate-100 pb-2">✍️ Inject System Entry Transaction</h3>
                 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                         <label class="block text-xs font-bold text-slate-600 uppercase mb-1.5">Module Route Target</label>
                         <select id="postRoute" class="w-full bg-slate-50 border border-slate-200 text-sm p-3 rounded-xl text-slate-800 font-semibold outline-none focus:border-indigo-500">
-                            <option value="job">job.html (Standard Jobs Grid)</option>
-                            <option value="yojna">yojna.html (Paisabazaar Rich Wiki Layout)</option>
+                            <option value="job">job.html Layout Template (Standard Job Cards)</option>
+                            <option value="yojna">yojna.html Layout Template (Paisabazaar Rich Content Wiki)</option>
                             <option value="admit-card">admit-card.html Module</option>
                             <option value="result">result.html Module</option>
                             <option value="scholarship">scholarship.html Module</option>
@@ -52,7 +61,7 @@
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-600 uppercase mb-1.5">Authority Cluster Board</label>
-                        <input type="text" id="postAuth" required class="w-full bg-slate-50 border border-slate-200 text-sm p-3 rounded-xl text-slate-800 outline-none font-medium" placeholder="e.g. UPSC, SSC, Bihar Board">
+                        <input type="text" id="postAuth" required class="w-full bg-slate-50 border border-slate-200 text-sm p-3 rounded-xl text-slate-800 outline-none font-medium" placeholder="e.g. SSC, BPSC, Railway">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-600 uppercase mb-1.5">Front Card View Layout Size</label>
@@ -64,35 +73,32 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1.5">Listing Heading Title Header Text (SEO Optimization Value)</label>
+                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1.5">Listing Heading Title Text (SEO Value)</label>
                     <input type="text" id="postTitle" required class="w-full bg-slate-50 border border-slate-200 text-sm p-3 rounded-xl text-slate-800 outline-none font-semibold" placeholder="Type primary target keywords rich title headline string...">
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-100">
                     <div><label class="block text-[11px] font-bold text-slate-500 uppercase">Image View Rule Location</label><select id="imgViewLoc" class="w-full bg-white border text-xs p-2 rounded-lg"><option value="both">Both (Front & Details Screen)</option><option value="front">Front Card Only</option><option value="post">Post Detail Screen Only</option></select></div>
-                    <div><label class="block text-[11px] font-bold text-slate-500 uppercase">Custom Font Sizing Scale</label><select id="fontSize" class="w-full bg-white border text-xs p-2 rounded-lg"><option value="15px">14px Micro Fluidity</option><option value="17px" selected>17px Clean Reading</option><option value="20px">20px Rich Wiki Text</option></select></div>
-                    <div><label class="block text-[11px] font-bold text-slate-500 uppercase">Global Header Accent Color</label><input type="color" id="fontColor" value="#1e1b4b" class="w-full h-8 bg-white border rounded-lg p-0.5"></div>
+                    <div><label class="block text-[11px] font-bold text-slate-500 uppercase">Custom Font Sizing Scale</label><select id="fontSize" class="w-full bg-white border text-xs p-2 rounded-lg"><option value="17px" selected>17px Clean Reading</option><option value="20px">20px Rich Wiki Text</option></select></div>
+                    <div><label class="block text-[11px] font-bold text-slate-500 uppercase">Global Header Accent Color</label><input type="color" id="fontColor" value="#4f46e5" class="w-full h-8 bg-white border rounded-lg p-0.5"></div>
                 </div>
 
-                <div><label class="block text-xs font-bold text-slate-600 uppercase mb-1.5">Multiple Banner Image URLs strings (Comma separated `,` links value)</label><input type="text" id="postImages" class="w-full bg-slate-50 border border-slate-200 text-sm p-3 rounded-xl outline-none" placeholder="https://domain.com/asset1.png, https://domain.com/photo2.jpg"></div>
+                <div><label class="block text-xs font-bold text-slate-600 uppercase mb-1.5">Multiple Banner Image URLs strings</label><input type="text" id="postImages" class="w-full bg-slate-50 border border-slate-200 text-sm p-3 rounded-xl outline-none" placeholder="https://domain.com/asset1.png, https://domain.com/photo2.jpg"></div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div><label class="block text-xs font-bold text-slate-600 uppercase mb-1">Application Fees Breakdown SCALE</label><textarea id="postFees" rows="3" placeholder="Type systematic fee details data..." class="w-full bg-slate-50 border border-slate-200 text-sm p-3 rounded-xl outline-none font-medium"></textarea></div>
                     <div><label class="block text-xs font-bold text-slate-600 uppercase mb-1">Eligibility Criteria & Structural rules</label><textarea id="postElig" rows="3" placeholder="Type education/qualification criteria matrix rules..." class="w-full bg-slate-50 border border-slate-200 text-sm p-3 rounded-xl outline-none font-medium"></textarea></div>
                 </div>
                 
-                <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm py-4 rounded-xl shadow-lg shadow-slate-200 transition-all tracking-wide">Broadcast Globally Live Live Live 🚀</button>
+                <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm py-4 rounded-xl shadow-lg transition-all">Broadcast Globally Live 🚀</button>
             </form>
 
-            <div class="bg-white border border-slate-200 p-5 rounded-3xl flex flex-col shadow-sm max-h-[700px] overflow-y-auto">
-                <h3 class="text-xs font-black uppercase text-slate-500 tracking-wider border-b border-slate-100 pb-2 mb-4">📋 Contributor Approval Queues</h3>
-                <div id="approvalLedger" class="space-y-4 flex-1"></div>
-            </div>
+            <div class="bg-white border border-slate-200 p-5 rounded-3xl flex flex-col shadow-sm max-h-[700px] overflow-y-auto"><h3 class="text-xs font-black uppercase text-slate-500 tracking-wider border-b border-slate-100 pb-2 mb-4">📋 Contributor Approval Queues</h3><div id="approvalLedger" class="space-y-4 flex-1"></div></div>
         </div>
     </div>
 
     <script type="module">
-        import { collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import "../app.js";
 
         window.evaluateAdminVerificationChallenge = function() {
@@ -104,27 +110,38 @@
             } else { alert("Error: Security token validation failed."); }
         };
 
-        window.toggleLocalEyeField = function(fid) {
-            const el = document.getElementById(fid); el.type = el.type === 'password' ? 'text' : 'password';
-        };
-
         async function initAdminDashboardRealtimeSync() {
+            // Load current layout dropdown value setting on system boot initialization from cloud database doc parameters
+            const currentSettingSnap = await getDoc(doc(window.fbDB, "app_settings", "grid_layout"));
+            if(currentSettingSnap.exists()) {
+                document.getElementById('frontpageGridConfigSelector').value = currentSettingSnap.data().columnsClass || 'lg:grid-cols-3';
+            }
+
             onSnapshot(collection(window.fbDB, "jobs"), (snapshot) => {
                 const container = document.getElementById('approvalLedger'); container.innerHTML = "";
                 snapshot.forEach(docSnap => {
                     const data = docSnap.data();
                     if(data.approvalStatus === 'Pending for Approval') {
                         container.innerHTML += `
-                            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200/60 space-y-2">
+                            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-2">
                                 <h4 class="text-sm font-bold text-slate-900 leading-tight">${data.title}</h4>
-                                <span class="text-[10px] font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 border border-indigo-100 rounded-md">By Contributor Node: ${data.authorName || 'Writer User'}</span>
-                                <div class="flex gap-2 pt-2"><button onclick="approveNode('${docSnap.id}')" class="flex-1 bg-slate-900 text-white text-xs font-bold py-1.5 rounded-lg shadow-sm">✓ Approve</button><button onclick="dropNode('${docSnap.id}')" class="bg-rose-600 text-white text-xs font-bold px-2.5 rounded-lg">✕ Drop</button></div>
+                                <span class="text-[10px] font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-100">By Contributor Node: ${data.authorName || 'User Contributor'}</span>
+                                <div class="flex gap-2 pt-2"><button onclick="approveNode('${docSnap.id}')" class="flex-1 bg-slate-900 text-white text-xs font-bold py-1.5 rounded-lg">✓ Approve</button><button onclick="dropNode('${docSnap.id}')" class="bg-rose-600 text-white text-xs font-bold px-2.5 rounded-lg">✕ Drop</button></div>
                             </div>
                         `;
                     }
                 });
             });
         }
+
+        // 🔥 CORE INTERACTIVE LAYOUT CONFIGURATION TRANSIT PIPELINE FUNCTION
+        window.updateGlobalFrontpageGridLayoutConfig = async function() {
+            const chosenClass = document.getElementById('frontpageGridConfigSelector').value;
+            try {
+                await setDoc(doc(window.fbDB, "app_settings", "grid_layout"), { columnsClass: chosenClass });
+                alert("🎉 Layout Saved! Main page grid re-aligned dynamically to custom view constraints.");
+            } catch(err) { alert("Matrix Configuration Error: " + err.message); }
+        };
 
         window.handleDirectBroadcastSubmit = async function(e) {
             e.preventDefault();
@@ -135,16 +152,16 @@
                 type: document.getElementById('postRoute').value,
                 authority: document.getElementById('postAuth').value.trim(),
                 title: document.getElementById('postTitle').value.trim(),
-                cardSizeLayout: document.getElementById('postCardSize').value, // Transmitting grid selection mapping
+                cardSizeLayout: document.getElementById('postCardSize').value,
                 imageUrls: imagesArray,
                 imgDisplayLocation: document.getElementById('imgViewLoc').value,
                 customFontSize: document.getElementById('fontSize').value,
                 customFontColor: document.getElementById('fontColor').value,
                 feesDetails: document.getElementById('postFees').value.trim(),
                 eligibility: document.getElementById('postElig').value.trim(),
-                approvalStatus: "Live", authorName: "Super Admin Terminal Node"
+                approvalStatus: "Live", authorName: "Super Admin Control Node"
             });
-            alert("Success: Authorized SEO Post Broadcasted!"); e.target.reset();
+            alert("Success: SEO Post Broadcasted!"); e.target.reset();
         };
 
         window.approveNode = async function(id) { await updateDoc(doc(window.fbDB, "jobs", id), { approvalStatus: "Live" }); };
