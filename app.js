@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore, collection, addDoc, doc, setDoc, onSnapshot, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js";
 
 const firebaseConfig = {
@@ -32,7 +32,7 @@ let activeDynamicCategoriesList = [
 ];
 
 // ==========================================
-// 🌟 UNIFIED WINDOW GLOBAL REBINDING FOR ENGINE CHANNELS
+// 🌟 SINGLE-PAGE ROUTING WINDOW SCOPE ENGINE
 // ==========================================
 window.performSinglePageRoutingView = function(targetViewMode, postId = null) {
     const feedView = document.getElementById('mainFeedRouterBlock');
@@ -63,6 +63,11 @@ window.performSinglePageRoutingView = function(targetViewMode, postId = null) {
         feedView?.classList.remove('hidden');
         window.executeUIRenderPipeline();
     }
+};
+
+window.performSecurePlatformLogout = async function() {
+    await signOut(auth);
+    window.location.reload();
 };
 
 window.toggleAuthOverlay = function(show) {
@@ -98,7 +103,7 @@ window.spawnPremiumToastAlert = function(title, message, type) {
 };
 
 // ==========================================
-// ⚙️ CORE PIPELINES
+// ⚙️ IDENTITY CONTROL PIPELINES
 // ==========================================
 window.executeAuthActionPipeline = async function() {
     const email = document.getElementById('usrEmail').value.trim();
@@ -136,7 +141,7 @@ window.executeForgotRecoveryPipeline = async function() {
     const email = document.getElementById('forgotUsrEmail').value.trim();
     try {
         await sendPasswordResetEmail(auth, email);
-        window.spawnPremiumToastAlert("Dispatched", "🔑 Recovery mail token link sent.", "success");
+        window.spawnPremiumToastAlert("Dispatched", "🔑 recovery mail link sent.", "success");
         window.toggleAuthOverlay(false);
     } catch(err) { window.spawnPremiumToastAlert("Error", err.message, "error"); }
 };
@@ -161,6 +166,9 @@ window.applyRichFormatting = function(textareaId, mode) {
     if(replacement) txtArea.value = txtArea.value.substring(0, start) + replacement + txtArea.value.substring(end);
 };
 
+// ==========================================
+// DESK CONTROLLERS & DATA WORKSPACE LOGIC
+// ==========================================
 window.submitProposalPipeline = async function() {
     try {
         await addDoc(collection(db, "jobs"), {
@@ -168,7 +176,12 @@ window.submitProposalPipeline = async function() {
             authority: document.getElementById('cAuth').value.trim(),
             type: document.getElementById('cType').value,
             lastDate: document.getElementById('cLastDate').value.trim(),
-            description: document.getElementById('cDesc').value.trim(),
+            description: `
+                <div class="p-4 bg-indigo-50/50 border rounded-xl my-4 text-xs font-bold text-slate-600">
+                    <p>💰 Application Fee: ${document.getElementById('cFees').value.trim() || 'Review PDF'}</p>
+                    <p class="mt-1">🎓 Eligibility Matrix: ${document.getElementById('cElig').value.trim() || 'Review Details'}</p>
+                </div>
+                <div class="text-sm font-medium mt-2">${document.getElementById('cDesc').value.trim()}</div>`,
             approvalStatus: "Pending", 
             timestamp: Date.now()
         });
@@ -183,11 +196,27 @@ window.publishDirectAdminNode = async function() {
             authority: document.getElementById('aAuth').value.trim(),
             type: document.getElementById('aType').value,
             lastDate: document.getElementById('aLastDate').value.trim(),
-            description: document.getElementById('aDesc').value.trim(),
+            description: `
+                <div class="p-4 bg-indigo-50/50 border rounded-xl my-4 text-xs font-bold text-slate-600">
+                    <p>💰 Application Fee: ${document.getElementById('aFees').value.trim() || 'Review PDF'}</p>
+                    <p class="mt-1">🎓 Eligibility Matrix: ${document.getElementById('aElig').value.trim() || 'Review Details'}</p>
+                </div>
+                <div class="text-sm font-medium mt-2">${document.getElementById('aDesc').value.trim()}</div>`,
             approvalStatus: "Live",
             timestamp: Date.now()
         });
-        window.spawnPremiumToastAlert("Live", "🚀 लाइव हो चुका है!", "success");
+        window.spawnPremiumToastAlert("Live", "🚀 फ्रंटपेज पर लाइव हो चुका है!", "success");
+    } catch(e) { alert(e.message); }
+};
+
+window.executePublishNewToolNode = async function() {
+    const title = document.getElementById('toolTitle').value.trim();
+    const url = document.getElementById('toolUrl').value.trim();
+    if(!title || !url) return;
+    try {
+        await addDoc(collection(db, "pdf_tools"), { title, url, timestamp: Date.now() });
+        document.getElementById('toolTitle').value = ""; document.getElementById('toolUrl').value = "";
+        window.spawnPremiumToastAlert("Added", "Tool linked on sidebar successfully!", "success");
     } catch(e) { alert(e.message); }
 };
 
@@ -224,18 +253,15 @@ function renderDynamicCategoryChips() {
 window.executeUIRenderPipeline = function() {
     const feed = document.getElementById('publicCardsFeed');
     if(!feed) return;
-
     const filtered = cachedJobsArray.filter(j => {
         if(j.approvalStatus !== 'Live') return false;
         if(selectedCategoryFilter === 'All') return true;
         return j.type.toLowerCase() === selectedCategoryFilter.toLowerCase();
     });
-
     if(filtered.length === 0) {
         feed.innerHTML = `<div class="col-span-full text-center py-12 text-xs font-bold text-slate-400 bg-white/50 border border-dashed p-6 rounded-xl">कोई पोस्ट उपलब्ध नहीं है।</div>`;
         return;
     }
-
     feed.innerHTML = filtered.map(j => {
         const catObj = activeDynamicCategoriesList.find(c => c.name.toLowerCase() === j.type.toLowerCase());
         let badgeColorHex = catObj ? catObj.hexColor : '#6366f1';
@@ -274,13 +300,7 @@ window.renderPostDeepContentView = function(postId) {
     const payload = document.getElementById('detailViewContentPayload');
     const matched = cachedJobsArray.find(item => item.id === postId);
     if(!matched || !payload) return;
-    payload.innerHTML = `
-        <div class="space-y-4">
-            <h2 class="text-2xl font-black text-slate-900">${matched.title}</h2>
-            <p class="text-xs font-bold text-indigo-600 uppercase">🏛️ Authority: ${matched.authority}</p>
-            <div class="bg-slate-50 border p-4 rounded-xl text-sm leading-relaxed">${matched.description || 'No data uploaded.'}</div>
-        </div>
-    `;
+    payload.innerHTML = matched.description || 'No contents uploaded.';
 };
 
 window.triggerPlatformPushSubscription = async function() {
@@ -310,6 +330,7 @@ function bootstrapApplicationEngine() {
     
     window.navigateToHub = window.performSinglePageRoutingView;
 
+    // Listen layout posts loop
     onSnapshot(collection(db, "jobs"), (snapshot) => {
         cachedJobsArray = [];
         let approvalQueueHTML = "";
@@ -318,9 +339,9 @@ function bootstrapApplicationEngine() {
             const id = docSnap.id;
             cachedJobsArray.push({ id, ...data });
             if(data.approvalStatus === 'Pending') {
-                approvalQueueHTML += `<div class="p-3 bg-white border rounded-xl space-y-2 text-xs">
+                approvalQueueHTML += `<div class="p-3 bg-white border rounded-xl space-y-2 text-xs shadow-sm">
                     <h4 class="font-bold text-slate-800">${data.title}</h4>
-                    <div class="flex gap-2"><button onclick="window.approvePostItemNode('${id}')" class="bg-emerald-600 text-white px-2 py-1 rounded">Approve</button><button onclick="window.rejectPostItemNode('${id}')" class="bg-rose-600 text-white px-2 py-1 rounded">Reject</button></div>
+                    <div class="flex gap-2"><button onclick="window.approvePostItemNode('${id}')" class="bg-emerald-600 text-white px-2.5 py-1 rounded font-bold text-[11px]">Approve</button><button onclick="window.rejectPostItemNode('${id}')" class="bg-rose-600 text-white px-2.5 py-1 rounded font-bold text-[11px]">Reject</button></div>
                 </div>`;
             }
         });
@@ -328,6 +349,19 @@ function bootstrapApplicationEngine() {
         if(qBox) qBox.innerHTML = approvalQueueHTML || `<p class="text-xs font-bold text-slate-400 text-center py-4">कोई लंबित पोस्ट नहीं है।</p>`;
         window.executeUIRenderPipeline();
         window.executeSidebarLiveSearchFilters();
+    });
+
+    // Sync Dynamic PDF External tools panel sidebar channels
+    onSnapshot(collection(db, "pdf_tools"), (snapshot) => {
+        const container = document.getElementById('publicPdfToolsListTargetStack');
+        if(!container) return;
+        let html = "";
+        snapshot.forEach(d => {
+            const t = d.data();
+            html += `<a href="${t.url}" target="_blank" class="block w-full text-left bg-slate-50 hover:bg-purple-50 hover:text-purple-700 text-slate-700 text-xs font-bold p-2.5 rounded-xl border border-slate-100 truncate transition-all">🛠️ ${t.title}</a>`;
+        });
+        html = html || `<p class="text-[10px] font-bold text-slate-400 px-2">No tools active.</p>`;
+        container.innerHTML = html;
     });
 }
 window.addEventListener('DOMContentLoaded', bootstrapApplicationEngine);
