@@ -3,278 +3,189 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LuminaEdu | Super Admin Terminal Control Panel</title>
+    <title>LuminaEdu | Premium Career & Results Hub</title>
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body { 
+            font-family: 'Plus Jakarta Sans', 'Noto Sans Devanagari', sans-serif; 
+            background: linear-gradient(135deg, #e0f2fe 0%, #fef08a 30%, #fae8ff 100%);
+            color: #1e293b;
+            background-attachment: fixed;
+        }
+        .premium-glass-panel {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 1.5rem;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.04);
+        }
+        .luxury-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 1.25rem;
+            box-shadow: 0 10px 25px -10px rgba(0, 0, 0, 0.05);
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .luxury-card:hover {
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 25px 35px -10px rgba(99, 102, 241, 0.18);
+            border-color: rgba(99, 102, 241, 0.25);
+        }
+    </style>
 </head>
-<body class="bg-slate-50 min-h-screen text-slate-800 p-4 lg:p-8" style="font-family: 'Plus Jakarta Sans', sans-serif;">
+<body class="min-h-screen flex flex-col">
 
-    <div class="max-w-6xl mx-auto space-y-8">
-        
-        <div class="bg-slate-900 text-white p-6 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4 shadow-lg">
+    <!-- ✨ TOP PREMIUM HEADER COMPONENT -->
+    <header class="sticky top-0 z-50 bg-white/70 backdrop-blur-md border-b border-white/50 px-4 lg:px-12 py-3.5 flex items-center justify-between shadow-sm">
+        <div class="flex items-center gap-3 cursor-pointer" onclick="window.setJobFilter('All')">
+            <div class="bg-gradient-to-tr from-indigo-600 to-indigo-700 text-white font-black p-2.5 rounded-xl text-lg shadow-md shadow-indigo-600/20">LE</div>
             <div>
-                <h1 class="text-xl lg:text-2xl font-black">LuminaEdu Central Command Panel Matrix</h1>
-                <p class="text-xs text-slate-400 mt-1">Manage dynamic content grids, global configurations parameters, colors layouts nodes.</p>
+                <h1 class="text-xl md:text-2xl font-black text-slate-900 tracking-tight">Lumina<span class="text-indigo-600">Edu</span></h1>
+                <p class="hidden md:block text-[10px] text-slate-400 font-bold tracking-widest uppercase">Verified Central Information Grid</p>
             </div>
-            <a href="index.html" class="bg-white/10 text-white font-bold text-xs px-4 py-2 rounded-xl border border-white/10 hover:bg-white/20">View Website Live ↗</a>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Dynamic Category Navigation Chips inside Header -->
+        <div class="hidden lg:flex items-center gap-2" id="categoryFilterContainer"></div>
+
+        <button onclick="toggleAuthOverlay(true)" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs md:text-sm px-5 py-2.5 rounded-xl shadow-md transition-all whitespace-nowrap">
+            Join Platform 🚀
+        </button>
+    </header>
+
+    <!-- 🔍 SEARCH, SORT & CENTRAL MANAGEMENT CONTROL STRIP -->
+    <section class="max-w-[94%] w-full mx-auto px-2 pt-6">
+        <div class="premium-glass-panel p-4 flex flex-col md:flex-row gap-4 items-center justify-between">
+            <div class="w-full md:flex-1 relative">
+                <input type="text" id="globalPortalSearchBox" oninput="window.executeLiveSearchFiltering()" class="w-full bg-white/80 border border-slate-200 text-slate-800 font-semibold text-sm p-3 pl-10 rounded-xl outline-none focus:border-indigo-500 transition-all" placeholder="शीर्षक, बोर्ड या पद का नाम खोजें (Search live keywords)...">
+                <span class="absolute left-3.5 top-3.5 text-slate-400 text-sm">🔍</span>
+            </div>
             
-            <div class="lg:col-span-1 space-y-6">
-                
-                <div class="bg-white p-5 rounded-2xl shadow-sm border space-y-4">
-                    <h3 class="font-extrabold text-sm uppercase text-slate-400 border-b pb-2">Layout & Image Controls</h3>
-                    
-                    <div>
-                        <label class="block text-xs font-bold mb-1">Grid Column View Layout</label>
-                        <select id="settingGridColumns" class="w-full bg-slate-50 border text-xs p-2.5 rounded-xl outline-none font-bold">
-                            <option value="lg:grid-cols-3">3 Columns Normal Grid View (Default)</option>
-                            <option value="lg:grid-cols-2">2 Columns Extended Wide View</option>
-                            <option value="lg:grid-cols-1">1 Column Vertical Feed View</option>
-                        </select>
-                    </div>
+            <div class="w-full md:w-auto flex items-center gap-3">
+                <select id="globalPortalSortSelector" onchange="window.executeLiveSearchFiltering()" class="bg-white/80 border border-slate-200 text-slate-700 font-bold text-xs md:text-sm p-3 rounded-xl outline-none cursor-pointer">
+                    <option value="newest">📅 प्रकाशन तिथि: नवीन विज्ञापन (Newest First)</option>
+                    <option value="oldest">⏳ प्रकाशन तिथि: पुराने विज्ञापन (Oldest First)</option>
+                    <option value="alpha">🔤 वर्णानुक्रम अनुसार: A to Z Title</option>
+                </select>
+            </div>
+        </div>
+    </section>
 
-                    <div>
-                        <label class="block text-xs font-bold mb-1">Global Card Images Switch</label>
-                        <select id="settingImageVisibility" class="w-full bg-slate-50 border text-xs p-2.5 rounded-xl outline-none font-bold">
-                            <option value="show">Show Banner Image inside Feed Cards</option>
-                            <option value="hide">Hide All Images inside Feed Cards (Text Only Layout)</option>
-                        </select>
-                    </div>
+    <!-- 📱 DYNAMIC HUB VIEW ROUTER CONSOLE CONTAINER -->
+    <main class="max-w-[94%] w-full mx-auto p-2 lg:p-6 flex-1 flex flex-col lg:flex-row gap-6 items-start">
+        
+        <!-- LEFT REGION PANEL: CORE GATEWAY DISPATCHER VIEWS -->
+        <div class="flex-1 w-full min-w-0">
+            
+            <!-- VIEW 1: DYNAMIC FEED CARDS GRID VIEW VIEWPORT -->
+            <div id="mainFeedRouterBlock" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6"></div>
 
-                    <button onclick="saveGlobalLayoutConfigurationSettings()" class="w-full bg-slate-900 text-white font-bold text-xs py-3 rounded-xl hover:bg-slate-800 transition-all shadow-md">
-                        Save Interface Settings ⚡
-                    </button>
+            <!-- VIEW 2: EXTRA PREMIUM DEEP CONTENT VIEWER LAYER (HIDDEN BASE STATE) -->
+            <div id="postDetailView" class="hidden premium-glass-panel p-6 lg:p-10 bg-white/95 relative shadow-xl">
+                <button onclick="navigateToHub('front')" class="mb-6 inline-flex items-center gap-2 text-xs font-black text-indigo-700 bg-indigo-50 border border-indigo-100 px-4 py-2.5 rounded-xl transition-all hover:bg-indigo-100">
+                    ← मुख्य सूची पर वापस जाएं (Back to Home)
+                </button>
+                <div id="detailViewContentPayload"></div>
+            </div>
+
+            <!-- VIEW 3: DYNAMIC DEDICATED CONTRIBUTOR WORKSPACE (REPLACES REDIRECT CRASH) -->
+            <div id="contributorDashboardView" class="hidden premium-glass-panel p-6 lg:p-8 bg-white/95 shadow-xl space-y-6">
+                <div class="flex justify-between items-center border-b pb-4">
+                    <div>
+                        <h2 class="text-xl font-black text-slate-900">👨‍💻 Contributor Workspace Studio</h2>
+                        <p class="text-xs text-indigo-600 font-bold">Clearance Authenticated: Draft & Propose Board Listings</p>
+                    </div>
+                    <button onclick="window.location.reload()" class="bg-rose-600 text-white font-bold text-xs px-4 py-2 rounded-xl">Secure Logout</button>
                 </div>
-
-                <div class="bg-white p-5 rounded-2xl shadow-sm border space-y-4">
-                    <h3 class="font-extrabold text-sm uppercase text-slate-400 border-b pb-2">Dynamic Categories Panel</h3>
-                    
-                    <div>
-                        <label class="block text-xs font-bold mb-1">Category Name</label>
-                        <input type="text" id="newCatName" class="w-full bg-slate-50 border text-xs p-2.5 rounded-xl outline-none" placeholder="e.g., Admit-Card, Sarkari-Yojna">
+                <!-- Contributor Upload Module Ingestion Form -->
+                <form id="contributorListingForm" onsubmit="window.executeContributorPostSubmission(event)" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div><label class="block text-xs font-bold text-slate-600 mb-1">Post Title Headline</label><input type="text" id="cPostTitle" required class="w-full bg-slate-50 border text-xs p-3 rounded-xl outline-none" placeholder="e.g. SSC CGL Recruitment 2026"></div>
+                        <div><label class="block text-xs font-bold text-slate-600 mb-1">Issuing Board Authority</label><input type="text" id="cPostAuth" required class="w-full bg-slate-50 border text-xs p-3 rounded-xl outline-none" placeholder="e.g. Staff Selection Commission"></div>
+                        <div><label class="block text-xs font-bold text-slate-600 mb-1">Category Route</label><select id="cPostType" class="w-full bg-slate-50 border text-xs p-3 rounded-xl outline-none font-bold"></select></div>
+                        <div><label class="block text-xs font-bold text-slate-600 mb-1">Last Date to Apply</label><input type="text" id="cPostDate" class="w-full bg-slate-50 border text-xs p-3 rounded-xl outline-none" placeholder="e.g. 15/08/2026"></div>
                     </div>
+                    <button type="submit" class="w-full bg-indigo-600 text-white font-bold text-sm py-3.5 rounded-xl shadow-md">Submit Document to Super Admin Queue 🚀</button>
+                </form>
+            </div>
+        </div>
 
-                    <div>
-                        <label class="block text-xs font-bold mb-1">Pick Identity Color (Hex Tag)</label>
-                        <div class="flex gap-2">
-                            <input type="color" id="newCatColorPicker" class="w-10 h-10 border rounded-xl cursor-pointer bg-transparent">
-                            <input type="text" id="newCatColorHex" class="flex-1 bg-slate-50 border text-xs p-2.5 rounded-xl outline-none font-mono" placeholder="#6366f1">
-                        </div>
-                    </div>
+        <!-- 🔥 RIGHT SIDEBAR COMPONENT: OTHER FEATURED LISTINGS BLOCK (As seen in image 2) -->
+        <aside class="w-full lg:w-80 shrink-0 sticky top-24 space-y-4">
+            <div class="premium-glass-panel p-5 space-y-4 shadow-sm">
+                <div class="border-b pb-2 flex items-center justify-between">
+                    <h3 class="font-black text-xs uppercase tracking-wider text-slate-900">🔥 Other Top Posts</h3>
+                    <span class="bg-indigo-600 text-white text-[9px] px-1.5 py-0.5 font-bold rounded">Live Sync</span>
+                </div>
+                <!-- Right dynamic sidebar lists stack rendering targets inside app.js -->
+                <div id="rightSidebarRecommendedStack" class="space-y-3.5"></div>
+            </div>
+        </aside>
+    </main>
 
-                    <button onclick="createNewCustomCategoryNode()" class="w-full bg-indigo-600 text-white font-bold text-xs py-3 rounded-xl hover:bg-indigo-700 transition-all shadow-md">
-                        Add New Category Node ➕
-                    </button>
+    <!-- 🏛️ AD SENSE COMPLIANT SYSTEM COMPLIANCE FOOTER -->
+    <footer class="bg-white/80 backdrop-blur-md border-t border-slate-200 p-6 text-xs text-slate-500 mt-12">
+        <div class="max-w-[94%] w-full mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+            <div>
+                <h4 class="font-extrabold text-slate-900 uppercase tracking-wide">LUMINAEDU CM NETWORKS</h4>
+                <p class="mt-0.5">शिक्षा, एडमिट कार्ड और परीक्षा परिणामों का सर्वाधिक तीव्र एवं पारदर्शी डिजिटल सेवा केंद्र।</p>
+            </div>
+            <div class="flex flex-wrap gap-4 font-bold text-indigo-600 justify-center">
+                <a href="pages/privacy.html" class="hover:underline">Privacy Policy</a> | 
+                <a href="pages/terms.html" class="hover:underline">Terms & Conditions</a> | 
+                <a href="pages/contact.html" class="hover:underline">Contact Center</a>
+            </div>
+        </div>
+    </footer>
 
-                    <div class="pt-2">
-                        <p class="text-[11px] font-bold text-slate-400 mb-2">Active Categories Stream List:</p>
-                        <div id="adminCategoriesList" class="space-y-1"></div>
-                    </div>
+    <!-- 🔐 LUXURY AUTHENTICATION GATEWAY MODAL (WITH ACCESSIBLE FORGOT FORMS PINCH) -->
+    <div id="authModalOverlay" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 flex items-center justify-center hidden opacity-0 transition-all duration-300">
+        <div class="bg-white/95 max-w-sm w-full m-4 p-6 rounded-3xl shadow-2xl relative border border-white">
+            <button onclick="toggleAuthOverlay(false)" class="absolute top-4 right-4 text-slate-400 font-bold hover:text-slate-600">✕</button>
+            
+            <div id="authFormMainGroupBox">
+                <div class="flex border-b text-sm font-bold mb-4">
+                    <button id="tabLogin" onclick="switchAuthForm('login')" class="flex-1 pb-2 border-b-2 border-indigo-600 text-indigo-600">यूजर लॉगिन</button>
+                    <button id="tabReg" onclick="switchAuthForm('reg')" class="flex-1 pb-2 text-slate-400">रजिस्ट्रेशन</button>
+                </div>
+                <div class="space-y-4">
+                    <div id="regNameBlock" class="hidden"><label class="block text-xs font-bold text-slate-600 mb-1">पूरा नाम</label><input type="text" id="usrName" class="w-full bg-slate-50 border text-sm p-3 rounded-xl outline-none" placeholder="आपका नाम"></div>
+                    <div><label class="block text-xs font-bold text-slate-600 mb-1">ईमेल</label><input type="email" id="usrEmail" class="w-full bg-slate-50 border text-sm p-3 rounded-xl outline-none" placeholder="name@domain.com"></div>
+                    <div><label class="block text-xs font-bold text-slate-600 mb-1">पासवर्ड</label><input type="password" id="usrPass" class="w-full bg-slate-50 border text-sm p-3 rounded-xl outline-none" placeholder="••••••••"></div>
+                    <button onclick="executeAuthActionPipeline()" class="w-full bg-indigo-600 text-white font-bold text-sm py-3.5 rounded-xl shadow-md">सत्यापन निष्पादित करें ⚡</button>
+                    <button onclick="toggleForgotPasswordViewMode(true)" class="w-full text-center text-xs font-bold text-slate-400 hover:text-indigo-600 transition-colors">पासवर्ड भूल गए? (Forgot Password)</button>
                 </div>
             </div>
 
-            <div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-sm border space-y-6">
-                <h3 class="font-extrabold text-base border-b pb-2 text-slate-900">Post New Advertisement Feed Node</h3>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-bold mb-1">Advertisement Job Title</label>
-                        <input type="text" id="postTitle" class="w-full bg-slate-50 border text-xs p-3 rounded-xl outline-none" placeholder="e.g., UP Police Constable Online Form 2026">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold mb-1">Authority Organization Board</label>
-                        <input type="text" id="postAuthority" class="w-full bg-slate-50 border text-xs p-3 rounded-xl outline-none" placeholder="e.g., UPRPB">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold mb-1">Select Target Category Mapping</label>
-                        <select id="postCategorySelect" class="w-full bg-slate-50 border text-xs p-3 rounded-xl outline-none font-semibold"></select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold mb-1">Last Date Submission</label>
-                        <input type="text" id="postLastDate" class="w-full bg-slate-50 border text-xs p-3 rounded-xl outline-none" placeholder="e.g., 31/12/2026 or Notification Soon">
-                    </div>
-                    <div class="md:col-span-2">
-                        <label class="block text-xs font-bold mb-1">Banner Image URL Asset (Optional)</label>
-                        <input type="text" id="postImageUrl" class="w-full bg-slate-50 border text-xs p-3 rounded-xl outline-none" placeholder="Paste full HTTP banner link address">
-                    </div>
-                    <div class="md:col-span-2">
-                        <label class="block text-xs font-bold mb-1">Description Meta Text Content</label>
-                        <textarea id="postDesc" rows="4" class="w-full bg-slate-50 border text-xs p-3 rounded-xl outline-none" placeholder="Type core updates details details breakdown..."></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold mb-1">Application Fees Info Text</label>
-                        <textarea id="postFees" rows="2" class="w-full bg-slate-50 border text-xs p-3 rounded-xl outline-none" placeholder="General: 400&#10;SC/ST: 0"></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold mb-1">Eligibility Criteria text</label>
-                        <textarea id="postElig" rows="2" class="w-full bg-slate-50 border text-xs p-3 rounded-xl outline-none" placeholder="10+2 Intermediate Exam Passed in Any Recognized Board."></textarea>
-                    </div>
-                </div>
-
-                <button onclick="submitNewPostNodePipeline()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm py-3.5 rounded-xl transition-all shadow-md">
-                    Publish & Make It Live Globally 🚀
-                </button>
-
-                <div class="pt-4 border-t">
-                    <h4 class="font-extrabold text-sm text-slate-900 mb-3">Live Active Advertisements Hub List</h4>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs text-slate-600 border-collapse">
-                            <thead>
-                                <tr class="bg-slate-100 font-bold border-b text-slate-700">
-                                    <th class="p-3">Title</th>
-                                    <th class="p-3">Category</th>
-                                    <th class="p-3 text-center">Actions Ports</th>
-                                </tr>
-                            </thead>
-                            <tbody id="adminPostsListTable"></tbody>
-                        </table>
-                    </div>
-                </div>
+            <!-- Embedded Forgot Password Remap Mode Module Form UI -->
+            <div id="authFormForgotGroupBox" class="hidden space-y-4">
+                <h3 class="text-sm font-black uppercase text-slate-900 border-b pb-2">🔑 Account Recovery Panel</h3>
+                <p class="text-xs text-slate-500 font-medium leading-relaxed">अपना पंजीकृत ईमेल दर्ज करें, सिस्टम सर्वर आपके ईमेल पर ऑटोमैटिक रीसेट टोकन लिंक भेज देगा।</p>
+                <div><label class="block text-xs font-bold text-slate-600 mb-1">पंजीकृत ईमेल पता</label><input type="email" id="forgotUsrEmail" class="w-full bg-slate-50 border text-sm p-3 rounded-xl outline-none" placeholder="name@domain.com"></div>
+                <button onclick="executeForgotDispatchRecoveryLink()" class="w-full bg-slate-900 text-white font-bold text-xs py-3.5 rounded-xl shadow-md">Reset Password Link 📡</button>
+                <button type="button" onclick="toggleForgotPasswordViewMode(false)" class="w-full text-center text-xs font-bold text-indigo-600 underline">← Back to Log In</button>
             </div>
         </div>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, doc, setDoc, onSnapshot, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-        // YAHAN APNI REAL FIREBASE DIKHI GYI VALUE SETUP KAREIN EXACT MATCH:
-        const firebaseConfig = {
-            apiKey: "YOUR_REAL_API_KEY_HERE",
-            authDomain: "luminaedu-ai786.firebaseapp.com",
-            projectId: "luminaedu-ai786",
-            storageBucket: "luminaedu-ai786.appspot.com",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID_HERE",
-            appId: "YOUR_APP_ID_HERE"
+    <!-- Core Setup Toast Container -->
+    <script id="toastUiLauncherBlock">
+        window.spawnPremiumToastAlert = function(title, message, type) {
+            const toast = document.getElementById('premiumToastNotification');
+            if(!toast) return;
+            document.getElementById('toastTitleSlot').innerText = title;
+            document.getElementById('toastMessageSlot').innerText = message;
+            document.getElementById('toastIconSlot').innerText = type === 'error' ? "❌" : "✨";
+            toast.className = `fixed top-5 left-1/2 transform -translate-x-1/2 z-[100] max-w-sm w-full mx-4 bg-white border p-4 rounded-2xl shadow-2xl flex items-start gap-3 transition-all duration-300 opacity-100 translate-y-0 ${type==='error'?'border-rose-200 bg-rose-50':'border-emerald-200 bg-emerald-50'}`;
+            setTimeout(() => { toast.className += " opacity-0 translate-y-[-20px] pointer-events-none"; }, 4000);
         };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        // SYNC COLOR PICKER VALUE TO TEXT FIELD LOCALLY
-        const picker = document.getElementById('newCatColorPicker');
-        const txtHex = document.getElementById('newCatColorHex');
-        if(picker && txtHex) {
-            picker.addEventListener('input', (e) => { txtHex.value = e.target.value; });
-        }
-
-        // CONTROL CHANNEL 1: CREATE CATEGORY ENGINE LINKER
-        window.createNewCustomCategoryNode = async function() {
-            const name = document.getElementById('newCatName').value.trim();
-            const hex = document.getElementById('newCatColorHex').value.trim() || '#3b82f6';
-            if(!name) return alert('Category Name cannot be blank!');
-            
-            try {
-                await addDoc(collection(db, "categories"), { name: name, hexColor: hex });
-                document.getElementById('newCatName').value = "";
-                alert('Success: Category Node Added Successfully! 🎉');
-            } catch(e) { alert(e.message); }
-        };
-
-        window.deleteCategoryNode = async function(id) {
-            if(confirm('Are you sure you want to completely erase this category channel?')) {
-                await deleteDoc(doc(db, "categories", id));
-            }
-        };
-
-        // CONTROL CHANNEL 2: CREATE POST APPLICATION PIPELINE ENGINE
-        window.submitNewPostNodePipeline = async function() {
-            const title = document.getElementById('postTitle').value.trim();
-            const authority = document.getElementById('postAuthority').value.trim();
-            const type = document.getElementById('postCategorySelect').value;
-            const lastDate = document.getElementById('postLastDate').value.trim();
-            const imgUrl = document.getElementById('postImageUrl').value.trim();
-            const description = document.getElementById('postDesc').value.trim();
-            const feesDetails = document.getElementById('postFees').value.trim();
-            const eligibility = document.getElementById('postElig').value.trim();
-
-            if(!title || !authority || !type) return alert('Fields Missing: Title, Authority and Categories Selection is mandatory!');
-
-            try {
-                await addDoc(collection(db, "jobs"), {
-                    title, authority, type, lastDate,
-                    imageUrls: imgUrl ? [imgUrl] : [],
-                    description, feesDetails, eligibility,
-                    approvalStatus: "Live" // Forcing default visibility instantly
-                });
-                
-                // Clear inputs form parameters arrays fields
-                document.getElementById('postTitle').value = "";
-                document.getElementById('postAuthority').value = "";
-                document.getElementById('postLastDate').value = "";
-                document.getElementById('postImageUrl').value = "";
-                document.getElementById('postDesc').value = "";
-                document.getElementById('postFees').value = "";
-                document.getElementById('postElig').value = "";
-                alert('Success: Post Data is now Live On Website Main Front Feed Grid! 🚀');
-            } catch(e) { alert(e.message); }
-        };
-
-        window.deletePostNode = async function(id) {
-            if(confirm('Erase this post data advertisement forever?')) {
-                await deleteDoc(doc(db, "jobs", id));
-            }
-        };
-
-        // CONTROL CHANNEL 3: SYSTEM INTERFACE TOGGLES SETTINGS SAVE
-        window.saveGlobalLayoutConfigurationSettings = async function() {
-            const col = document.getElementById('settingGridColumns').value;
-            const img = document.getElementById('settingImageVisibility').value;
-            try {
-                await setDoc(doc(db, "app_settings", "grid_layout"), { columnsClass: col, imageVisibility: img });
-                alert('System Parameters Configuration Layout State updated successfully! Refresh home page to view changes.');
-            } catch(e) { alert(e.message); }
-        };
-
-        // REALTIME CORE PIPELINE DATA STREAMS LISTENER DISPATCHERS
-        function triggerDashboardRealtimeDataSyncer() {
-            // Live Category Sync Dropdowns
-            onSnapshot(collection(db, "categories"), (snap) => {
-                const select = document.getElementById('postCategorySelect');
-                const list = document.getElementById('adminCategoriesList');
-                if(!select || !list) return;
-
-                let selectOptions = "";
-                let sideListItems = "";
-
-                snap.forEach(d => {
-                    const c = d.data();
-                    selectOptions += `<option value="${c.name}">${c.name}</option>`;
-                    sideListItems += `
-                        <div class="flex items-center justify-between p-2 bg-slate-100 rounded-lg border text-xs">
-                            <span class="font-bold" style="color: ${c.hexColor}">${c.name}</span>
-                            <button onclick="deleteCategoryNode('${d.id}')" class="text-rose-600 font-bold hover:underline">✕</button>
-                        </div>`;
-                });
-
-                select.innerHTML = selectOptions;
-                list.innerHTML = sideListItems || `<p class="text-[11px] text-slate-400">No Custom Nodes Active</p>`;
-            });
-
-            // Live Database Posts Stream Tables View Sync
-            onSnapshot(collection(db, "jobs"), (snap) => {
-                const table = document.getElementById('adminPostsListTable');
-                if(!table) return;
-
-                let rows = "";
-                snap.forEach(d => {
-                    const p = d.data();
-                    rows += `
-                        <tr class="border-b hover:bg-slate-50 font-medium">
-                            <td class="p-3 truncate max-w-[200px] font-bold text-slate-800">${p.title}</td>
-                            <td class="p-3"><span class="px-2 py-0.5 rounded bg-slate-100 border text-slate-600">${p.type}</span></td>
-                            <td class="p-3 text-center">
-                                <button onclick="deletePostNode('${d.id}')" class="bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-600 text-[11px] font-bold px-3 py-1 rounded-lg">Delete</button>
-                            </td>
-                        </tr>`;
-                });
-                table.innerHTML = rows || `<tr><td colspan="3" class="p-4 text-center text-slate-400">No Post Active In Live Database Streaming Node</td></tr>`;
-            });
-        }
-
-        window.addEventListener('DOMContentLoaded', triggerDashboardRealtimeDataSyncer);
     </script>
 </body>
 </html>
