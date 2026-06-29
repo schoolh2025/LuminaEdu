@@ -3,143 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LuminaEdu | नवीनतम सरकारी नौकरी, एडमिट कार्ड, रिजल्ट और सरकारी योजनाएं</title>
-    <meta name="description" content="LuminaEdu (सर्कुलर हब): भारत का सबसे भरोसेमंद रोजगार और सरकारी योजना सूचना केंद्र।">
-    <meta name="keywords" content="LuminaEdu, Sarkari Result, Sarkari Job, Admit Card, PM Yojana List">
-    <meta name="robots" content="index, follow">
+    <title>LuminaEdu | Latest Sarkari Job, Admit Card & Result Portal</title>
+    <meta name="description" content="India's most trusted recruitment and information hub.">
     
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Noto+Sans+Devanagari:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;600;700;800&display=swap" rel="stylesheet">
     
     <style>
         body { 
             font-family: 'Plus Jakarta Sans', 'Noto Sans Devanagari', sans-serif; 
-            background: linear-gradient(135deg, #f3f8fc 0%, #f4fefe 100%);
+            background-color: #0b0f19; /* Deep Slate/Black background like your premium image */
+            color: #f1f5f9;
+        }
+        .neon-glow-card {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .neon-glow-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(99, 102, 241, 0.4);
+            box-shadow: 0 12px 40px -5px rgba(99, 102, 241, 0.2);
         }
         .glass-header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+            background: rgba(11, 15, 25, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
-        .premium-card {
-            background: #ffffff;
-            border: 1px solid rgba(226, 232, 240, 0.8);
-            border-radius: 1.5rem;
-            padding: 1.5rem;
-            box-shadow: 0 4px 20px -2px rgba(148, 163, 184, 0.06);
-            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .premium-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 25px -5px rgba(148, 163, 184, 0.15);
-            border-color: rgba(79, 70, 229, 0.3);
-        }
-        /* Premium Floating Toast Alert CSS Animation */
-        #premiumToastNotification {
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
+        /* Custom Premium Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0b0f19; }
+        ::-webkit-scrollbar-thumb { background: #1f2937; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #4f46e5; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
-    <!-- 🔥 NEW CORE MODULE: ULTRA PREMIUM FLOATING ALERTS MODAL (Replaces Cheap Browser Popups) -->
-    <div id="premiumToastNotification" class="fixed top-5 left-1/2 transform -translate-x-1/2 z-[100] max-w-sm w-full mx-4 bg-white/90 backdrop-blur-xl border p-4 rounded-2xl shadow-2xl flex items-start gap-3 opacity-0 pointer-events-none translate-y-[-20px]">
-        <div id="toastIconSlot" class="text-xl">🔔</div>
-        <div class="flex-1">
-            <h4 id="toastTitleSlot" class="text-xs font-black uppercase tracking-wider text-slate-900">System Alert</h4>
-            <p id="toastMessageSlot" class="text-xs font-bold text-slate-600 mt-0.5 leading-relaxed"></p>
-        </div>
-        <button onclick="dismissPremiumToastNotification()" class="text-slate-400 hover:text-slate-600 font-bold text-xs">✕</button>
-    </div>
-
-    <!-- Top Navigation Block -->
-    <header class="glass-header sticky top-0 z-50 px-4 lg:px-10 py-3 flex flex-row items-center justify-between gap-4 shadow-sm">
-        <div class="flex items-center gap-3">
-            <h1 class="text-xl md:text-2xl font-extrabold text-indigo-700 tracking-tight cursor-pointer" onclick="window.location.reload()">LuminaEdu</h1>
-            <div class="hidden md:block text-slate-600 text-sm font-bold border-l-2 border-slate-300 pl-4 py-0.5 max-w-xl">
-                📋 शिक्षा, रोज़गार और सरकारी योजनाएं – सटीक सूचना, सबसे तेज़ समाधान।
+    <header class="glass-header sticky top-0 z-50 px-4 lg:px-12 py-4 flex items-center justify-between shadow-xl">
+        <div class="flex items-center gap-4 cursor-pointer" onclick="navigateToHub('front')">
+            <div class="bg-indigo-600 text-white font-black p-2.5 rounded-xl shadow-lg shadow-indigo-600/30 tracking-wider text-xl">LE</div>
+            <div>
+                <h1 class="text-xl md:text-2xl font-black text-white tracking-tight">Lumina<span class="text-indigo-400">Edu</span></h1>
+                <p class="hidden md:block text-[11px] text-slate-400 font-semibold tracking-wide uppercase">Circular Hub & Recruitment Network</p>
             </div>
         </div>
 
-        <div class="hidden lg:flex items-center gap-2" id="categoryFilterContainer"></div>
-
-        <button onclick="toggleAuthOverlay(true)" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs md:text-sm px-4 py-2 md:py-2.5 rounded-xl shadow-md transition-all whitespace-nowrap">
-            Join Us 🚀
-        </button>
+        <div class="flex items-center gap-3">
+            <button onclick="toggleAuthOverlay(true)" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs md:text-sm px-5 py-2.5 rounded-xl shadow-lg shadow-indigo-600/20 transition-all">
+                Join Us 🚀
+            </button>
+        </div>
     </header>
 
-    <!-- Slogan Banner for Mobile -->
-    <section class="block md:hidden bg-indigo-900 text-white text-center py-2 px-4 text-[11px] font-bold">
-        📋 शिक्षा, रोज़गार और सरकारी योजनाएं – सटीक सूचना, सबसे तेज़ समाधान।
-    </section>
+    <section id="categoryFiltersSection" class="max-w-[92%] w-full mx-auto px-2 pt-8">
+        <div class="bg-slate-900/60 border border-white/5 p-4 rounded-2xl flex flex-col lg:flex-row items-center justify-between gap-4">
+            <div class="text-center lg:text-left">
+                <span class="text-[10px] bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 font-black px-2.5 py-1 rounded-full uppercase tracking-wider">Live Filters</span>
+                <h2 class="text-base font-black text-white mt-1">श्रेणी अनुसार खोजें (Filter Post Category)</h2>
+            </div>
+            
+            <div class="hidden lg:flex flex-wrap items-center gap-2" id="desktopCategoryChips"></div>
 
-    <!-- Mobile Category Dropdown Selector -->
-    <section class="block lg:hidden max-w-[92%] w-full mx-auto px-2 pt-4">
-        <div class="bg-white border border-slate-200 p-3 rounded-2xl shadow-sm flex flex-col gap-1.5">
-            <label class="text-[11px] font-extrabold text-slate-500 uppercase tracking-wider">🔍 श्रेणी अनुसार खोजें</label>
-            <select id="mobileCategoryDropdown" onchange="window.setJobFilter(this.value)" class="w-full bg-slate-50 border border-slate-200 text-slate-800 font-bold text-sm p-3 rounded-xl outline-none shadow-inner">
-                <option value="All">🔍 सभी श्रेणियां (All Categories)</option>
-                <option value="Job">💼 सरकारी नौकरी (Sarkari Job)</option>
-                <option value="Admit-Card">🎟️ एडमिट कार्ड (Admit Card)</option>
-                <option value="Result">📊 परीक्षा परिणाम (Sarkari Result)</option>
-                <option value="Yojna">🏛️ सरकारी योजना (Sarkari Yojna)</option>
-                <option value="Scholarship">🎓 स्कॉलरशिप (Scholarship)</option>
-            </select>
+            <div class="block lg:hidden w-full">
+                <select id="mobileCategorySelect" onchange="window.setJobFilter(this.value)" class="w-full bg-slate-800 border border-white/10 text-slate-200 font-bold text-sm p-3.5 rounded-xl outline-none">
+                    <option value="All">🔍 सभी श्रेणियां (All Fields)</option>
+                    <option value="Job">💼 सरकारी नौकरी (Sarkari Job)</option>
+                    <option value="Admit-Card">🎟️ एडमिट कार्ड (Admit Card)</option>
+                    <option value="Result">📊 परीक्षा परिणाम (Sarkari Result)</option>
+                    <option value="Yojna">🏛️ सरकारी योजना (Sarkari Yojna)</option>
+                    <option value="Scholarship">🎓 स्कॉलरशिप (Scholarship)</option>
+                </select>
+            </div>
         </div>
     </section>
 
-    <!-- Main Feed Content Grid -->
     <main class="max-w-[92%] w-full mx-auto p-4 lg:p-8 flex-1">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="publicCardsFeed"></div>
+        
+        <div id="postsGridView" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+
+        <div id="postDetailView" class="hidden max-w-4xl mx-auto bg-slate-900/40 border border-white/5 p-6 lg:p-10 rounded-3xl shadow-2xl relative">
+            <button onclick="navigateToHub('front')" class="mb-6 inline-flex items-center gap-2 text-xs font-bold text-indigo-400 hover:text-indigo-300 bg-indigo-500/10 border border-indigo-500/20 px-4 py-2 rounded-xl transition-all">
+                ← मुख्य पृष्ठ पर वापस जाएं (Back to Home)
+            </button>
+            <div id="detailViewContentPayload"></div>
+        </div>
     </main>
 
-    <!-- Footer Links Section -->
-    <footer class="bg-white border-t border-slate-200/60 p-6 text-sm text-slate-600 mt-12">
-        <div class="max-w-[92%] w-full mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+    <footer class="bg-[#070a12] border-t border-white/5 p-8 text-sm text-slate-400 mt-16">
+        <div class="max-w-[92%] w-full mx-auto flex flex-col lg:flex-row items-center justify-between gap-6 text-center lg:text-left">
             <div>
-                <h4 class="font-black text-slate-900 uppercase tracking-wide">LUMINAEDU</h4>
-                <p class="font-semibold text-slate-500 text-xs mt-0.5">सटीक सूचना एवं त्वरित समाधान नेटवर्क। © 2026</p>
+                <div class="flex items-center justify-center lg:justify-start gap-3">
+                    <span class="bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 text-xs font-black px-2 py-0.5 rounded-md">PRO</span>
+                    <h4 class="font-black text-white text-base tracking-wide uppercase">LuminaEdu Network</h4>
+                </div>
+                <p class="text-xs font-medium text-slate-500 mt-1">सटीक शिक्षा, नवीनतम रोज़गार एवं त्वरित सरकारी योजनाओं का विश्वसनीय सूचना मंच। © 2026</p>
             </div>
-            <div class="hidden md:flex flex-wrap gap-4 text-indigo-600 font-bold text-xs justify-center">
-                <button onclick="window.setJobFilter('All')" class="hover:underline">Home Hub</button> | 
-                <a href="pages/privacy.html" class="hover:underline">Privacy Policy</a> | 
-                <a href="pages/terms.html" class="hover:underline">Terms & Conditions</a> | 
-                <a href="pages/disclaimer.html" class="hover:underline">Disclaimer</a> | 
-                <a href="pages/contact.html" class="hover:underline">Contact Us</a>
+            
+            <div class="flex flex-wrap gap-4 text-slate-400 font-bold text-xs justify-center bg-slate-900/50 border border-white/5 px-4 py-2.5 rounded-xl">
+                <button onclick="window.setJobFilter('All')" class="hover:text-indigo-400 transition-colors">Home Hub</button>
+                <span class="text-slate-700">|</span>
+                <a href="pages/privacy.html" class="hover:text-indigo-400 transition-colors">Privacy Policy</a>
+                <span class="text-slate-700">|</span>
+                <a href="pages/terms.html" class="hover:text-indigo-400 transition-colors">Terms & Conditions</a>
+                <span class="text-slate-700">|</span>
+                <a href="pages/disclaimer.html" class="hover:text-indigo-400 transition-colors">Disclaimer</a>
+                <span class="text-slate-700">|</span>
+                <a href="pages/contact.html" class="hover:text-indigo-400 transition-colors">Contact Us</a>
             </div>
-            <div class="font-bold text-xs text-slate-400">Security Shield Verification Active v4.8</div>
+            
+            <div class="flex flex-col items-center lg:items-end gap-1">
+                <span class="text-[11px] font-mono text-slate-500 bg-slate-900 px-3 py-1 rounded-md border border-white/5">SSL SECURE SHIELD ACTIVE</span>
+                <span class="text-[10px] text-slate-600 font-bold">App Interface Framework v5.2</span>
+            </div>
         </div>
     </footer>
 
-    <!-- User Authentication Modal Layer (WITH REFRESH COUNTER SECURITY RESET) -->
-    <div id="authModalOverlay" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-all duration-300">
-        <div class="bg-white max-w-sm w-full m-4 p-6 rounded-3xl shadow-2xl relative border border-slate-100">
-            <button onclick="toggleAuthOverlay(false)" class="absolute top-4 right-4 text-slate-400 font-bold hover:text-slate-600">✕</button>
-            <div class="flex border-b text-sm font-bold mb-4">
-                <button id="tabLogin" onclick="switchAuthForm('login')" class="flex-1 pb-2 border-b-2 border-indigo-600 text-indigo-600">यूजर लॉगिन</button>
-                <button id="tabReg" onclick="switchAuthForm('reg')" class="flex-1 pb-2 text-slate-400">यूजर रजिस्ट्रेशन</button>
+    <div id="authModalOverlay" class="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center hidden opacity-0 transition-all duration-300">
+        <div class="bg-slate-900 border border-white/10 max-w-sm w-full m-4 p-6 rounded-3xl shadow-2xl relative">
+            <button onclick="toggleAuthOverlay(false)" class="absolute top-4 right-4 text-slate-400 font-bold hover:text-slate-200">✕</button>
+            <div class="flex border-b border-white/5 text-sm font-bold mb-4">
+                <button id="tabLogin" onclick="switchAuthForm('login')" class="flex-1 pb-2 border-b-2 border-indigo-500 text-indigo-400">लॉगिन</button>
+                <button id="tabReg" onclick="switchAuthForm('reg')" class="flex-1 pb-2 text-slate-500">रजिस्ट्रेशन</button>
             </div>
-            <div class="space-y-4">
+            <div class="space-y-4 text-slate-300">
                 <div id="regNameBlock" class="hidden">
-                    <label class="block text-xs font-bold text-slate-600 uppercase">पूरा नाम दर्ज करें</label>
-                    <!-- autocomplete="off" maps prevent browser caching forms inputs -->
-                    <input type="text" id="usrName" autocomplete="off" class="w-full bg-slate-50 border text-sm p-3 rounded-xl outline-none" placeholder="आपका नाम">
+                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1">पूरा नाम</label>
+                    <input type="text" id="usrName" class="w-full bg-slate-800 border border-white/5 text-sm p-3 rounded-xl outline-none text-white" placeholder="आपका नाम">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-600 uppercase">ईमेल एड्रेस</label>
-                    <input type="email" id="usrEmail" autocomplete="off" class="w-full bg-slate-50 border text-sm p-3 rounded-xl outline-none" placeholder="name@domain.com">
+                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1">ईमेल एड्रेस</label>
+                    <input type="email" id="usrEmail" class="w-full bg-slate-800 border border-white/5 text-sm p-3 rounded-xl outline-none text-white" placeholder="name@domain.com">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-600 uppercase">सुरक्षित पासवर्ड (Dots View)</label>
-                    <div class="relative">
-                        <input type="password" id="usrPass" autocomplete="new-password" class="w-full bg-slate-50 border text-sm p-3 pr-10 rounded-xl outline-none font-mono" placeholder="••••••••">
-                        <button type="button" onclick="togglePasswordVisibility('usrPass')" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-indigo-600 font-bold text-sm">👁️</button>
-                    </div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1">पासवर्ड</label>
+                    <input type="password" id="usrPass" class="w-full bg-slate-800 border border-white/5 text-sm p-3 rounded-xl outline-none text-white font-mono" placeholder="••••••••">
                 </div>
-                <button onclick="executeAuthActionPipeline()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm py-3.5 rounded-xl shadow-md">सत्यापन निष्पादित करें ⚡</button>
-                <button onclick="executeForgotRemapPipeline()" class="w-full text-center text-xs text-slate-500 font-bold hover:underline">पासवर्ड भूल गए? (Forgot Password)</button>
+                <button onclick="executeAuthActionPipeline()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm py-3.5 rounded-xl shadow-md transition-all">सत्यापन निष्पादित करें ⚡</button>
             </div>
         </div>
     </div>
@@ -148,83 +153,46 @@
     <script>
         let currentAuthMode = 'login';
         
-        // 🔥 HIGH SECURITY RULE: Instantly purges memory entries on page mount/reload sequences
-        window.addEventListener('load', () => { clearIdentityFieldsData(); });
-
-        function clearIdentityFieldsData() {
-            if(document.getElementById('usrName')) document.getElementById('usrName').value = "";
-            if(document.getElementById('usrEmail')) document.getElementById('usrEmail').value = "";
-            if(document.getElementById('usrPass')) document.getElementById('usrPass').value = "";
-        }
-
-        // Custom High-End Dynamic Toast System Dispatcher
-        window.spawnPremiumToastAlert = function(title, message, type) {
-            const toast = document.getElementById('premiumToastNotification');
-            const icon = document.getElementById('toastIconSlot');
-            const tTitle = document.getElementById('toastTitleSlot');
-            const tMsg = document.getElementById('toastMessageSlot');
+        // 🔀 DYNAMIC SINGLE-PAGE APP ROUTER CHANNELS
+        window.navigateToHub = function(targetViewMode, postId = null) {
+            const gridView = document.getElementById('postsGridView');
+            const detailView = document.getElementById('postDetailView');
+            const filtersSection = document.getElementById('categoryFiltersSection');
             
-            tTitle.innerText = title;
-            tMsg.innerText = message;
-            
-            if(type === 'error') {
-                icon.innerText = "❌";
-                toast.className = toast.className.replace(/border-[a-z]*/g, '') + " border-rose-200 bg-rose-50/95";
+            if(targetViewMode === 'detail') {
+                gridView.classList.add('hidden');
+                filtersSection.classList.add('hidden');
+                detailView.classList.remove('hidden');
+                // Trigger detail rendering data inside app.js instance array
+                if(typeof window.renderPostDeepContentView === 'function') {
+                    window.renderPostDeepContentView(postId);
+                }
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             } else {
-                icon.innerText = "✨";
-                toast.className = toast.className.replace(/border-[a-z]*/g, '') + " border-emerald-200 bg-emerald-50/95";
-            }
-            
-            toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
-            toast.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
-            
-            setTimeout(() => { dismissPremiumToastNotification(); }, 5000);
-        };
-
-        window.dismissPremiumToastNotification = function() {
-            const toast = document.getElementById('premiumToastNotification');
-            if(toast) {
-                toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
-                toast.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
+                detailView.classList.add('hidden');
+                gridView.classList.remove('hidden');
+                filtersSection.classList.remove('hidden');
             }
         };
 
         window.toggleAuthOverlay = function(show) {
             const overlay = document.getElementById('authModalOverlay');
-            clearIdentityFieldsData(); // Force-clear on close/open window sequences
             if(show) { overlay.classList.remove('hidden'); setTimeout(() => { overlay.classList.remove('opacity-0'); }, 10); }
             else { overlay.classList.add('opacity-0'); setTimeout(() => { overlay.classList.add('hidden'); }, 300); }
         };
 
         window.switchAuthForm = function(mode) {
             currentAuthMode = mode;
-            clearIdentityFieldsData();
             document.getElementById('regNameBlock').classList.toggle('hidden', mode === 'login');
-            document.getElementById('tabLogin').className = mode === 'login' ? 'flex-1 pb-2 border-b-2 border-indigo-600 text-indigo-600' : 'flex-1 pb-2 text-slate-400';
-            document.getElementById('tabReg').className = mode === 'reg' ? 'flex-1 pb-2 border-b-2 border-indigo-600 text-indigo-600' : 'flex-1 pb-2 text-slate-400';
+            document.getElementById('tabLogin').className = mode === 'login' ? 'flex-1 pb-2 border-b-2 border-indigo-500 text-indigo-400' : 'flex-1 pb-2 text-slate-500';
+            document.getElementById('tabReg').className = mode === 'reg' ? 'flex-1 pb-2 border-b-2 border-indigo-500 text-indigo-400' : 'flex-1 pb-2 text-slate-500';
         };
-        
+
         window.executeAuthActionPipeline = function() {
             const email = document.getElementById('usrEmail').value.trim();
             const pass = document.getElementById('usrPass').value.trim();
-            if(!email || !pass) return window.spawnPremiumToastAlert("Validation Error", "ईमेल और पासवर्ड फ़ील्ड भरना अनिवार्य है।", "error");
-            
-            if(currentAuthMode === 'login') { 
-                if(typeof window.loginUserNode === "function") { window.loginUserNode(email, pass); }
-            } else { 
-                const name = document.getElementById('usrName').value.trim();
-                if(typeof window.registerNewUserNode === "function") { window.registerNewUserNode(email, pass, name); }
-            }
-        };
-        
-        window.executeForgotRemapPipeline = function() { 
-            const email = document.getElementById('usrEmail').value.trim();
-            if(typeof window.triggerForgotRecoveryNode === "function") { window.triggerForgotRecoveryNode(email); }
-        };
-        
-        window.togglePasswordVisibility = function(fieldId) {
-            const input = document.getElementById(fieldId);
-            input.type = input.type === 'password' ? 'text' : 'password';
+            if(currentAuthMode === 'login') { window.loginUserNode(email, pass); } 
+            else { window.registerNewUserNode(email, pass, document.getElementById('usrName').value.trim()); }
         };
     </script>
 </body>
