@@ -2,190 +2,279 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>🔒 Super Admin Master Console Workspace - LuminaEdu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LuminaEdu | Super Admin Terminal Control Panel</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <style>body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }</style>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
 </head>
-<body class="min-h-screen flex items-center justify-center p-4 text-slate-800">
+<body class="bg-slate-50 min-h-screen text-slate-800 p-4 lg:p-8" style="font-family: 'Plus Jakarta Sans', sans-serif;">
 
-    <div id="adminAuthBoxGate" class="w-full max-w-md bg-white border border-slate-200 p-8 rounded-3xl shadow-xl transition-all duration-300">
-        <div class="text-center mb-6">
-            <span class="text-[11px] font-black tracking-widest text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100">SUPER CLEARANCE SECURITY</span>
-            <h2 class="text-2xl font-black text-slate-900 mt-3 tracking-tight">Master Console Gate</h2>
-        </div>
-        <div class="space-y-4">
-            <input type="password" id="adminTokenInput" class="w-full bg-slate-50 border border-slate-200 text-sm p-3 rounded-xl text-slate-900 outline-none font-mono" placeholder="••••••••">
-            <button onclick="evaluateAdminVerificationChallenge()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm py-3.5 rounded-xl shadow-md">Unlock System Engine ⚡</button>
-        </div>
-    </div>
-
-    <div class="max-w-[94%] w-full mx-auto space-y-6 hidden" id="adminMasterSystemShell">
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-200 pb-4 gap-4">
+    <div class="max-w-6xl mx-auto space-y-8">
+        
+        <div class="bg-slate-900 text-white p-6 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4 shadow-lg">
             <div>
-                <h1 class="text-2xl font-black text-slate-900 tracking-tight">Master Control Workstation</h1>
-                <p class="text-sm text-indigo-600 font-bold">Authorized Pipeline Mode: Pure SEO Optimized Light Interface</p>
+                <h1 class="text-xl lg:text-2xl font-black">LuminaEdu Central Command Panel Matrix</h1>
+                <p class="text-xs text-slate-400 mt-1">Manage dynamic content grids, global configurations parameters, colors layouts nodes.</p>
             </div>
-            <button onclick="window.location.reload()" class="bg-rose-600 hover:bg-rose-700 text-white px-5 py-2.5 text-sm font-bold rounded-xl shadow-sm transition-all">Logout Session Connection</button>
-        </div>
-
-        <div class="bg-white border border-slate-200 p-6 rounded-3xl shadow-sm grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
-            <div class="lg:col-span-1">
-                <h3 class="font-extrabold text-slate-900 text-base">⚙️ मुख्य पृष्ठ ग्रिड लेआउट विन्यास (Layout Core Customizer)</h3>
-                <p class="text-xs text-slate-500 font-medium mt-0.5">फ्रंटपेज ग्रिड डेंसिटी को 3 से 6 कार्ड्स तक कस्टमाइज़ करें।</p>
-            </div>
-            <div class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 items-end">
-                <div>
-                    <label class="block text-[11px] font-bold text-slate-500 uppercase mb-1">कॉलम संख्या (Columns in Row)</label>
-                    <select id="frontpageGridConfigSelector" class="w-full bg-slate-50 border border-slate-200 text-sm p-2.5 rounded-xl font-bold text-slate-800 outline-none">
-                        <option value="lg:grid-cols-3">3 Columns (Standard Look)</option>
-                        <option value="lg:grid-cols-4">4 Columns Layout</option>
-                        <option value="lg:grid-cols-5">5 Columns Dense Layout</option>
-                        <option value="lg:grid-cols-6">6 Columns Micro Grid</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-[11px] font-bold text-slate-500 uppercase mb-1">अधिकतम लिमिट (Max Cards to Show)</label>
-                    <select id="frontpageMaxLimitSelector" class="w-full bg-slate-50 border border-slate-200 text-sm p-2.5 rounded-xl font-bold text-slate-800 outline-none">
-                        <option value="3">3 Cards Max</option>
-                        <option value="4">4 Cards Max</option>
-                        <option value="5">5 Cards Max</option>
-                        <option value="6" selected>6 Cards Max Limit</option>
-                        <option value="12">12 Cards Grid</option>
-                        <option value="24">24 Dense Matrix Grid</option>
-                    </select>
-                </div>
-                <button onclick="updateGlobalFrontpageGridLayoutConfig()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm py-3 rounded-xl shadow-sm transition-all whitespace-nowrap">Save Layout Configuration ⚡</button>
-            </div>
+            <a href="index.html" class="bg-white/10 text-white font-bold text-xs px-4 py-2 rounded-xl border border-white/10 hover:bg-white/20">View Website Live ↗</a>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <form class="lg:col-span-2 bg-white border border-slate-200 p-6 md:p-8 rounded-3xl space-y-5 shadow-sm" onsubmit="handleDirectBroadcastSubmit(event)">
-                <h3 class="text-sm font-black uppercase text-slate-900 tracking-wider border-b border-slate-100 pb-2">✍️ Inject System Entry Transaction</h3>
+            
+            <div class="lg:col-span-1 space-y-6">
                 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-white p-5 rounded-2xl shadow-sm border space-y-4">
+                    <h3 class="font-extrabold text-sm uppercase text-slate-400 border-b pb-2">Layout & Image Controls</h3>
+                    
                     <div>
-                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1.5">Module Route Target</label>
-                        <select id="postRoute" class="w-full bg-slate-50 border border-slate-200 text-sm p-3 rounded-xl text-slate-800 font-semibold outline-none focus:border-indigo-500">
-                            <option value="job">job.html Template Node</option>
-                            <option value="yojna">yojna.html Template Node</option>
-                            <option value="admit-card">admit-card.html Module</option>
-                            <option value="result">result.html Module</option>
-                            <option value="scholarship">scholarship.html Module</option>
+                        <label class="block text-xs font-bold mb-1">Grid Column View Layout</label>
+                        <select id="settingGridColumns" class="w-full bg-slate-50 border text-xs p-2.5 rounded-xl outline-none font-bold">
+                            <option value="lg:grid-cols-3">3 Columns Normal Grid View (Default)</option>
+                            <option value="lg:grid-cols-2">2 Columns Extended Wide View</option>
+                            <option value="lg:grid-cols-1">1 Column Vertical Feed View</option>
                         </select>
                     </div>
+
                     <div>
-                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1.5">Authority Cluster Board</label>
-                        <input type="text" id="postAuth" required class="w-full bg-slate-50 border border-slate-200 text-sm p-3 rounded-xl text-slate-800 outline-none font-medium" placeholder="e.g. UPSC, SSC, RRB">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1.5">Front Card View Layout Size</label>
-                        <select id="postCardSize" class="w-full bg-slate-50 border border-slate-200 text-sm p-3 rounded-xl text-slate-800 font-semibold outline-none">
-                            <option value="normal" selected>Standard Layout Card (1 Unit)</option>
-                            <option value="featured">Featured Wide Card Showcase (2 Units Span)</option>
+                        <label class="block text-xs font-bold mb-1">Global Card Images Switch</label>
+                        <select id="settingImageVisibility" class="w-full bg-slate-50 border text-xs p-2.5 rounded-xl outline-none font-bold">
+                            <option value="show">Show Banner Image inside Feed Cards</option>
+                            <option value="hide">Hide All Images inside Feed Cards (Text Only Layout)</option>
                         </select>
                     </div>
+
+                    <button onclick="saveGlobalLayoutConfigurationSettings()" class="w-full bg-slate-900 text-white font-bold text-xs py-3 rounded-xl hover:bg-slate-800 transition-all shadow-md">
+                        Save Interface Settings ⚡
+                    </button>
                 </div>
 
-                <div>
-                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1.5">Listing Heading Title Text (SEO Value)</label>
-                    <input type="text" id="postTitle" required class="w-full bg-slate-50 border border-slate-200 text-sm p-3 rounded-xl text-slate-800 outline-none font-semibold" placeholder="Type primary target keywords rich title headline string...">
+                <div class="bg-white p-5 rounded-2xl shadow-sm border space-y-4">
+                    <h3 class="font-extrabold text-sm uppercase text-slate-400 border-b pb-2">Dynamic Categories Panel</h3>
+                    
+                    <div>
+                        <label class="block text-xs font-bold mb-1">Category Name</label>
+                        <input type="text" id="newCatName" class="w-full bg-slate-50 border text-xs p-2.5 rounded-xl outline-none" placeholder="e.g., Admit-Card, Sarkari-Yojna">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold mb-1">Pick Identity Color (Hex Tag)</label>
+                        <div class="flex gap-2">
+                            <input type="color" id="newCatColorPicker" class="w-10 h-10 border rounded-xl cursor-pointer bg-transparent">
+                            <input type="text" id="newCatColorHex" class="flex-1 bg-slate-50 border text-xs p-2.5 rounded-xl outline-none font-mono" placeholder="#6366f1">
+                        </div>
+                    </div>
+
+                    <button onclick="createNewCustomCategoryNode()" class="w-full bg-indigo-600 text-white font-bold text-xs py-3 rounded-xl hover:bg-indigo-700 transition-all shadow-md">
+                        Add New Category Node ➕
+                    </button>
+
+                    <div class="pt-2">
+                        <p class="text-[11px] font-bold text-slate-400 mb-2">Active Categories Stream List:</p>
+                        <div id="adminCategoriesList" class="space-y-1"></div>
+                    </div>
                 </div>
+            </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                    <div><label class="block text-[11px] font-bold text-slate-500 uppercase">Image View Rule Location</label><select id="imgViewLoc" class="w-full bg-white border text-xs p-2 rounded-lg"><option value="both">Both (Front & Details Screen)</option><option value="front">Front Card Only</option><option value="post">Post Detail Screen Only</option></select></div>
-                    <div><label class="block text-[11px] font-bold text-slate-500 uppercase">Custom Font Sizing Scale</label><select id="fontSize" class="w-full bg-white border text-xs p-2 rounded-lg"><option value="17px" selected>17px Clean Reading</option><option value="20px">20px Rich Wiki Text</option></select></div>
-                    <div><label class="block text-[11px] font-bold text-slate-500 uppercase">Global Header Accent Color</label><input type="color" id="fontColor" value="#4f46e5" class="w-full h-8 bg-white border rounded-lg p-0.5"></div>
-                </div>
-
-                <div><label class="block text-xs font-bold text-slate-600 uppercase mb-1.5">Multiple Banner Image URLs strings</label><input type="text" id="postImages" class="w-full bg-slate-50 border border-slate-200 text-sm p-3 rounded-xl outline-none" placeholder="https://domain.com/asset1.png, https://domain.com/photo2.jpg"></div>
-
+            <div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-sm border space-y-6">
+                <h3 class="font-extrabold text-base border-b pb-2 text-slate-900">Post New Advertisement Feed Node</h3>
+                
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div><label class="block text-xs font-bold text-slate-600 uppercase mb-1">Application Fees Breakdown SCALE</label><textarea id="postFees" rows="3" placeholder="Type systematic fee details data..." class="w-full bg-slate-50 border border-slate-200 text-sm p-3 rounded-xl outline-none font-medium"></textarea></div>
-                    <div><label class="block text-xs font-bold text-slate-600 uppercase mb-1">Eligibility Criteria & Structural rules</label><textarea id="postElig" rows="3" placeholder="Type education/qualification criteria matrix rules..." class="w-full bg-slate-50 border border-slate-200 text-sm p-3 rounded-xl outline-none font-medium"></textarea></div>
+                    <div>
+                        <label class="block text-xs font-bold mb-1">Advertisement Job Title</label>
+                        <input type="text" id="postTitle" class="w-full bg-slate-50 border text-xs p-3 rounded-xl outline-none" placeholder="e.g., UP Police Constable Online Form 2026">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold mb-1">Authority Organization Board</label>
+                        <input type="text" id="postAuthority" class="w-full bg-slate-50 border text-xs p-3 rounded-xl outline-none" placeholder="e.g., UPRPB">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold mb-1">Select Target Category Mapping</label>
+                        <select id="postCategorySelect" class="w-full bg-slate-50 border text-xs p-3 rounded-xl outline-none font-semibold"></select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold mb-1">Last Date Submission</label>
+                        <input type="text" id="postLastDate" class="w-full bg-slate-50 border text-xs p-3 rounded-xl outline-none" placeholder="e.g., 31/12/2026 or Notification Soon">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-bold mb-1">Banner Image URL Asset (Optional)</label>
+                        <input type="text" id="postImageUrl" class="w-full bg-slate-50 border text-xs p-3 rounded-xl outline-none" placeholder="Paste full HTTP banner link address">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-bold mb-1">Description Meta Text Content</label>
+                        <textarea id="postDesc" rows="4" class="w-full bg-slate-50 border text-xs p-3 rounded-xl outline-none" placeholder="Type core updates details details breakdown..."></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold mb-1">Application Fees Info Text</label>
+                        <textarea id="postFees" rows="2" class="w-full bg-slate-50 border text-xs p-3 rounded-xl outline-none" placeholder="General: 400&#10;SC/ST: 0"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold mb-1">Eligibility Criteria text</label>
+                        <textarea id="postElig" rows="2" class="w-full bg-slate-50 border text-xs p-3 rounded-xl outline-none" placeholder="10+2 Intermediate Exam Passed in Any Recognized Board."></textarea>
+                    </div>
                 </div>
-                
-                <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm py-4 rounded-xl shadow-lg transition-all">Broadcast Globally Live 🚀</button>
-            </form>
 
-            <div class="bg-white border border-slate-200 p-5 rounded-3xl flex flex-col shadow-sm max-h-[700px] overflow-y-auto"><h3 class="text-xs font-black uppercase text-slate-500 tracking-wider border-b border-slate-100 pb-2 mb-4">📋 Contributor Approval Queues</h3><div id="approvalLedger" class="space-y-4 flex-1"></div></div>
+                <button onclick="submitNewPostNodePipeline()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm py-3.5 rounded-xl transition-all shadow-md">
+                    Publish & Make It Live Globally 🚀
+                </button>
+
+                <div class="pt-4 border-t">
+                    <h4 class="font-extrabold text-sm text-slate-900 mb-3">Live Active Advertisements Hub List</h4>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-slate-600 border-collapse">
+                            <thead>
+                                <tr class="bg-slate-100 font-bold border-b text-slate-700">
+                                    <th class="p-3">Title</th>
+                                    <th class="p-3">Category</th>
+                                    <th class="p-3 text-center">Actions Ports</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminPostsListTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script type="module">
-        import { collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import "../app.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, doc, setDoc, onSnapshot, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        window.evaluateAdminVerificationChallenge = function() {
-            const token = document.getElementById('adminTokenInput').value.trim();
-            if(token === "Admin@2026") {
-                document.getElementById('adminAuthBoxGate').classList.add('hidden');
-                document.getElementById('adminMasterSystemShell').classList.remove('hidden');
-                initAdminDashboardRealtimeSync();
-            } else { alert("Error: Security token validation failed."); }
+        // YAHAN APNI REAL FIREBASE DIKHI GYI VALUE SETUP KAREIN EXACT MATCH:
+        const firebaseConfig = {
+            apiKey: "YOUR_REAL_API_KEY_HERE",
+            authDomain: "luminaedu-ai786.firebaseapp.com",
+            projectId: "luminaedu-ai786",
+            storageBucket: "luminaedu-ai786.appspot.com",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID_HERE",
+            appId: "YOUR_APP_ID_HERE"
         };
 
-        async function initAdminDashboardRealtimeSync() {
-            const currentSettingSnap = await getDoc(doc(window.fbDB, "app_settings", "grid_layout"));
-            if(currentSettingSnap.exists()) {
-                const d = currentSettingSnap.data();
-                document.getElementById('frontpageGridConfigSelector').value = d.columnsClass || 'lg:grid-cols-3';
-                document.getElementById('frontpageMaxLimitSelector').value = d.maxLimitCards || '6';
-            }
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
-            onSnapshot(collection(window.fbDB, "jobs"), (snapshot) => {
-                const container = document.getElementById('approvalLedger'); container.innerHTML = "";
-                snapshot.forEach(docSnap => {
-                    const data = docSnap.data();
-                    if(data.approvalStatus === 'Pending for Approval') {
-                        container.innerHTML += `
-                            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-2">
-                                <h4 class="text-sm font-bold text-slate-900 leading-tight">${data.title}</h4>
-                                <span class="text-[10px] font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-100">By Contributor: ${data.authorName || 'User Contributor'}</span>
-                                <div class="flex gap-2 pt-2"><button onclick="approveNode('${docSnap.id}')" class="flex-1 bg-slate-900 text-white text-xs font-bold py-1.5 rounded-lg">✓ Approve</button><button onclick="dropNode('${docSnap.id}')" class="bg-rose-600 text-white text-xs font-bold px-2.5 rounded-lg">✕ Drop</button></div>
-                            </div>
-                        `;
-                    }
+        // SYNC COLOR PICKER VALUE TO TEXT FIELD LOCALLY
+        const picker = document.getElementById('newCatColorPicker');
+        const txtHex = document.getElementById('newCatColorHex');
+        if(picker && txtHex) {
+            picker.addEventListener('input', (e) => { txtHex.value = e.target.value; });
+        }
+
+        // CONTROL CHANNEL 1: CREATE CATEGORY ENGINE LINKER
+        window.createNewCustomCategoryNode = async function() {
+            const name = document.getElementById('newCatName').value.trim();
+            const hex = document.getElementById('newCatColorHex').value.trim() || '#3b82f6';
+            if(!name) return alert('Category Name cannot be blank!');
+            
+            try {
+                await addDoc(collection(db, "categories"), { name: name, hexColor: hex });
+                document.getElementById('newCatName').value = "";
+                alert('Success: Category Node Added Successfully! 🎉');
+            } catch(e) { alert(e.message); }
+        };
+
+        window.deleteCategoryNode = async function(id) {
+            if(confirm('Are you sure you want to completely erase this category channel?')) {
+                await deleteDoc(doc(db, "categories", id));
+            }
+        };
+
+        // CONTROL CHANNEL 2: CREATE POST APPLICATION PIPELINE ENGINE
+        window.submitNewPostNodePipeline = async function() {
+            const title = document.getElementById('postTitle').value.trim();
+            const authority = document.getElementById('postAuthority').value.trim();
+            const type = document.getElementById('postCategorySelect').value;
+            const lastDate = document.getElementById('postLastDate').value.trim();
+            const imgUrl = document.getElementById('postImageUrl').value.trim();
+            const description = document.getElementById('postDesc').value.trim();
+            const feesDetails = document.getElementById('postFees').value.trim();
+            const eligibility = document.getElementById('postElig').value.trim();
+
+            if(!title || !authority || !type) return alert('Fields Missing: Title, Authority and Categories Selection is mandatory!');
+
+            try {
+                await addDoc(collection(db, "jobs"), {
+                    title, authority, type, lastDate,
+                    imageUrls: imgUrl ? [imgUrl] : [],
+                    description, feesDetails, eligibility,
+                    approvalStatus: "Live" // Forcing default visibility instantly
                 });
+                
+                // Clear inputs form parameters arrays fields
+                document.getElementById('postTitle').value = "";
+                document.getElementById('postAuthority').value = "";
+                document.getElementById('postLastDate').value = "";
+                document.getElementById('postImageUrl').value = "";
+                document.getElementById('postDesc').value = "";
+                document.getElementById('postFees').value = "";
+                document.getElementById('postElig').value = "";
+                alert('Success: Post Data is now Live On Website Main Front Feed Grid! 🚀');
+            } catch(e) { alert(e.message); }
+        };
+
+        window.deletePostNode = async function(id) {
+            if(confirm('Erase this post data advertisement forever?')) {
+                await deleteDoc(doc(db, "jobs", id));
+            }
+        };
+
+        // CONTROL CHANNEL 3: SYSTEM INTERFACE TOGGLES SETTINGS SAVE
+        window.saveGlobalLayoutConfigurationSettings = async function() {
+            const col = document.getElementById('settingGridColumns').value;
+            const img = document.getElementById('settingImageVisibility').value;
+            try {
+                await setDoc(doc(db, "app_settings", "grid_layout"), { columnsClass: col, imageVisibility: img });
+                alert('System Parameters Configuration Layout State updated successfully! Refresh home page to view changes.');
+            } catch(e) { alert(e.message); }
+        };
+
+        // REALTIME CORE PIPELINE DATA STREAMS LISTENER DISPATCHERS
+        function triggerDashboardRealtimeDataSyncer() {
+            // Live Category Sync Dropdowns
+            onSnapshot(collection(db, "categories"), (snap) => {
+                const select = document.getElementById('postCategorySelect');
+                const list = document.getElementById('adminCategoriesList');
+                if(!select || !list) return;
+
+                let selectOptions = "";
+                let sideListItems = "";
+
+                snap.forEach(d => {
+                    const c = d.data();
+                    selectOptions += `<option value="${c.name}">${c.name}</option>`;
+                    sideListItems += `
+                        <div class="flex items-center justify-between p-2 bg-slate-100 rounded-lg border text-xs">
+                            <span class="font-bold" style="color: ${c.hexColor}">${c.name}</span>
+                            <button onclick="deleteCategoryNode('${d.id}')" class="text-rose-600 font-bold hover:underline">✕</button>
+                        </div>`;
+                });
+
+                select.innerHTML = selectOptions;
+                list.innerHTML = sideListItems || `<p class="text-[11px] text-slate-400">No Custom Nodes Active</p>`;
+            });
+
+            // Live Database Posts Stream Tables View Sync
+            onSnapshot(collection(db, "jobs"), (snap) => {
+                const table = document.getElementById('adminPostsListTable');
+                if(!table) return;
+
+                let rows = "";
+                snap.forEach(d => {
+                    const p = d.data();
+                    rows += `
+                        <tr class="border-b hover:bg-slate-50 font-medium">
+                            <td class="p-3 truncate max-w-[200px] font-bold text-slate-800">${p.title}</td>
+                            <td class="p-3"><span class="px-2 py-0.5 rounded bg-slate-100 border text-slate-600">${p.type}</span></td>
+                            <td class="p-3 text-center">
+                                <button onclick="deletePostNode('${d.id}')" class="bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-600 text-[11px] font-bold px-3 py-1 rounded-lg">Delete</button>
+                            </td>
+                        </tr>`;
+                });
+                table.innerHTML = rows || `<tr><td colspan="3" class="p-4 text-center text-slate-400">No Post Active In Live Database Streaming Node</td></tr>`;
             });
         }
 
-        // 🔥 FIXED CONFIGURATION ACCESS PIPELINE WITH EXTENDED SELECTORS CAPABILITIES
-        window.updateGlobalFrontpageGridLayoutConfig = async function() {
-            const chosenClass = document.getElementById('frontpageGridConfigSelector').value;
-            const chosenLimit = document.getElementById('frontpageMaxLimitSelector').value;
-            try {
-                await setDoc(doc(window.fbDB, "app_settings", "grid_layout"), { 
-                    columnsClass: chosenClass,
-                    maxLimitCards: parseInt(chosenLimit)
-                });
-                alert("🎉 Layout Configuration Saved! Database parameters mapped and grid re-aligned.");
-            } catch(err) { alert("Matrix Configuration Error: " + err.message); }
-        };
-
-        window.handleDirectBroadcastSubmit = async function(e) {
-            e.preventDefault();
-            const imgRaw = document.getElementById('postImages').value.trim();
-            const imagesArray = imgRaw ? imgRaw.split(',').map(s => s.trim()) : [];
-
-            await addDoc(collection(window.fbDB, "jobs"), {
-                type: document.getElementById('postRoute').value,
-                authority: document.getElementById('postAuth').value.trim(),
-                title: document.getElementById('postTitle').value.trim(),
-                cardSizeLayout: document.getElementById('postCardSize').value,
-                imageUrls: imagesArray,
-                imgDisplayLocation: document.getElementById('imgViewLoc').value,
-                customFontSize: document.getElementById('fontSize').value,
-                customFontColor: document.getElementById('fontColor').value,
-                feesDetails: document.getElementById('postFees').value.trim(),
-                eligibility: document.getElementById('postElig').value.trim(),
-                approvalStatus: "Live", authorName: "Super Admin Control Node"
-            });
-            alert("Success: SEO Post Broadcasted!"); e.target.reset();
-        };
-
-        window.approveNode = async function(id) { await updateDoc(doc(window.fbDB, "jobs", id), { approvalStatus: "Live" }); };
-        window.dropNode = async function(id) { await deleteDoc(doc(window.fbDB, "jobs", id)); };
+        window.addEventListener('DOMContentLoaded', triggerDashboardRealtimeDataSyncer);
     </script>
 </body>
 </html>
