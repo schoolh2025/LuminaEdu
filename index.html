@@ -55,6 +55,19 @@
         <!-- 📲 SIDEBAR LEFT NAV PANEL (Only Visible on Main Front View Screen) -->
         <aside id="mainLeftSidebarNode" class="w-full md:w-64 bg-white/80 backdrop-blur-md border-r border-slate-200/60 p-5 flex flex-col justify-between shrink-0">
             <div class="space-y-6">
+                <!-- Is block ko index.html ke andar Left Sidebar (<aside id="mainLeftSidebarNode">) me "Navigation Links" ke thik upar paste karein -->
+<div class="mb-4 bg-indigo-50/80 border border-indigo-100 p-3.5 rounded-2xl space-y-2">
+    <div class="flex items-center justify-between">
+        <span class="text-xs font-black text-indigo-950 uppercase tracking-wide flex items-center gap-1.5">
+            🔔 Push Alerts
+        </span>
+        <span id="pushStatusBadge" class="text-[9px] font-black px-1.5 py-0.5 rounded-md bg-slate-200 text-slate-600 uppercase">Checking</span>
+    </div>
+    <p class="text-[10px] font-bold text-slate-500 leading-snug">नए जॉब और एडमिट कार्ड अपडेट्स का तुरंत अलर्ट पाने के लिए सब्सक्राइब करें।</p>
+    <button id="btnSubscribePushAlerts" onclick="window.triggerPlatformPushSubscription()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs py-2 rounded-xl transition-all shadow-sm flex items-center justify-center gap-1">
+        📢 Subscribe Now
+    </button>
+</div>
                 <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-2 mb-2">Navigation Links</p>
                 <nav class="space-y-1">
                     <button onclick="window.setJobFilter('All')" class="w-full flex items-center gap-3 px-4 py-2.5 bg-indigo-50 text-indigo-700 font-bold text-sm rounded-xl">
