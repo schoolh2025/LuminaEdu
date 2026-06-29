@@ -32,7 +32,7 @@ let activeDynamicCategoriesList = [
 ];
 
 // ==========================================
-// 🌟 GLOBAL ATTACHMENT TO WINDOW SCOPE (MODULE FIX)
+// 🌟 UNIFIED WINDOW GLOBAL REBINDING FOR ENGINE CHANNELS
 // ==========================================
 window.performSinglePageRoutingView = function(targetViewMode, postId = null) {
     const feedView = document.getElementById('mainFeedRouterBlock');
@@ -94,11 +94,11 @@ window.spawnPremiumToastAlert = function(title, message, type) {
     document.getElementById('toastMessageSlot').innerText = message;
     document.getElementById('toastIconSlot').innerText = type === 'error' ? "❌" : "✨";
     toast.className = `fixed top-5 left-1/2 transform -translate-x-1/2 z-[100] max-w-sm w-full mx-4 bg-white border p-4 rounded-2xl shadow-2xl flex items-start gap-3 transition-all duration-300 opacity-100 translate-y-0 ${type==='error'?'border-rose-200 bg-rose-50':'border-emerald-200 bg-emerald-50'}`;
-    setTimeout(() => { toast.className += " opacity-0 translate-y-[-20px] pointer-events-none"; }, 4000);
+    setTimeout(() => { toast.classList.remove('opacity-100'); toast.classList.add('opacity-0','pointer-events-none'); }, 5000);
 };
 
 // ==========================================
-// ⚙️ AUTH PIPELINES
+// ⚙️ CORE PIPELINES
 // ==========================================
 window.executeAuthActionPipeline = async function() {
     const email = document.getElementById('usrEmail').value.trim();
@@ -136,7 +136,7 @@ window.executeForgotRecoveryPipeline = async function() {
     const email = document.getElementById('forgotUsrEmail').value.trim();
     try {
         await sendPasswordResetEmail(auth, email);
-        window.spawnPremiumToastAlert("Dispatched", "🔑 recovery mail link sent.", "success");
+        window.spawnPremiumToastAlert("Dispatched", "🔑 Recovery mail token link sent.", "success");
         window.toggleAuthOverlay(false);
     } catch(err) { window.spawnPremiumToastAlert("Error", err.message, "error"); }
 };
@@ -172,7 +172,7 @@ window.submitProposalPipeline = async function() {
             approvalStatus: "Pending", 
             timestamp: Date.now()
         });
-        window.spawnPremiumToastAlert("Sent", "🎉 समीक्षा हेतु एडimin कतार में भेजा गया!", "success");
+        window.spawnPremiumToastAlert("Sent", "🎉 समीक्षा हेतु एडमिन कतार में भेजा गया!", "success");
     } catch(e) { alert(e.message); }
 };
 
@@ -304,11 +304,12 @@ function checkCurrentSubscriptionState() {
     }
 }
 
-// BOOTSTRAP ENGINE
 function bootstrapApplicationEngine() {
     renderDynamicCategoryChips();
     checkCurrentSubscriptionState();
     
+    window.navigateToHub = window.performSinglePageRoutingView;
+
     onSnapshot(collection(db, "jobs"), (snapshot) => {
         cachedJobsArray = [];
         let approvalQueueHTML = "";
