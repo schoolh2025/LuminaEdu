@@ -3,7 +3,6 @@ import { getFirestore, collection, addDoc, doc, setDoc, onSnapshot, updateDoc, d
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js";
 
-// 🚨 FIREBASE CONFIG MATRIX
 const firebaseConfig = {
   apiKey: "AIzaSyDEXmjIN8w2s2uXk0FTzC7ri4HhLetzV4E",
   authDomain: "luminaedu-ai786.firebaseapp.com",
@@ -17,18 +16,12 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-// Safe initialization of messaging for browsers supporting it
 let messaging = null;
-try {
-    messaging = getMessaging(app);
-} catch (e) {
-    console.log("Messaging setup skipped or unsupported in this environment.");
-}
+try { messaging = getMessaging(app); } catch (e) { }
 
 let selectedCategoryFilter = 'All';
 let cachedJobsArray = [];
 let layoutGridColumnsSetting = 'lg:grid-cols-3'; 
-let globalImageVisibilitySetting = 'show'; 
 let activeDynamicCategoriesList = [
     { name: 'All', colorClass: 'bg-white text-slate-800 border-slate-200 shadow-sm font-bold', hexColor: '#4f46e5' },
     { name: 'Admit Crad', colorClass: 'bg-orange-50 text-orange-700 border-orange-200', hexColor: '#ea580c' },
@@ -39,115 +32,54 @@ let activeDynamicCategoriesList = [
 ];
 
 // ==========================================
-// 🔔 PUSH ALERTS SUBSCRIPTION PIPELINE
+// 🌟 GLOBAL ATTACHMENT TO WINDOW SCOPE (MODULE FIX)
 // ==========================================
-window.triggerPlatformPushSubscription = async function() {
-    const btn = document.getElementById('btnSubscribePushAlerts');
-    const badge = document.getElementById('pushStatusBadge');
+window.performSinglePageRoutingView = function(targetViewMode, postId = null) {
+    const feedView = document.getElementById('mainFeedRouterBlock');
+    const detailView = document.getElementById('postDetailView');
+    const leftSidebar = document.getElementById('mainLeftSidebarNode');
+    const rightSidebar = document.getElementById('subPageRightSidebarNode');
+    const mainContentRegion = document.getElementById('coreContentLayoutViewRegion');
+    const contributorView = document.getElementById('contributorDashboardView');
+    const adminView = document.getElementById('adminMasterConsoleView');
     
-    if (!messaging || !('Notification' in window)) {
-        window.spawnPremiumToastAlert("Not Supported", "आपका ब्राउज़र पुश नोटिफिकेशन सपोर्ट नहीं करता है।", "error");
-        return;
-    }
+    feedView?.classList.add('hidden'); detailView?.classList.add('hidden');
+    contributorView?.classList.add('hidden'); adminView?.classList.add('hidden');
+    leftSidebar?.classList.add('hidden'); rightSidebar?.classList.add('hidden');
+    if(mainContentRegion) mainContentRegion.className = "lg:col-span-12 space-y-6 min-w-0 w-full";
 
-    try {
-        const permission = await Notification.requestPermission();
-        if (permission === 'granted') {
-            const currentToken = await getToken(messaging, { vapidKey: 'YOUR_PUBLIC_VAPID_KEY_HERE' });
-            
-            if (currentToken) {
-                await setDoc(doc(db, "subscribers", currentToken), {
-                    subscribedAt: Date.now(),
-                    deviceStatus: "Active"
-                });
-                
-                if(badge) { badge.className = "text-[9px] font-black px-1.5 py-0.5 rounded-md bg-emerald-100 text-emerald-800 uppercase"; badge.innerText = "Active"; }
-                if(btn) { btn.disabled = true; btn.className = "w-full bg-slate-200 text-slate-400 font-bold text-xs py-2 rounded-xl cursor-not-allowed"; btn.innerText = "✓ Subscribed"; }
-                window.spawnPremiumToastAlert("Subscribed", "🎉 Notification Alert Enabled Successfully!", "success");
-            }
-        } else {
-            window.spawnPremiumToastAlert("Blocked", "आपने नोटिफिकेशन ब्लॉक कर दिया है।", "error");
-        }
-    } catch (err) {
-        console.error("FCM System Blocked:", err);
-    }
-};
-
-function checkCurrentSubscriptionState() {
-    if ('Notification' in window && Notification.permission === 'granted') {
-        const badge = document.getElementById('pushStatusBadge');
-        const btn = document.getElementById('btnSubscribePushAlerts');
-        if(badge) { badge.className = "text-[9px] font-black px-1.5 py-0.5 rounded-md bg-emerald-100 text-emerald-800 uppercase"; badge.innerText = "Active"; }
-        if(btn) { btn.disabled = true; btn.className = "w-full bg-slate-200 text-slate-400 font-bold text-xs py-2 rounded-xl cursor-not-allowed"; btn.innerText = "✓ Subscribed"; }
+    if(targetViewMode === 'detail') {
+        detailView?.classList.remove('hidden');
+        rightSidebar?.classList.remove('hidden');
+        if(mainContentRegion) mainContentRegion.className = "lg:col-span-8 space-y-6 min-w-0 w-full";
+        window.renderPostDeepContentView(postId);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if(targetViewMode === 'contributor') {
+        contributorView?.classList.remove('hidden');
+    } else if(targetViewMode === 'admin') {
+        adminView?.classList.remove('hidden');
     } else {
-        const badge = document.getElementById('pushStatusBadge');
-        if(badge) { badge.innerText = "Off"; }
-    }
-}
-
-// ==========================================
-// 🎨 RICH TEXT CUSTOM SELECTION FORMATTING
-// ==========================================
-window.applyRichFormatting = function(textareaId, mode) {
-    const txtArea = document.getElementById(textareaId);
-    if (!txtArea) return;
-    const start = txtArea.selectionStart;
-    const end = txtArea.selectionEnd;
-    const selectedText = txtArea.value.substring(start, end);
-    
-    let replacement = "";
-    if(mode === 'link') {
-        const url = prompt("Enter complete URL:", "https://");
-        if(url) replacement = `<a href="${url}" target="_blank" style="color:#2563eb; text-decoration:underline;">${selectedText || 'Link'}</a>`;
-    } else if(mode === 'color') {
-        const hex = prompt("Enter text Hex Color Code:", "#ff0000");
-        if(hex) replacement = `<span style="color:${hex}; font-weight:bold;">${selectedText || 'Colored Text'}</span>`;
-    } else if(mode === 'size') {
-        const size = prompt("Enter font size setting (e.g. 14px, 18px, 24px):", "16px");
-        if(size) replacement = `<span style="font-size:${size}; font-weight:bold;">${selectedText || 'Sized Text'}</span>`;
-    }
-    
-    if(replacement) {
-        txtArea.value = txtArea.value.substring(0, start) + replacement + txtArea.value.substring(end);
+        leftSidebar?.classList.remove('hidden');
+        feedView?.classList.remove('hidden');
+        window.executeUIRenderPipeline();
     }
 };
 
-// ==========================================
-// 🔐 IDENTITY REDIRECTION GATEWAY NODES
-// ==========================================
-window.loginUserNode = async function(email, password) {
-    try {
-        const credential = await signInWithEmailAndPassword(auth, email, password);
-        window.spawnPremiumToastAlert("Access Granted", "🎉 लॉगिन सफल!", "success");
-        
-        onSnapshot(doc(db, "users", credential.user.uid), (docSnap) => {
-            if(docSnap.exists() && docSnap.data().role === 'Admin') {
-                document.getElementById('adminPortalHeaderBtn')?.classList.remove('hidden');
-                window.performSinglePageRoutingView('admin');
-            } else {
-                window.performSinglePageRoutingView('contributor');
-            }
-        });
-    } catch(err) { window.spawnPremiumToastAlert("Error", err.message, "error"); }
+window.toggleAuthOverlay = function(show) {
+    const overlay = document.getElementById('authModalOverlay');
+    if(document.getElementById('usrPass')) document.getElementById('usrPass').value = "";
+    window.toggleForgotFormModeView(false);
+    if(show) { overlay?.classList.remove('hidden'); setTimeout(() => { overlay?.classList.remove('opacity-0'); }, 10); }
+    else { overlay?.classList.add('opacity-0'); setTimeout(() => { overlay?.classList.add('hidden'); }, 300); }
 };
 
-window.registerNewUserNode = async function(email, password, fullname) {
-    try {
-        const credential = await createUserWithEmailAndPassword(auth, email, password);
-        await setDoc(doc(db, "users", credential.user.uid), { name: fullname, role: "UserContributor", email: email });
-        window.spawnPremiumToastAlert("Success", "🎉 पंजीकरण सफल!", "success");
-        window.performSinglePageRoutingView('contributor');
-    } catch(err) { window.spawnPremiumToastAlert("Error", err.message, "error"); }
+window.switchAuthForm = function(mode) {
+    document.getElementById('regNameBlock')?.classList.toggle('hidden', mode === 'login');
 };
 
-window.executeForgotRecoveryPipeline = async function() {
-    const email = document.getElementById('forgotUsrEmail').value.trim();
-    if(!email) return window.spawnPremiumToastAlert("Missing", "ईमेल पता दर्ज करें।", "error");
-    try {
-        await sendPasswordResetEmail(auth, email);
-        window.spawnPremiumToastAlert("Dispatched", "🔑 पासवर्ड रिकवरी ईमेल लिंक भेज दिया गया है।", "success");
-        window.toggleAuthOverlay(false);
-    } catch(err) { window.spawnPremiumToastAlert("Error", err.message, "error"); }
+window.toggleForgotFormModeView = function(show) {
+    document.getElementById('authMainFormGroupBlock')?.classList.toggle('hidden', show);
+    document.getElementById('authForgotFormGroupBlock')?.classList.toggle('hidden', !show);
 };
 
 window.togglePasswordRevealNode = function() {
@@ -155,9 +87,80 @@ window.togglePasswordRevealNode = function() {
     if(element) element.type = element.type === 'password' ? 'text' : 'password';
 };
 
+window.spawnPremiumToastAlert = function(title, message, type) {
+    const toast = document.getElementById('premiumToastNotification');
+    if(!toast) return;
+    document.getElementById('toastTitleSlot').innerText = title;
+    document.getElementById('toastMessageSlot').innerText = message;
+    document.getElementById('toastIconSlot').innerText = type === 'error' ? "❌" : "✨";
+    toast.className = `fixed top-5 left-1/2 transform -translate-x-1/2 z-[100] max-w-sm w-full mx-4 bg-white border p-4 rounded-2xl shadow-2xl flex items-start gap-3 transition-all duration-300 opacity-100 translate-y-0 ${type==='error'?'border-rose-200 bg-rose-50':'border-emerald-200 bg-emerald-50'}`;
+    setTimeout(() => { toast.className += " opacity-0 translate-y-[-20px] pointer-events-none"; }, 4000);
+};
+
 // ==========================================
-// ✍️ DRAFTING & APPROVAL MATRIX GATEKEEPERS
+// ⚙️ AUTH PIPELINES
 // ==========================================
+window.executeAuthActionPipeline = async function() {
+    const email = document.getElementById('usrEmail').value.trim();
+    const password = document.getElementById('usrPass').value.trim();
+    const isRegister = !document.getElementById('regNameBlock').classList.contains('hidden');
+
+    if(isRegister) {
+        const fullname = document.getElementById('usrName').value.trim();
+        try {
+            const credential = await createUserWithEmailAndPassword(auth, email, password);
+            await setDoc(doc(db, "users", credential.user.uid), { name: fullname, role: "UserContributor", email: email });
+            window.spawnPremiumToastAlert("Success", "🎉 पंजीकरण सफल!", "success");
+            window.toggleAuthOverlay(false);
+            window.performSinglePageRoutingView('contributor');
+        } catch(err) { window.spawnPremiumToastAlert("Error", err.message, "error"); }
+    } else {
+        try {
+            const credential = await signInWithEmailAndPassword(auth, email, password);
+            window.spawnPremiumToastAlert("Access Granted", "🎉 लॉगिन सफल!", "success");
+            window.toggleAuthOverlay(false);
+            
+            onSnapshot(doc(db, "users", credential.user.uid), (docSnap) => {
+                if(docSnap.exists() && docSnap.data().role === 'Admin') {
+                    document.getElementById('adminPortalHeaderBtn')?.classList.remove('hidden');
+                    window.performSinglePageRoutingView('admin');
+                } else {
+                    window.performSinglePageRoutingView('contributor');
+                }
+            });
+        } catch(err) { window.spawnPremiumToastAlert("Error", err.message, "error"); }
+    }
+};
+
+window.executeForgotRecoveryPipeline = async function() {
+    const email = document.getElementById('forgotUsrEmail').value.trim();
+    try {
+        await sendPasswordResetEmail(auth, email);
+        window.spawnPremiumToastAlert("Dispatched", "🔑 recovery mail link sent.", "success");
+        window.toggleAuthOverlay(false);
+    } catch(err) { window.spawnPremiumToastAlert("Error", err.message, "error"); }
+};
+
+window.applyRichFormatting = function(textareaId, mode) {
+    const txtArea = document.getElementById(textareaId);
+    if (!txtArea) return;
+    const start = txtArea.selectionStart;
+    const end = txtArea.selectionEnd;
+    const selectedText = txtArea.value.substring(start, end);
+    let replacement = "";
+    if(mode === 'link') {
+        const url = prompt("Enter URL:", "https://");
+        if(url) replacement = `<a href="${url}" target="_blank" style="color:#2563eb;text-decoration:underline;">${selectedText || 'Link'}</a>`;
+    } else if(mode === 'color') {
+        const hex = prompt("Hex Color:", "#ff0000");
+        if(hex) replacement = `<span style="color:${hex};font-weight:bold;">${selectedText || 'Text'}</span>`;
+    } else if(mode === 'size') {
+        const size = prompt("Font Size:", "16px");
+        if(size) replacement = `<span style="font-size:${size};font-weight:bold;">${selectedText || 'Text'}</span>`;
+    }
+    if(replacement) txtArea.value = txtArea.value.substring(0, start) + replacement + txtArea.value.substring(end);
+};
+
 window.submitProposalPipeline = async function() {
     try {
         await addDoc(collection(db, "jobs"), {
@@ -169,9 +172,8 @@ window.submitProposalPipeline = async function() {
             approvalStatus: "Pending", 
             timestamp: Date.now()
         });
-        window.spawnPremiumToastAlert("Sent", "🎉 समीक्षा हेतु एडमिन कतार में भेजा गया!", "success");
-        document.getElementById('cTitle').value = ""; document.getElementById('cDesc').value = "";
-    } catch(e) { window.spawnPremiumToastAlert("Error", e.message, "error"); }
+        window.spawnPremiumToastAlert("Sent", "🎉 समीक्षा हेतु एडimin कतार में भेजा गया!", "success");
+    } catch(e) { alert(e.message); }
 };
 
 window.publishDirectAdminNode = async function() {
@@ -185,28 +187,24 @@ window.publishDirectAdminNode = async function() {
             approvalStatus: "Live",
             timestamp: Date.now()
         });
-        window.spawnPremiumToastAlert("Live", "🚀 विज्ञापन फ्रंटपेज पर लाइव हो चुका है!", "success");
-        document.getElementById('aTitle').value = ""; document.getElementById('aDesc').value = "";
-    } catch(e) { window.spawnPremiumToastAlert("Error", e.message, "error"); }
+        window.spawnPremiumToastAlert("Live", "🚀 लाइव हो चुका है!", "success");
+    } catch(e) { alert(e.message); }
 };
 
 window.approvePostItemNode = async function(id) {
     try {
         await updateDoc(doc(db, "jobs", id), { approvalStatus: "Live" });
-        window.spawnPremiumToastAlert("Approved", "विज्ञापन फ्रंटपेज पर लाइव कर दिया गया है!", "success");
-    } catch(e) { window.spawnPremiumToastAlert("Error", e.message, "error"); }
+        window.spawnPremiumToastAlert("Approved", "पोस्ट लाइव हो गई है!", "success");
+    } catch(e) { alert(e.message); }
 };
 
 window.rejectPostItemNode = async function(id) {
     try {
         await deleteDoc(doc(db, "jobs", id));
-        window.spawnPremiumToastAlert("Removed", "विज्ञापन कतार से हटा दिया गया है।", "error");
-    } catch(e) { window.spawnPremiumToastAlert("Error", e.message, "error"); }
+        window.spawnPremiumToastAlert("Removed", "हटा दिया गया है।", "error");
+    } catch(e) { alert(e.message); }
 };
 
-// ==========================================
-// 🚀 DYNAMIC CONTENT RENDERING PIPELINES
-// ==========================================
 window.setJobFilter = function(categoryName) {
     selectedCategoryFilter = categoryName;
     renderDynamicCategoryChips();
@@ -234,18 +232,16 @@ window.executeUIRenderPipeline = function() {
     });
 
     if(filtered.length === 0) {
-        feed.innerHTML = `<div class="col-span-full text-center py-12 text-xs font-bold text-slate-400 bg-white/50 border border-dashed p-6 rounded-xl">इस श्रेणी में कोई सक्रिय पोस्ट उपलब्ध नहीं है।</div>`;
+        feed.innerHTML = `<div class="col-span-full text-center py-12 text-xs font-bold text-slate-400 bg-white/50 border border-dashed p-6 rounded-xl">कोई पोस्ट उपलब्ध नहीं है।</div>`;
         return;
     }
 
     feed.innerHTML = filtered.map(j => {
         const catObj = activeDynamicCategoriesList.find(c => c.name.toLowerCase() === j.type.toLowerCase());
         let badgeColorHex = catObj ? catObj.hexColor : '#6366f1';
-        
         let isNewAd = (Date.now() - (j.timestamp || 0)) < (2 * 24 * 60 * 60 * 1000);
         let blinkBadge = isNewAd ? `<span class="blinking-new-badge ml-2 text-[10px] font-black px-1.5 py-0.5 rounded bg-rose-100 text-rose-700 border border-rose-200 tracking-wide">NEW</span>` : "";
 
-        // 🌟 FIXED LINK PIPELINE: Integrated with performSinglePageRoutingView perfectly
         return `
             <div class="premium-glass-card p-5 flex flex-col justify-between bg-white">
                 <div>
@@ -266,9 +262,7 @@ window.executeSidebarLiveSearchFilters = function() {
     const query = document.getElementById('sidebarLiveSearchBox')?.value.trim().toLowerCase() || "";
     const stack = document.getElementById('rightSidebarLiveCollectionStack');
     if(!stack) return;
-
     const filteredStack = cachedJobsArray.filter(j => j.approvalStatus === 'Live' && (j.title.toLowerCase().includes(query) || j.authority.toLowerCase().includes(query)));
-    
     stack.innerHTML = filteredStack.slice(0, 6).map(j => `
         <div onclick="window.performSinglePageRoutingView('detail', '${j.id}')" class="bg-white hover:bg-indigo-50 p-2.5 rounded-xl border cursor-pointer transition-all text-xs shadow-sm">
             <h5 class="font-bold text-slate-800 truncate">${j.title}</h5>
@@ -280,54 +274,59 @@ window.renderPostDeepContentView = function(postId) {
     const payload = document.getElementById('detailViewContentPayload');
     const matched = cachedJobsArray.find(item => item.id === postId);
     if(!matched || !payload) return;
-    
     payload.innerHTML = `
         <div class="space-y-4">
             <h2 class="text-2xl font-black text-slate-900">${matched.title}</h2>
-            <p class="text-xs font-bold text-indigo-600 uppercase">🏛️ Authority/Board: ${matched.authority}</p>
+            <p class="text-xs font-bold text-indigo-600 uppercase">🏛️ Authority: ${matched.authority}</p>
             <div class="bg-slate-50 border p-4 rounded-xl text-sm leading-relaxed">${matched.description || 'No data uploaded.'}</div>
         </div>
     `;
 };
 
-// ==========================================
-// 📡 APP BOOTSTRAP INITIAL RUN CONSOLE SYNC
-// ==========================================
+window.triggerPlatformPushSubscription = async function() {
+    if (!messaging) return;
+    try {
+        const permission = await Notification.requestPermission();
+        if (permission === 'granted') {
+            const token = await getToken(messaging, { vapidKey: 'YOUR_PUBLIC_VAPID_KEY_HERE' });
+            if (token) {
+                await setDoc(doc(db, "subscribers", token), { subscribedAt: Date.now() });
+                window.spawnPremiumToastAlert("Subscribed", "🎉 Notification turned on!", "success");
+            }
+        }
+    } catch (e) { }
+};
+
+function checkCurrentSubscriptionState() {
+    if ('Notification' in window && Notification.permission === 'granted') {
+        const b = document.getElementById('pushStatusBadge');
+        if(b) b.innerText = "Active";
+    }
+}
+
+// BOOTSTRAP ENGINE
 function bootstrapApplicationEngine() {
     renderDynamicCategoryChips();
     checkCurrentSubscriptionState();
     
-    // Fallback alignment map binding for button routes compatibility
-    window.navigateToHub = window.performSinglePageRoutingView;
-
     onSnapshot(collection(db, "jobs"), (snapshot) => {
         cachedJobsArray = [];
         let approvalQueueHTML = "";
-        
         snapshot.forEach(docSnap => {
             const data = docSnap.data();
             const id = docSnap.id;
             cachedJobsArray.push({ id, ...data });
-            
             if(data.approvalStatus === 'Pending') {
-                approvalQueueHTML += `
-                    <div class="p-3 bg-white border rounded-xl space-y-2 text-xs shadow-inner">
-                        <h4 class="font-bold text-slate-800">${data.title}</h4>
-                        <div class="flex gap-2 pt-1">
-                            <button onclick="window.approvePostItemNode('${id}')" class="bg-emerald-600 text-white font-bold px-2.5 py-1 rounded text-[11px]">Approve & Live</button>
-                            <button onclick="window.rejectPostItemNode('${id}')" class="bg-rose-600 text-white font-bold px-2.5 py-1 rounded text-[11px]">Reject</button>
-                        </div>
-                    </div>`;
+                approvalQueueHTML += `<div class="p-3 bg-white border rounded-xl space-y-2 text-xs">
+                    <h4 class="font-bold text-slate-800">${data.title}</h4>
+                    <div class="flex gap-2"><button onclick="window.approvePostItemNode('${id}')" class="bg-emerald-600 text-white px-2 py-1 rounded">Approve</button><button onclick="window.rejectPostItemNode('${id}')" class="bg-rose-600 text-white px-2 py-1 rounded">Reject</button></div>
+                </div>`;
             }
         });
-        
         const qBox = document.getElementById('adminApprovalQueueTargetList');
-        if(qBox) qBox.innerHTML = approvalQueueHTML || `<p class="text-xs font-bold text-slate-400 text-center py-6">कोई भी पोस्ट कतार में लंबित नहीं है।</p>`;
-        
+        if(qBox) qBox.innerHTML = approvalQueueHTML || `<p class="text-xs font-bold text-slate-400 text-center py-4">कोई लंबित पोस्ट नहीं है।</p>`;
         window.executeUIRenderPipeline();
         window.executeSidebarLiveSearchFilters();
     });
 }
-
 window.addEventListener('DOMContentLoaded', bootstrapApplicationEngine);
-window.executeUIRenderPipeline = window.executeUIRenderPipeline;
