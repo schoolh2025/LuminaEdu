@@ -2,7 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebas
 import { getFirestore, collection, addDoc, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-// 🚨 APNI REAL CONSOLE CONFIG DETAILS PARAMETERS STRINGS BIILKUL SAHI FILL KAREIN:
+// 🚨 APNI REAL CONFIG DETAILS PARAMETERS STRINGS BIILKUL SAHI FILL KAREIN:
 const firebaseConfig = {
   apiKey: "AIzaSyDEXmjIN8w2s2uXk0FTzC7ri4HhLetzV4E",
   authDomain: "luminaedu-ai786.firebaseapp.com",
@@ -22,7 +22,7 @@ let activeDynamicCategoriesList = [];
 let layoutGridColumnsSetting = 'lg:grid-cols-3'; 
 let globalImageVisibilitySetting = 'show'; 
 
-// AUTH NODES BINDING
+// USER ACCOUNT AUTHENTICATION CONSOLE PORTS
 window.registerNewUserNode = async function(email, password, fullname) {
     if(!email || !password || !fullname) return window.spawnPremiumToastAlert("Validation Error", "सभी फ़ील्ड्स भरना अनिवार्य है।", "error");
     try {
@@ -48,12 +48,12 @@ window.executeForgotDispatchRecoveryLink = async function() {
     if(!email) return window.spawnPremiumToastAlert("Input Missing", "कृपया ईमेल दर्ज करें।", "error");
     try {
         await sendPasswordResetEmail(auth, email);
-        window.spawnPremiumToastAlert("Email Dispatched", "🔑 पासवर्ड रीсет लिंक भेज दिया गया है।", "success");
+        window.spawnPremiumToastAlert("Email Dispatched", "🔑 पासवर्ड रीसेट लिंक भेज दिया गया है।", "success");
         window.toggleAuthOverlay(false);
     } catch(err) { window.spawnPremiumToastAlert("Error", err.message, "error"); }
 };
 
-// CATEGORY CHIPS VISUAL BUILDER
+// CATEGORY FILTERS CONTROLLER
 window.setJobFilter = function(categoryName) {
     selectedCategoryFilter = categoryName;
     renderDynamicChipsLayout();
@@ -74,13 +74,16 @@ function renderDynamicChipsLayout() {
     }).join('');
 }
 
-// UNIFIED PIPELINE FOR SEARCH AND SORTING
+// LIVE SEARCH, FILTERS & SORTING ENGINE PIPELINE
 window.executeLiveSearchFiltering = function() {
-    const searchVal = document.getElementById('globalPortalSearchBox')?.value.trim().toLowerCase() || "";
-    const sortVal = document.getElementById('globalPortalSortSelector')?.value || "newest";
+    const searchBox = document.getElementById('globalPortalSearchBox');
+    const sortSelector = document.getElementById('globalPortalSortSelector');
     const feed = document.getElementById('publicCardsFeed');
     
     if(!feed) return;
+
+    const searchVal = searchBox ? searchBox.value.trim().toLowerCase() : "";
+    const sortVal = sortSelector ? sortSelector.value : "newest";
 
     let dataset = cachedJobsArray.filter(j => {
         if(j.approvalStatus !== 'Live') return false;
@@ -123,7 +126,7 @@ window.executeLiveSearchFiltering = function() {
                     ${displayImg}
                     <div class="flex justify-between items-center mb-2.5">
                         <span style="background-color: ${badgeColorHex}12; color: ${badgeColorHex}; border-color: ${badgeColorHex}25;" class="text-[10px] font-black px-2.5 py-0.5 rounded-md uppercase border tracking-wide">${j.type}</span>
-                        <span class="text-[11px] font-bold text-slate-400">⏰ ${j.lastDate || 'Active'}</span>
+                        <span class="text-[11px] font-bold text-slate-400">📅 ${j.lastDate || 'Active'}</span>
                     </div>
                     <h3 class="font-extrabold text-slate-800 text-sm lg:text-base mb-1.5 leading-snug tracking-tight">${j.title}</h3>
                     <p class="text-xs text-slate-400 font-bold">🏛️ Board: ${j.authority}</p>
@@ -136,7 +139,7 @@ window.executeLiveSearchFiltering = function() {
     }).join('');
 }
 
-// RIGHT SIDEBAR RECOMENDED STACK BUILDER
+// RIGHT SIDEBAR RECOMMENDATION LISTS STACK
 function renderRightSidebarRecommendedStack() {
     const sidebar = document.getElementById('rightSidebarRecommendedStack');
     if(!sidebar) return;
@@ -159,7 +162,7 @@ window.renderPostDeepContentView = function(postId) {
         <div class="space-y-4 text-slate-800">
             <h2 class="text-xl lg:text-3xl font-black text-slate-900 leading-tight">${matchedPost.title}</h2>
             <p class="text-sm font-extrabold text-indigo-600">🏛️ Board: ${matchedPost.authority}</p>
-            <div class="bg-white/80 border p-4 rounded-xl text-sm leading-relaxed whitespace-pre-wrap">${matchedPost.description || 'विवरण उपलब्ध नहीं है।'}</div>
+            <div class="bg-white/80 border p-4 rounded-xl text-sm leading-relaxed whitespace-pre-wrap font-medium">${matchedPost.description || 'विवरण उपलब्ध नहीं है।'}</div>
         </div>
     `;
 };
@@ -180,6 +183,7 @@ window.executeContributorPostSubmission = async function(e) {
     } catch(err) { window.spawnPremiumToastAlert("Error", err.message, "error"); }
 };
 
+// INITIAL CORES START RUNTIME LOGIC CHANNELS
 function startApplicationCoreEngine() {
     onSnapshot(collection(db, "categories"), (snapshot) => {
         activeDynamicCategoriesList = [{ id: 'all', name: 'All', hexColor: '#4f46e5' }];
@@ -211,4 +215,3 @@ function startApplicationCoreEngine() {
 }
 
 window.addEventListener('load', startApplicationCoreEngine);
-window.executeLiveSearchFiltering = window.executeLiveSearchFiltering;
