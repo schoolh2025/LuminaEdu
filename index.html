@@ -3,148 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LuminaEdu | Latest Sarkari Job, Admit Card & Result Portal</title>
-    <meta name="description" content="India's most trusted recruitment and information hub.">
+    <title>LuminaEdu | Sarkari Naukri & Results Portal</title>
     
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
-    
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Noto+Sans+Devanagari:wght@400;600;700;800&display=swap" rel="stylesheet">
     
     <style>
         body { 
             font-family: 'Plus Jakarta Sans', 'Noto Sans Devanagari', sans-serif; 
-            background-color: #0b0f19; /* Deep Slate/Black background like your premium image */
-            color: #f1f5f9;
+            background: linear-gradient(135deg, #e0f2fe 0%, #fae8ff 100%); /* Perfect Light Gradient from image 1 */
+            color: #1e293b;
         }
-        .neon-glow-card {
-            background: rgba(17, 24, 39, 0.7);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        .premium-glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .neon-glow-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(99, 102, 241, 0.4);
-            box-shadow: 0 12px 40px -5px rgba(99, 102, 241, 0.2);
+        .premium-glass-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px -10px rgba(99, 102, 241, 0.15);
+            border-color: rgba(99, 102, 241, 0.2);
         }
-        .glass-header {
-            background: rgba(11, 15, 25, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        /* Custom Premium Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #0b0f19; }
-        ::-webkit-scrollbar-thumb { background: #1f2937; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #4f46e5; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col md:flex-row">
 
-    <header class="glass-header sticky top-0 z-50 px-4 lg:px-12 py-4 flex items-center justify-between shadow-xl">
-        <div class="flex items-center gap-4 cursor-pointer" onclick="navigateToHub('front')">
-            <div class="bg-indigo-600 text-white font-black p-2.5 rounded-xl shadow-lg shadow-indigo-600/30 tracking-wider text-xl">LE</div>
-            <div>
-                <h1 class="text-xl md:text-2xl font-black text-white tracking-tight">Lumina<span class="text-indigo-400">Edu</span></h1>
-                <p class="hidden md:block text-[11px] text-slate-400 font-semibold tracking-wide uppercase">Circular Hub & Recruitment Network</p>
-            </div>
-        </div>
-
-        <div class="flex items-center gap-3">
-            <button onclick="toggleAuthOverlay(true)" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs md:text-sm px-5 py-2.5 rounded-xl shadow-lg shadow-indigo-600/20 transition-all">
-                Join Us 🚀
-            </button>
-        </div>
-    </header>
-
-    <section id="categoryFiltersSection" class="max-w-[92%] w-full mx-auto px-2 pt-8">
-        <div class="bg-slate-900/60 border border-white/5 p-4 rounded-2xl flex flex-col lg:flex-row items-center justify-between gap-4">
-            <div class="text-center lg:text-left">
-                <span class="text-[10px] bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 font-black px-2.5 py-1 rounded-full uppercase tracking-wider">Live Filters</span>
-                <h2 class="text-base font-black text-white mt-1">श्रेणी अनुसार खोजें (Filter Post Category)</h2>
+    <aside class="w-full md:w-64 bg-white/70 backdrop-blur-md border-r border-white/40 p-5 flex flex-col justify-between shrink-0">
+        <div class="space-y-6">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="window.setJobFilter('All')">
+                <div class="bg-indigo-600 text-white font-black p-2.5 rounded-xl text-lg shadow-md">L</div>
+                <h1 class="text-xl font-extrabold text-slate-900">Lumina<span class="text-indigo-600">Edu</span></h1>
             </div>
             
-            <div class="hidden lg:flex flex-wrap items-center gap-2" id="desktopCategoryChips"></div>
-
-            <div class="block lg:hidden w-full">
-                <select id="mobileCategorySelect" onchange="window.setJobFilter(this.value)" class="w-full bg-slate-800 border border-white/10 text-slate-200 font-bold text-sm p-3.5 rounded-xl outline-none">
-                    <option value="All">🔍 सभी श्रेणियां (All Fields)</option>
-                    <option value="Job">💼 सरकारी नौकरी (Sarkari Job)</option>
-                    <option value="Admit-Card">🎟️ एडमिट कार्ड (Admit Card)</option>
-                    <option value="Result">📊 परीक्षा परिणाम (Sarkari Result)</option>
-                    <option value="Yojna">🏛️ सरकारी योजना (Sarkari Yojna)</option>
-                    <option value="Scholarship">🎓 स्कॉलरशिप (Scholarship)</option>
-                </select>
-            </div>
+            <nav class="space-y-1">
+                <button onclick="window.setJobFilter('All')" class="w-full flex items-center gap-3 px-4 py-3 bg-indigo-50 text-indigo-700 font-bold text-sm rounded-xl border border-indigo-100/50">
+                    💼 Jobs & Results
+                </button>
+            </nav>
         </div>
-    </section>
 
-    <main class="max-w-[92%] w-full mx-auto p-4 lg:p-8 flex-1">
+        <button onclick="toggleAuthOverlay(true)" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm py-3 rounded-xl shadow-md mt-6 transition-all">
+            Login / Join 🚀
+        </button>
+    </aside>
+
+    <div class="flex-1 flex flex-col min-w-0">
         
-        <div id="postsGridView" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
-
-        <div id="postDetailView" class="hidden max-w-4xl mx-auto bg-slate-900/40 border border-white/5 p-6 lg:p-10 rounded-3xl shadow-2xl relative">
-            <button onclick="navigateToHub('front')" class="mb-6 inline-flex items-center gap-2 text-xs font-bold text-indigo-400 hover:text-indigo-300 bg-indigo-500/10 border border-indigo-500/20 px-4 py-2 rounded-xl transition-all">
-                ← मुख्य पृष्ठ पर वापस जाएं (Back to Home)
-            </button>
-            <div id="detailViewContentPayload"></div>
+        <div id="premiumToastNotification" class="fixed top-5 left-1/2 transform -translate-x-1/2 z-[100] max-w-sm w-full mx-4 bg-white/95 backdrop-blur-md border p-4 rounded-2xl shadow-2xl flex items-start gap-3 opacity-0 pointer-events-none transition-all duration-300">
+            <div id="toastIconSlot" class="text-lg">✨</div>
+            <div class="flex-1">
+                <h4 id="toastTitleSlot" class="text-xs font-black uppercase text-slate-900">System Notification</h4>
+                <p id="toastMessageSlot" class="text-xs font-semibold text-slate-600 mt-0.5"></p>
+            </div>
         </div>
-    </main>
 
-    <footer class="bg-[#070a12] border-t border-white/5 p-8 text-sm text-slate-400 mt-16">
-        <div class="max-w-[92%] w-full mx-auto flex flex-col lg:flex-row items-center justify-between gap-6 text-center lg:text-left">
-            <div>
-                <div class="flex items-center justify-center lg:justify-start gap-3">
-                    <span class="bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 text-xs font-black px-2 py-0.5 rounded-md">PRO</span>
-                    <h4 class="font-black text-white text-base tracking-wide uppercase">LuminaEdu Network</h4>
+        <main class="p-4 lg:p-10 flex-1 space-y-6">
+            
+            <div id="mainFeedRouterBlock" class="space-y-6">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div>
+                        <h2 class="text-2xl lg:text-3xl font-black text-slate-900 tracking-tight">Sarkari Naukri & Results</h2>
+                        <p class="text-xs lg:text-sm font-semibold text-slate-500 mt-0.5">Latest updates on government jobs, admit cards, and results.</p>
+                    </div>
+
+                    <div class="flex flex-wrap gap-1.5 bg-white/60 p-1.5 rounded-xl border border-white/50" id="categoryFilterContainer"></div>
                 </div>
-                <p class="text-xs font-medium text-slate-500 mt-1">सटीक शिक्षा, नवीनतम रोज़गार एवं त्वरित सरकारी योजनाओं का विश्वसनीय सूचना मंच। © 2026</p>
-            </div>
-            
-            <div class="flex flex-wrap gap-4 text-slate-400 font-bold text-xs justify-center bg-slate-900/50 border border-white/5 px-4 py-2.5 rounded-xl">
-                <button onclick="window.setJobFilter('All')" class="hover:text-indigo-400 transition-colors">Home Hub</button>
-                <span class="text-slate-700">|</span>
-                <a href="pages/privacy.html" class="hover:text-indigo-400 transition-colors">Privacy Policy</a>
-                <span class="text-slate-700">|</span>
-                <a href="pages/terms.html" class="hover:text-indigo-400 transition-colors">Terms & Conditions</a>
-                <span class="text-slate-700">|</span>
-                <a href="pages/disclaimer.html" class="hover:text-indigo-400 transition-colors">Disclaimer</a>
-                <span class="text-slate-700">|</span>
-                <a href="pages/contact.html" class="hover:text-indigo-400 transition-colors">Contact Us</a>
-            </div>
-            
-            <div class="flex flex-col items-center lg:items-end gap-1">
-                <span class="text-[11px] font-mono text-slate-500 bg-slate-900 px-3 py-1 rounded-md border border-white/5">SSL SECURE SHIELD ACTIVE</span>
-                <span class="text-[10px] text-slate-600 font-bold">App Interface Framework v5.2</span>
-            </div>
-        </div>
-    </footer>
 
-    <div id="authModalOverlay" class="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center hidden opacity-0 transition-all duration-300">
-        <div class="bg-slate-900 border border-white/10 max-w-sm w-full m-4 p-6 rounded-3xl shadow-2xl relative">
-            <button onclick="toggleAuthOverlay(false)" class="absolute top-4 right-4 text-slate-400 font-bold hover:text-slate-200">✕</button>
-            <div class="flex border-b border-white/5 text-sm font-bold mb-4">
-                <button id="tabLogin" onclick="switchAuthForm('login')" class="flex-1 pb-2 border-b-2 border-indigo-500 text-indigo-400">लॉगिन</button>
-                <button id="tabReg" onclick="switchAuthForm('reg')" class="flex-1 pb-2 text-slate-500">रजिस्ट्रेशन</button>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="publicCardsFeed"></div>
             </div>
-            <div class="space-y-4 text-slate-300">
+
+            <div id="postDetailView" class="hidden premium-glass-card p-6 lg:p-10 max-w-4xl mx-auto bg-white/90">
+                <button onclick="navigateToHub('front')" class="mb-6 inline-flex items-center gap-2 text-xs font-black text-indigo-600 bg-indigo-50 border border-indigo-100 px-4 py-2 rounded-xl">
+                    ← मुख्य पृष्ठ (Back to Home)
+                </button>
+                <div id="detailViewContentPayload"></div>
+            </div>
+        </main>
+
+        <footer class="bg-white/40 backdrop-blur-md border-t border-white/60 p-6 text-xs text-slate-500">
+            <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+                <div>
+                    <h4 class="font-bold text-slate-800 uppercase tracking-wide">LUMINAEDU PORTAL</h4>
+                    <p class="mt-0.5">सटीक शिक्षा एवं त्वरित सरकारी योजनाओं का विश्वसनीय नेटवर्क। © 2026</p>
+                </div>
+                <div class="flex flex-wrap gap-4 font-bold text-indigo-600 justify-center">
+                    <button onclick="window.setJobFilter('All')" class="hover:underline">Home</button> | 
+                    <a href="pages/privacy.html" class="hover:underline">Privacy Policy</a> | 
+                    <a href="pages/terms.html" class="hover:underline">Terms</a> | 
+                    <a href="pages/contact.html" class="hover:underline">Contact Us</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <div id="authModalOverlay" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-all duration-300">
+        <div class="bg-white max-w-sm w-full m-4 p-6 rounded-3xl shadow-2xl relative border border-slate-100">
+            <button onclick="toggleAuthOverlay(false)" class="absolute top-4 right-4 text-slate-400 font-bold hover:text-slate-600">✕</button>
+            <div class="flex border-b text-sm font-bold mb-4">
+                <button id="tabLogin" onclick="switchAuthForm('login')" class="flex-1 pb-2 border-b-2 border-indigo-600 text-indigo-600">लॉगिन</button>
+                <button id="tabReg" onclick="switchAuthForm('reg')" class="flex-1 pb-2 text-slate-400">रजिस्ट्रेशन</button>
+            </div>
+            <div class="space-y-4">
                 <div id="regNameBlock" class="hidden">
-                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1">पूरा नाम</label>
-                    <input type="text" id="usrName" class="w-full bg-slate-800 border border-white/5 text-sm p-3 rounded-xl outline-none text-white" placeholder="आपका नाम">
+                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">आपका पूरा नाम</label>
+                    <input type="text" id="usrName" class="w-full bg-slate-50 border text-sm p-3 rounded-xl outline-none" placeholder="आपका नाम">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1">ईमेल एड्रेस</label>
-                    <input type="email" id="usrEmail" class="w-full bg-slate-800 border border-white/5 text-sm p-3 rounded-xl outline-none text-white" placeholder="name@domain.com">
+                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">ईमेल एड्रेस</label>
+                    <input type="email" id="usrEmail" class="w-full bg-slate-50 border text-sm p-3 rounded-xl outline-none" placeholder="name@domain.com">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1">पासवर्ड</label>
-                    <input type="password" id="usrPass" class="w-full bg-slate-800 border border-white/5 text-sm p-3 rounded-xl outline-none text-white font-mono" placeholder="••••••••">
+                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">पासवर्ड</label>
+                    <input type="password" id="usrPass" class="w-full bg-slate-50 border text-sm p-3 rounded-xl outline-none font-mono" placeholder="••••••••">
                 </div>
-                <button onclick="executeAuthActionPipeline()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm py-3.5 rounded-xl shadow-md transition-all">सत्यापन निष्पादित करें ⚡</button>
+                <button onclick="executeAuthActionPipeline()" class="w-full bg-indigo-600 text-white font-bold text-sm py-3.5 rounded-xl shadow-md">सत्यापन निष्पादित करें ⚡</button>
             </div>
         </div>
     </div>
@@ -152,42 +129,37 @@
     <script type="module" src="app.js"></script>
     <script>
         let currentAuthMode = 'login';
-        
-        // 🔀 DYNAMIC SINGLE-PAGE APP ROUTER CHANNELS
         window.navigateToHub = function(targetViewMode, postId = null) {
-            const gridView = document.getElementById('postsGridView');
+            const feedView = document.getElementById('mainFeedRouterBlock');
             const detailView = document.getElementById('postDetailView');
-            const filtersSection = document.getElementById('categoryFiltersSection');
-            
             if(targetViewMode === 'detail') {
-                gridView.classList.add('hidden');
-                filtersSection.classList.add('hidden');
+                feedView.classList.add('hidden');
                 detailView.classList.remove('hidden');
-                // Trigger detail rendering data inside app.js instance array
-                if(typeof window.renderPostDeepContentView === 'function') {
-                    window.renderPostDeepContentView(postId);
-                }
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                if(typeof window.renderPostDeepContentView === 'function') { window.renderPostDeepContentView(postId); }
             } else {
                 detailView.classList.add('hidden');
-                gridView.classList.remove('hidden');
-                filtersSection.classList.remove('hidden');
+                feedView.classList.remove('hidden');
             }
         };
-
+        window.spawnPremiumToastAlert = function(title, message, type) {
+            const toast = document.getElementById('premiumToastNotification');
+            document.getElementById('toastTitleSlot').innerText = title;
+            document.getElementById('toastMessageSlot').innerText = message;
+            document.getElementById('toastIconSlot').innerText = type === 'error' ? "❌" : "✨";
+            toast.className = `fixed top-5 left-1/2 transform -translate-x-1/2 z-[100] max-w-sm w-full mx-4 bg-white border p-4 rounded-2xl shadow-2xl flex items-start gap-3 transition-all duration-300 opacity-100 translate-y-0 ${type==='error'?'border-rose-200 bg-rose-50':'border-emerald-200 bg-emerald-50'}`;
+            setTimeout(() => { toast.classList.add('opacity-0', 'translate-y-[-20px]'); }, 4000);
+        };
         window.toggleAuthOverlay = function(show) {
             const overlay = document.getElementById('authModalOverlay');
             if(show) { overlay.classList.remove('hidden'); setTimeout(() => { overlay.classList.remove('opacity-0'); }, 10); }
             else { overlay.classList.add('opacity-0'); setTimeout(() => { overlay.classList.add('hidden'); }, 300); }
         };
-
         window.switchAuthForm = function(mode) {
             currentAuthMode = mode;
             document.getElementById('regNameBlock').classList.toggle('hidden', mode === 'login');
-            document.getElementById('tabLogin').className = mode === 'login' ? 'flex-1 pb-2 border-b-2 border-indigo-500 text-indigo-400' : 'flex-1 pb-2 text-slate-500';
-            document.getElementById('tabReg').className = mode === 'reg' ? 'flex-1 pb-2 border-b-2 border-indigo-500 text-indigo-400' : 'flex-1 pb-2 text-slate-500';
+            document.getElementById('tabLogin').className = mode === 'login' ? 'flex-1 pb-2 border-b-2 border-indigo-600 text-indigo-600' : 'flex-1 pb-2 text-slate-400';
+            document.getElementById('tabReg').className = mode === 'reg' ? 'flex-1 pb-2 border-b-2 border-indigo-600 text-indigo-600' : 'flex-1 pb-2 text-slate-400';
         };
-
         window.executeAuthActionPipeline = function() {
             const email = document.getElementById('usrEmail').value.trim();
             const pass = document.getElementById('usrPass').value.trim();
