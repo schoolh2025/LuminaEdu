@@ -3,209 +3,163 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LuminaEdu | Premium Career & Results Hub</title>
+    <title>LuminaEdu | Official Sarkari Hub</title>
+    
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Noto+Sans+Devanagari:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
-        body { font-family: 'Plus Jakarta Sans', 'Noto Sans Devanagari', sans-serif; background: linear-gradient(135deg, #e0f2fe 0%, #fef08a 30%, #fae8ff 100%); color: #1e293b; background-attachment: fixed; }
-        .glass-header { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid rgba(226, 232, 240, 0.9); }
-        .premium-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(226, 232, 240, 0.8); border-radius: 1.5rem; box-shadow: 0 4px 12px 0 rgba(148, 163, 184, 0.03); transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
-        .premium-card:hover { transform: translateY(-3px); box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.15); border-color: rgba(99, 102, 241, 0.3); }
-        /* Blinking "New" Badge Animation */
-        @keyframes blinkingBadge { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
-        .new-blinking-badge { animation: blinkingBadge 1.2s infinite; }
+        body { 
+            font-family: 'Plus Jakarta Sans', 'Noto Sans Devanagari', sans-serif; 
+            background: linear-gradient(135deg, #e0f2fe 0%, #fae8ff 100%);
+            color: #1e293b;
+        }
+        .premium-glass-card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 1.25rem;
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        .premium-glass-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 30px -5px rgba(99, 102, 241, 0.15);
+        }
     </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col md:flex-row">
 
-    <header class="glass-header sticky top-0 z-50 px-4 lg:px-10 py-3 flex flex-row items-center justify-between gap-4 shadow-sm">
-        <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.reload()">
-            <div class="bg-indigo-600 text-white font-black p-2.5 rounded-xl text-xl shadow-lg">LE</div>
-            <h1 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">Lumina<span class="text-indigo-600">Edu</span> Hub</h1>
-        </div>
-        <button onclick="toggleAuthOverlay(true)" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs md:text-sm px-5 py-2.5 rounded-xl shadow-lg transition-all">Sign In 🚀</button>
-    </header>
-
-    <main class="max-w-7xl w-full mx-auto p-4 lg:p-8 flex-1 flex flex-col lg:flex-row gap-8 items-start">
-        
-        <div class="flex-1 min-w-0 space-y-8">
+    <aside class="w-full md:w-64 bg-white/80 backdrop-blur-md border-r border-slate-200/60 p-5 flex flex-col justify-between shrink-0">
+        <div class="space-y-6">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="window.setJobFilter('All')">
+                <div class="bg-indigo-600 text-white font-black p-2 rounded-lg text-lg">LE</div>
+                <h1 class="text-xl font-extrabold text-slate-900 tracking-tight">Lumina<span class="text-indigo-600">Edu</span></h1>
+            </div>
             
-            <div id="frontFeedViewRouterNode" class="space-y-6">
-                
-                <div class="premium-card p-4 flex flex-col md:flex-row gap-4 justify-between items-center bg-white/70">
-                    <div class="relative w-full md:flex-1">
-                        <input type="text" id="mainPortalSearchBox" oninput="window.performPortalLiveSearchFiltering()" class="w-full bg-white border border-slate-200 text-slate-800 font-semibold text-sm p-3 pl-10 rounded-xl outline-none" placeholder="शीर्षक, बोर्ड या पद का नाम खोजें (Search live keywords)...">
-                        <span class="absolute left-3.5 top-3.5 text-slate-400">🔍</span>
+            <div>
+                <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-2 mb-2">Navigation Links</p>
+                <nav class="space-y-1">
+                    <button onclick="window.setJobFilter('All')" class="w-full flex items-center gap-3 px-4 py-2.5 bg-indigo-50 text-indigo-700 font-bold text-sm rounded-xl">
+                        💼 All Updates
+                    </button>
+                </nav>
+            </div>
+        </div>
+
+        <div class="pt-4 border-t border-slate-100">
+            <button onclick="toggleAuthOverlay(true)" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs py-3 rounded-xl shadow-md transition-all">
+                Contributor Login 🚀
+            </button>
+        </div>
+    </aside>
+
+    <div class="flex-1 flex flex-col min-w-0">
+        
+        <div id="premiumToastNotification" class="fixed top-5 left-1/2 transform -translate-x-1/2 z-[100] max-w-sm w-full mx-4 bg-white border p-4 rounded-2xl shadow-2xl flex items-start gap-3 opacity-0 pointer-events-none transition-all duration-300">
+            <div id="toastIconSlot" class="text-lg">✨</div>
+            <div class="flex-1">
+                <h4 id="toastTitleSlot" class="text-xs font-black uppercase text-slate-900">System Notify</h4>
+                <p id="toastMessageSlot" class="text-xs font-semibold text-slate-600 mt-0.5"></p>
+            </div>
+        </div>
+
+        <main class="p-4 lg:p-8 flex-1 space-y-6">
+            <div id="mainFeedRouterBlock" class="space-y-6">
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white/40 p-4 rounded-2xl border border-white/60">
+                    <div>
+                        <h2 class="text-xl lg:text-2xl font-black text-slate-900 tracking-tight">Sarkari Yojana, Jobs & Results</h2>
+                        <p class="text-xs font-semibold text-slate-500">Real-time verification portal dashboard stream.</p>
                     </div>
-                    <div class="hidden lg:flex items-center gap-2" id="categoryFilterContainer"></div>
+                    <div class="flex flex-wrap gap-1.5" id="categoryFilterContainer"></div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="publicCardsFeed">
-                    <div class="col-span-full py-20 text-center text-sm font-bold text-slate-400 bg-white/50 rounded-2xl border">Loading matrix nodes...</div>
-                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="publicCardsFeed"></div>
             </div>
 
-            <div id="postDeepDetailViewRouterNode" class="hidden premium-card p-6 lg:p-10 bg-white shadow-xl relative">
-                <button onclick="window.performSinglePageRoutingView('front')" class="mb-6 inline-flex items-center gap-2 text-xs font-black text-indigo-700 bg-indigo-50 border border-indigo-100 px-4 py-2.5 rounded-xl transition-all hover:bg-indigo-100">
-                    ← मुख्य सूची (Back to Home)
+            <div id="postDetailView" class="hidden premium-glass-card p-6 lg:p-10 max-w-4xl mx-auto bg-white">
+                <button onclick="navigateToHub('front')" class="mb-6 inline-flex items-center gap-2 text-xs font-bold text-indigo-600 bg-indigo-50 border border-indigo-100 px-4 py-2 rounded-xl">
+                    ← मुख्य पृष्ठ (Back to Home)
                 </button>
                 <div id="detailViewContentPayload"></div>
             </div>
+        </main>
 
-            <div id="contributorWorkspaceStudioNode" class="hidden premium-card p-6 lg:p-8 bg-white space-y-6">
-                <div class="flex justify-between items-center border-b pb-4">
-                    <h2 class="text-xl font-black text-slate-900">👨‍💻 Contributor Workspace Studio</h2>
-                    <button onclick="window.performSecurePlatformLogout()" class="bg-rose-600 text-white font-bold text-xs px-4 py-2 rounded-xl">Logout Session</button>
-                </div>
-                <form id="contributorListingForm" onsubmit="window.executeContributorPostSubmission(event)" class="space-y-4">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div><label class="block text-xs font-bold text-slate-600 mb-1">Post Title Headline</label><input type="text" id="cPostTitle" required class="w-full bg-slate-50 border text-xs p-3 rounded-xl outline-none" placeholder="SSC CGL Recruitment 2026"></div>
-                        <div><label class="block text-xs font-bold text-slate-600 mb-1">Board Authority</label><input type="text" id="cPostAuth" required class="w-full bg-slate-50 border text-xs p-3 rounded-xl outline-none" placeholder="Staff Selection Commission"></div>
-                        <div><label class="block text-xs font-bold text-slate-600 mb-1">Category Route</label><select id="cPostType" class="w-full bg-slate-50 border text-xs p-3 rounded-xl outline-none font-bold"></select></div>
-                        <div><label class="block text-xs font-bold text-slate-600 mb-1">Last Date to Apply</label><input type="text" id="cPostDate" class="w-full bg-slate-50 border text-xs p-3 rounded-xl outline-none" placeholder="15/08/2026"></div>
-                    </div>
-                    <button type="submit" class="w-full bg-indigo-600 text-white font-bold text-sm py-3.5 rounded-xl shadow-md">Submit to Admin Queue 🚀</button>
-                </form>
-            </div>
-        </div>
-
-        <aside class="w-full lg:w-80 shrink-0 sticky top-24 space-y-4">
-            <div class="premium-card p-5 space-y-4 bg-white/80 border-slate-200/50">
-                <div class="border-b pb-2 flex items-center justify-between">
-                    <h3 class="font-black text-xs uppercase tracking-wider text-slate-900">🔥 Other Top Posts</h3>
-                    <span class="bg-emerald-500 text-white text-[9px] px-1.5 py-0.5 font-bold rounded">Live Sync</span>
-                </div>
-                <div id="rightSidebarRecommendedStack" class="space-y-3.5"></div>
-            </div>
-        </aside>
-    </main>
-
-    <footer class="bg-white/90 border-t border-slate-200/60 p-6 text-xs text-slate-500 mt-12 text-center md:text-left">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-            <p class="font-semibold">Sarkari Yojana, Jobs & Results CM Network © 2026 | Verified Portal</p>
-            <div class="flex gap-3 font-bold text-indigo-600">
-                <a href="pages/privacy.html" class="hover:underline">Privacy Policy</a>
-                <a href="pages/terms.html" class="hover:underline">Terms of Service</a>
-            </div>
-        </div>
-    </footer>
-
-    <div id="authModalOverlay" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-all duration-300">
-        <div class="bg-white/95 max-w-sm w-full m-4 p-6 rounded-3xl shadow-2xl relative border border-white">
-            <button onclick="toggleAuthOverlay(false)" class="absolute top-4 right-4 text-slate-400 font-bold hover:text-slate-600">✕</button>
-            
-            <div id="authFormMainGroupBox">
-                <div class="flex border-b text-sm font-bold mb-4">
-                    <button id="tabLogin" onclick="switchAuthForm('login')" class="flex-1 pb-2 border-b-2 border-indigo-600 text-indigo-600">लॉगिन</button>
-                    <button id="tabReg" onclick="switchAuthForm('reg')" class="flex-1 pb-2 text-slate-400">रजिस्ट्रेशन</button>
-                </div>
-                <div class="space-y-4 text-slate-900">
-                    <div id="regNameBlock" class="hidden"><label class="block text-xs font-bold text-slate-600 mb-1">पूरा नाम</label><input type="text" id="usrName" class="w-full bg-slate-50 border text-sm p-3 rounded-xl outline-none" placeholder="आपका नाम"></div>
-                    <div><label class="block text-xs font-bold text-slate-600 mb-1">ईमेल</label><input type="email" id="usrEmail" class="w-full bg-slate-50 border text-sm p-3 rounded-xl outline-none" placeholder="admin@domain.com"></div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-600 mb-1">पासवर्ड</label>
-                        <div class="relative"><input type="password" id="usrPass" class="w-full bg-slate-50 border text-sm p-3 pr-10 rounded-xl outline-none font-mono" placeholder="••••••••"><button type="button" onclick="togglePasswordVisibility('usrPass')" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-indigo-600 font-bold text-sm">👁️</button></div>
-                    </div>
-                    <button onclick="executeAuthActionPipeline()" class="w-full bg-indigo-600 text-white font-bold text-sm py-3.5 rounded-xl shadow-md dynamic-btn">प्रवेश / लॉग इन करें ⚡</button>
-                    <button onclick="toggleForgotPasswordViewMode(true)" class="w-full text-center text-xs font-bold text-slate-400 hover:text-indigo-600 transition-colors">पासवर्ड भूल गए? (Forgot Password)</button>
+        <footer class="bg-white/60 backdrop-blur-sm border-t border-slate-200/60 p-6 text-xs text-slate-500">
+            <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+                <p class="font-semibold">LuminaEdu Network © 2026 | Powered by Firebase Full CMS Control Panel</p>
+                <div class="flex gap-3 font-bold text-indigo-600">
+                    <a href="pages/privacy.html" class="hover:underline">Privacy Policy</a>
+                    <a href="pages/terms.html" class="hover:underline">Terms of Service</a>
                 </div>
             </div>
-
-            <div id="authFormForgotGroupBox" class="hidden space-y-4">
-                <h3 class="text-sm font-black uppercase text-slate-900 border-b pb-2">🔑 Account Recovery Panel</h3>
-                <p class="text-xs text-slate-500 font-medium leading-relaxed">अपना पंजीकृत ईमेल दर्ज करें, रीसेट लिंक भेज दिया जाएगा।</p>
-                <div><label class="block text-xs font-bold text-slate-600 mb-1">पंजीकृत ईमेल पता</label><input type="email" id="forgotUsrEmail" class="w-full bg-slate-50 border text-sm p-3 rounded-xl outline-none" placeholder="name@domain.com"></div>
-                <button onclick="executeForgotDispatchRecoveryLink()" class="w-full bg-slate-900 text-white font-bold text-xs py-3.5 rounded-xl shadow-md">Reset Password Link 📡</button>
-                <button type="button" onclick="toggleForgotPasswordViewMode(false)" class="w-full text-center text-xs font-bold text-indigo-600 underline">← Back to Log In</button>
-            </div>
-        </div>
+        </footer>
     </div>
 
-    <div id="premiumToastNotification" class="fixed top-5 left-1/2 transform -translate-x-1/2 z-[100] max-w-sm w-full mx-4 bg-white border p-4 rounded-2xl shadow-2xl flex items-start gap-3 opacity-0 pointer-events-none transition-all duration-300">
-        <div id="toastIconSlot" class="text-lg">✨</div>
-        <div class="flex-1">
-            <h4 id="toastTitleSlot" class="text-xs font-black uppercase text-slate-900">System Notify</h4>
-            <p id="toastMessageSlot" class="text-xs font-semibold text-slate-600 mt-0.5"></p>
+    <div id="authModalOverlay" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-all duration-300">
+        <div class="bg-white max-w-sm w-full m-4 p-6 rounded-2xl shadow-2xl relative border">
+            <button onclick="toggleAuthOverlay(false)" class="absolute top-4 right-4 text-slate-400 font-bold hover:text-slate-600">✕</button>
+            <div class="flex border-b text-sm font-bold mb-4">
+                <button id="tabLogin" onclick="switchAuthForm('login')" class="flex-1 pb-2 border-b-2 border-indigo-600 text-indigo-600">लॉगिन</button>
+                <button id="tabReg" onclick="switchAuthForm('reg')" class="flex-1 pb-2 text-slate-400">रजिस्ट्रेशन</button>
+            </div>
+            <div class="space-y-4">
+                <div id="regNameBlock" class="hidden">
+                    <label class="block text-xs font-bold text-slate-600 mb-1">पूरा नाम</label>
+                    <input type="text" id="usrName" class="w-full bg-slate-50 border text-sm p-3 rounded-xl outline-none" placeholder="आपका नाम">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">ईमेल</label>
+                    <input type="email" id="usrEmail" class="w-full bg-slate-50 border text-sm p-3 rounded-xl outline-none" placeholder="admin@domain.com">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">पासवर्ड</label>
+                    <input type="password" id="usrPass" class="w-full bg-slate-50 border text-sm p-3 rounded-xl outline-none" placeholder="••••••••">
+                </div>
+                <button onclick="executeAuthActionPipeline()" class="w-full bg-indigo-600 text-white font-bold text-sm py-3.5 rounded-xl shadow-md">प्रवेश / लॉग इन करें ⚡</button>
+            </div>
         </div>
     </div>
 
     <script type="module" src="app.js"></script>
     <script>
         let currentAuthMode = 'login';
-        
-        // Single Page Router Console Logic channels
-        window.performSinglePageRoutingView = function(targetViewMode, postId = null) {
-            const feedView = document.getElementById('frontFeedViewRouterNode');
-            const detailView = document.getElementById('postDeepDetailViewRouterNode');
-            const contributorView = document.getElementById('contributorWorkspaceStudioNode');
-            const searchBar = document.getElementById('mainPortalSearchBox')?.parentElement?.parentElement;
-            
+        window.navigateToHub = function(targetViewMode, postId = null) {
+            const feedView = document.getElementById('mainFeedRouterBlock');
+            const detailView = document.getElementById('postDetailView');
             if(targetViewMode === 'detail') {
-                feedView.classList.add('hidden'); contributorView.classList.add('hidden');
-                if(searchBar) searchBar.classList.add('hidden');
+                feedView.classList.add('hidden');
                 detailView.classList.remove('hidden');
-                window.renderPostDeepContentView(postId); 
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            } else if(targetViewMode === 'contributor') {
-                feedView.classList.add('hidden'); detailView.classList.add('hidden');
-                if(searchBar) searchBar.classList.add('hidden');
-                contributorView.classList.remove('hidden');
-                window.toggleAuthOverlay(false); // Close auth on success
+                if(typeof window.renderPostDeepContentView === 'function') { window.renderPostDeepContentView(postId); }
             } else {
-                detailView.classList.add('hidden'); contributorView.classList.add('hidden');
+                detailView.classList.add('hidden');
                 feedView.classList.remove('hidden');
-                if(searchBar) searchBar.classList.remove('hidden');
-                window.executeUIRenderPipeline(); // Re-render to clear deep view cache
             }
         };
-
-        window.toggleAuthOverlay = function(show) {
-            const overlay = document.getElementById('authModalOverlay');
-            window.clearPortalMemoryInputFields(); // Pure secure reset on window sequences
-            toggleForgotPasswordViewMode(false); // Back to login by default
-            if(show) { overlay.classList.remove('hidden'); setTimeout(() => { overlay.classList.remove('opacity-0'); }, 10); }
-            else { overlay.classList.add('opacity-0'); setTimeout(() => { overlay.classList.add('hidden'); }, 300); }
-        };
-
-        window.switchAuthForm = function(mode) {
-            currentAuthMode = mode;
-            window.clearPortalMemoryInputFields();
-            document.getElementById('regNameBlock').classList.toggle('hidden', mode === 'login');
-            document.getElementById('tabLogin').className = mode === 'login' ? 'flex-1 pb-2 border-b-2 border-indigo-600 text-indigo-600' : 'flex-1 pb-2 text-slate-400';
-            document.getElementById('tabReg').className = mode === 'reg' ? 'flex-1 pb-2 border-b-2 border-indigo-600 text-indigo-600' : 'flex-1 pb-2 text-slate-400';
-        };
-
-        window.toggleForgotPasswordViewMode = function(show) {
-            document.getElementById('authFormMainGroupBox').classList.toggle('hidden', show);
-            document.getElementById('authFormForgotGroupBox').classList.toggle('hidden', !show);
-        };
-        
-        window.executeAuthActionPipeline = function() {
-            const email = document.getElementById('usrEmail').value.trim();
-            const pass = document.getElementById('usrPass').value.trim();
-            if(currentAuthMode === 'login') { window.loginUserNode(email, pass); } 
-            else { window.registerNewUserNode(email, pass, document.getElementById('usrName').value.trim()); }
-        };
-        
-        window.executeForgotDispatchRecoveryLink = function() { 
-            const email = document.getElementById('forgotUsrEmail').value.trim();
-            window.executeForgotRemainingPipeline(email);
-        };
-        
-        window.togglePasswordVisibility = function(fieldId) {
-            const input = document.getElementById(fieldId);
-            input.type = input.type === 'password' ? 'text' : 'password';
-        };
-
-        // System Floating Toast Alert console dispatcher
         window.spawnPremiumToastAlert = function(title, message, type) {
             const toast = document.getElementById('premiumToastNotification');
             document.getElementById('toastTitleSlot').innerText = title;
             document.getElementById('toastMessageSlot').innerText = message;
             document.getElementById('toastIconSlot').innerText = type === 'error' ? "❌" : "✨";
             toast.className = `fixed top-5 left-1/2 transform -translate-x-1/2 z-[100] max-w-sm w-full mx-4 bg-white border p-4 rounded-2xl shadow-2xl flex items-start gap-3 transition-all duration-300 opacity-100 translate-y-0 ${type==='error'?'border-rose-200 bg-rose-50':'border-emerald-200 bg-emerald-50'}`;
-            setTimeout(() => { toast.className += " opacity-0 translate-y-[-20px] pointer-events-none"; }, 4000);
+            setTimeout(() => { toast.classList.add('opacity-0'); }, 4000);
+        };
+        window.toggleAuthOverlay = function(show) {
+            const overlay = document.getElementById('authModalOverlay');
+            if(show) { overlay.classList.remove('hidden'); setTimeout(() => { overlay.classList.remove('opacity-0'); }, 10); }
+            else { overlay.classList.add('opacity-0'); setTimeout(() => { overlay.classList.add('hidden'); }, 300); }
+        };
+        window.switchAuthForm = function(mode) {
+            currentAuthMode = mode;
+            document.getElementById('regNameBlock').classList.toggle('hidden', mode === 'login');
+        };
+        window.executeAuthActionPipeline = function() {
+            const email = document.getElementById('usrEmail').value.trim();
+            const pass = document.getElementById('usrPass').value.trim();
+            if(currentAuthMode === 'login') { window.loginUserNode(email, pass); } 
+            else { window.registerNewUserNode(email, pass, document.getElementById('usrName').value.trim()); }
         };
     </script>
 </body>
