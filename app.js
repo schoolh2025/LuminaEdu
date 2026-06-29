@@ -1,8 +1,8 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, collection, addDoc, doc, setDoc, onSnapshot, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-// 🚨 APNI REAL CONFIGURATION CREDENTIALS KEYS YAHAN BIILKUL SAHI FILL KAREIN:
+// 🚨 FIREBASE VALUES PRE-INTEGRATED ACCURATELY FROM THE BASE LAYER
 const firebaseConfig = {
   apiKey: "AIzaSyDEXmjIN8w2s2uXk0FTzC7ri4HhLetzV4E",
   authDomain: "luminaedu-ai786.firebaseapp.com",
@@ -22,12 +22,13 @@ let layoutGridColumnsSetting = 'lg:grid-cols-3';
 let globalImageVisibilitySetting = 'show'; 
 let activeDynamicCategoriesList = [];
 
-// IDENTITY FLOW NODES
+// IDENTITY PIPELINE FLOWS NODES
 window.registerNewUserNode = async function(email, password, fullname) {
     try {
         const credential = await createUserWithEmailAndPassword(auth, email, password);
         await setDoc(doc(db, "users", credential.user.uid), { name: fullname, role: "Admin", email: email });
         window.spawnPremiumToastAlert("Success", "पंजीकरण सफल!", "success");
+        window.toggleAuthOverlay(false);
     } catch(err) { window.spawnPremiumToastAlert("Error", err.message, "error"); }
 };
 
@@ -35,10 +36,20 @@ window.loginUserNode = async function(email, password) {
     try {
         await signInWithEmailAndPassword(auth, email, password);
         window.spawnPremiumToastAlert("Success", "लॉगिन सफल!", "success");
+        window.toggleAuthOverlay(false);
     } catch(err) { window.spawnPremiumToastAlert("Error", err.message, "error"); }
 };
 
-// FULL DYNAMIC CATEGORIES AND COLOR ENGINE
+window.triggerForgotRecoveryLinkNode = async function(email) {
+    if(!email) return window.spawnPremiumToastAlert("Missing", "ईमेल पता दर्ज करें।", "error");
+    try {
+        await sendPasswordResetEmail(auth, email);
+        window.spawnPremiumToastAlert("Dispatched", "🔑 पासवर्ड रिकवरी लिंक ईमेल पर भेज दिया गया है।", "success");
+        window.toggleAuthOverlay(false);
+    } catch(err) { window.spawnPremiumToastAlert("Error", err.message, "error"); }
+};
+
+// DYNAMIC CATEGORY AND FILTERS CONTROL PIPELINE
 window.setJobFilter = function(categoryName) {
     selectedCategoryFilter = categoryName;
     renderDynamicCategoryChips();
@@ -52,21 +63,20 @@ function renderDynamicCategoryChips() {
     box.innerHTML = activeDynamicCategoriesList.map(b => {
         let isActive = selectedCategoryFilter.toLowerCase() === b.name.toLowerCase();
         let currentCustomStyle = isActive 
-            ? `background-color: ${b.hexColor || '#4f46e5'}; color: white; border-color: ${b.hexColor || '#4f46e5'}; box-shadow: 0 4px 12px rgba(0,0,0,0.1);`
-            : `background-color: white; color: ${b.hexColor || '#1e293b'}; border-color: ${b.hexColor || '#cbd5e1'}20;`;
+            ? `background-color: ${b.hexColor || '#4f46e5'}; color: white; border-color: ${b.hexColor || '#4f46e5'}; box-shadow: 0 4px 12px rgba(0,0,0,0.1); font-weight: 700;`
+            : `background-color: white; color: ${b.hexColor || '#1e293b'}; border-color: ${b.hexColor || '#cbd5e1'}20; font-weight: 600;`;
 
-        return `<button onclick="window.setJobFilter('${b.name}')" style="${currentCustomStyle}" class="px-3.5 py-1.5 text-xs font-bold rounded-xl border transition-all duration-150">${b.name}</button>`;
+        return `<button onclick="window.setJobFilter('${b.name}')" style="${currentCustomStyle}" class="px-3.5 py-1.5 text-xs rounded-xl border transition-all duration-150">${b.name}</button>`;
     }).join('');
 }
 
-// MAIN CONTENT GENERATION CORE (FIXED DISCOVERY)
+// MAIN RENDER PROCESSING DISPATCH GRID
 function executeUIRenderPipeline() {
     const feed = document.getElementById('publicCardsFeed');
     if(!feed) return;
 
     feed.className = `grid grid-cols-1 md:grid-cols-2 ${layoutGridColumnsSetting} gap-6`;
 
-    // 🌟 FIX: Status filters applied carefully
     const filtered = cachedJobsArray.filter(j => {
         if(selectedCategoryFilter === 'All') return true;
         return j.type.toLowerCase() === selectedCategoryFilter.toLowerCase();
@@ -78,15 +88,17 @@ function executeUIRenderPipeline() {
     }
 
     feed.innerHTML = filtered.map(j => {
-        // Dynamic image hide/show according to admin preferences toggles
         let displayImg = "";
         if(globalImageVisibilitySetting === 'show' && j.imageUrls && j.imageUrls.length > 0) {
             displayImg = `<img src="${j.imageUrls[0]}" class="w-full h-40 object-cover rounded-xl mb-3 border border-slate-100" alt="Job Media">`;
         }
 
-        // Search category background identity data color
         const catObj = activeDynamicCategoriesList.find(c => c.name.toLowerCase() === j.type.toLowerCase());
         let badgeColorHex = catObj ? catObj.hexColor : '#6366f1';
+
+        // 🌟 FEATURE: Blinking badge logic for newest 48 hour entries
+        let isNewAd = (Date.now() - (j.timestamp || 0)) < (2 * 24 * 60 * 60 * 1000);
+        let blinkBadge = isNewAd ? `<span class="blinking-new-badge ml-2 text-[9px] font-black tracking-wide px-1.5 py-0.5 rounded bg-rose-100 text-rose-700 border border-rose-200">NEW</span>` : "";
 
         return `
             <div class="premium-glass-card p-5 flex flex-col justify-between bg-white">
@@ -96,7 +108,7 @@ function executeUIRenderPipeline() {
                         <span style="background-color: ${badgeColorHex}15; color: ${badgeColorHex}; border-color: ${badgeColorHex}30;" class="text-[10px] font-black px-2.5 py-0.5 rounded-md uppercase border">${j.type}</span>
                         <span class="text-[11px] font-bold text-slate-400">📅 ${j.lastDate || 'Active'}</span>
                     </div>
-                    <h3 class="font-extrabold text-slate-800 text-sm lg:text-base mb-1 leading-snug tracking-tight">${j.title}</h3>
+                    <h3 class="font-extrabold text-slate-800 text-sm lg:text-base mb-1 leading-snug tracking-tight">${j.title} ${blinkBadge}</h3>
                     <p class="text-[11px] text-slate-400 font-bold">🏛️ Board: ${j.authority}</p>
                 </div>
                 <button onclick="window.navigateToHub('detail', '${j.id}')" class="w-full bg-slate-50 hover:bg-indigo-50 border text-indigo-600 font-bold text-xs text-center py-2.5 rounded-xl mt-4 transition-all shadow-sm">
@@ -107,14 +119,33 @@ function executeUIRenderPipeline() {
     }).join('');
 }
 
-// EXTANDED POST PREVIEW RENDER
+// SIDEBAR SEARCH & POST LISTS RECONSTRUCTOR
+window.executeSidebarLiveSearchFilters = function() {
+    const query = document.getElementById('sidebarLiveSearchBox')?.value.trim().toLowerCase() || "";
+    const stack = document.getElementById('rightSidebarLiveCollectionStack');
+    if(!stack) return;
+
+    let filteredStack = cachedJobsArray.filter(j => j.approvalStatus === 'Live' || !j.approvalStatus);
+    if(query) {
+        filteredStack = filteredStack.filter(j => j.title.toLowerCase().includes(query) || j.authority.toLowerCase().includes(query));
+    }
+
+    stack.innerHTML = filteredStack.slice(0, 6).map(j => `
+        <div onclick="window.navigateToHub('detail', '${j.id}')" class="bg-white hover:bg-indigo-50/50 p-2.5 rounded-xl border cursor-pointer transition-all text-xs flex flex-col gap-0.5">
+            <h5 class="font-bold text-slate-800 truncate">${j.title}</h5>
+            <p class="text-[10px] font-medium text-slate-400 uppercase">${j.authority}</p>
+        </div>
+    `).join('');
+};
+
+// SUB PAGE VIEW DEEP CONTENT FACTORY PANEL
 window.renderPostDeepContentView = function(postId) {
     const targetPayloadBox = document.getElementById('detailViewContentPayload');
     const matchedPost = cachedJobsArray.find(item => item.id === postId);
     if(!matchedPost || !targetPayloadBox) return;
     
     targetPayloadBox.innerHTML = `
-        <div class="space-y-4">
+        <div class="space-y-4 text-slate-800">
             <h2 class="text-xl lg:text-3xl font-black text-slate-900 leading-tight">${matchedPost.title}</h2>
             <p class="text-sm font-bold text-indigo-600">🏛️ Department/Board: ${matchedPost.authority}</p>
             <div class="bg-slate-50 p-4 rounded-xl border text-sm leading-relaxed whitespace-pre-wrap">${matchedPost.description || 'विवरण उपलब्ध नहीं है।'}</div>
@@ -124,11 +155,11 @@ window.renderPostDeepContentView = function(postId) {
             </div>
         </div>
     `;
+    window.executeSidebarLiveSearchFilters(); // Flush sidebar lists cache
 };
 
-// DYNAMIC SYNC HOOKS LIFECYCLE
+// FULL INITIALIZATION CHANNELS SYNCS
 function startApplicationCoreEngine() {
-    // 1. Fetch categories completely with custom dynamic color properties
     onSnapshot(collection(db, "categories"), (snapshot) => {
         activeDynamicCategoriesList = [{ id: 'all', name: 'All', hexColor: '#4f46e5' }];
         snapshot.forEach(docSnap => {
@@ -138,7 +169,6 @@ function startApplicationCoreEngine() {
         renderDynamicCategoryChips();
     });
 
-    // 2. Fetch system configurations (layout columns grid type, images logic)
     onSnapshot(doc(db, "app_settings", "grid_layout"), (docSnap) => {
         if(docSnap.exists()) {
             const d = docSnap.data();
@@ -148,11 +178,11 @@ function startApplicationCoreEngine() {
         executeUIRenderPipeline();
     });
 
-    // 3. Sync posts loop
     onSnapshot(collection(db, "jobs"), (snapshot) => {
         cachedJobsArray = [];
         snapshot.forEach(docSnap => { cachedJobsArray.push({ id: docSnap.id, ...docSnap.data() }); });
         executeUIRenderPipeline();
+        window.executeSidebarLiveSearchFilters();
     });
 }
 
