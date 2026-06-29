@@ -1,8 +1,9 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore, collection, addDoc, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getStorage } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
-// 🚨 APNI REAL CONFIG DETAILS PARAMETERS STRINGS BIILKUL SAHI FILL KAREIN:
+// 🔥 SOLID APP CONFIGURATION CREDENTIALS PRE-INTEGRATED
 const firebaseConfig = {
   apiKey: "AIzaSyDEXmjIN8w2s2uXk0FTzC7ri4HhLetzV4E",
   authDomain: "luminaedu-ai786.firebaseapp.com",
@@ -15,32 +16,48 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
+const storage = getStorage(app);
+
+window.fbDB = db;
+window.fbStorage = storage;
 
 let selectedCategoryFilter = 'All';
 let cachedJobsArray = [];
-let activeDynamicCategoriesList = [];
 let layoutGridColumnsSetting = 'lg:grid-cols-3'; 
+let maxCardsToDisplayLimit = 6; 
 let globalImageVisibilitySetting = 'show'; 
 
-// USER ACCOUNT AUTHENTICATION CONSOLE PORTS
+let activeDynamicCategoriesList = [
+    { id: 'all', name: 'All', colorClass: 'bg-white text-slate-800 border-slate-200 shadow-sm font-bold' },
+    { id: 'job', name: 'Job', colorClass: 'bg-blue-50 text-blue-700 hover:bg-blue-100 border-blue-200' },
+    { id: 'admit-card', name: 'Admit-Card', colorClass: 'bg-orange-50 text-orange-700 hover:bg-orange-100 border-orange-200' },
+    { id: 'result', name: 'Result', colorClass: 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border-emerald-200' },
+    { id: 'yojna', name: 'Yojna', colorClass: 'bg-green-50 text-green-700 hover:bg-green-100 border-green-200' },
+    { id: 'scholarship', name: 'Scholarship', colorClass: 'bg-purple-50 text-purple-700 hover:bg-purple-100 border-purple-200' }
+];
+
+// ==========================================
+// 🔐 SECURE GLOBAL CORE IDENTITY GATEWAYS
+// ==========================================
 window.registerNewUserNode = async function(email, password, fullname) {
     if(!email || !password || !fullname) return window.spawnPremiumToastAlert("Validation Error", "सभी फ़ील्ड्स भरना अनिवार्य है।", "error");
     try {
         const credential = await createUserWithEmailAndPassword(auth, email, password);
         await setDoc(doc(db, "users", credential.user.uid), { name: fullname, role: "UserContributor", email: email });
-        window.spawnPremiumToastAlert("Success", "🎉 पंजीकरण सफल! वर्कस्पेस चालू हो रहा है।", "success");
+        window.spawnPremiumToastAlert("Access Created", "🎉 पंजीकरण सफल! वर्कस्पेस मोड ऑन हो रहा है।", "success");
         window.toggleAuthOverlay(false);
-        window.navigateToHub('contributor');
-    } catch(err) { window.spawnPremiumToastAlert("Error", err.message, "error"); }
+        window.navigateToHub('contributor'); 
+    } catch(err) { window.spawnPremiumToastAlert("Registration Refused", err.message, "error"); }
 };
 
 window.loginUserNode = async function(email, password) {
+    if(!email || !password) return window.spawnPremiumToastAlert("Validation Error", "ईमेल और पासवर्ड दर्ज करें।", "error");
     try {
         await signInWithEmailAndPassword(auth, email, password);
-        window.spawnPremiumToastAlert("Success", "🎉 लॉगिन सफल!", "success");
+        window.spawnPremiumToastAlert("Access Granted", "🎉 लॉगिन सफल! वर्कस्पेस लोड हो रहा है...", "success");
         window.toggleAuthOverlay(false);
         window.navigateToHub('contributor');
-    } catch(err) { window.spawnPremiumToastAlert("Error", err.message, "error"); }
+    } catch(err) { window.spawnPremiumToastAlert("Access Denied", err.message, "error"); }
 };
 
 window.executeForgotDispatchRecoveryLink = async function() {
@@ -48,42 +65,39 @@ window.executeForgotDispatchRecoveryLink = async function() {
     if(!email) return window.spawnPremiumToastAlert("Input Missing", "कृपया ईमेल दर्ज करें।", "error");
     try {
         await sendPasswordResetEmail(auth, email);
-        window.spawnPremiumToastAlert("Email Dispatched", "🔑 पासवर्ड रीसेट लिंक भेज दिया गया है।", "success");
+        window.spawnPremiumToastAlert("Email Dispatched", "🔑 पासवर्ड रीसेट लिंक आपके ईमेल पर भेज दिया गया है।", "success");
         window.toggleAuthOverlay(false);
-    } catch(err) { window.spawnPremiumToastAlert("Error", err.message, "error"); }
+    } catch(err) { window.spawnPremiumToastAlert("Recovery Failure", err.message, "error"); }
 };
 
-// CATEGORY FILTERS CONTROLLER
+// ==========================================
+// 🎨 CATEGORY FILTERS CHIPS CONTROLLER
+// ==========================================
 window.setJobFilter = function(categoryName) {
     selectedCategoryFilter = categoryName;
-    renderDynamicChipsLayout();
+    renderMulticolorCategoryChips();
     window.executeLiveSearchFiltering();
 };
 
-function renderDynamicChipsLayout() {
+function renderMulticolorCategoryChips() {
     const box = document.getElementById('categoryFilterContainer');
     if(!box) return;
-
     box.innerHTML = activeDynamicCategoriesList.map(b => {
         let isActive = selectedCategoryFilter.toLowerCase() === b.name.toLowerCase();
-        let currentCustomStyle = isActive 
-            ? `background-color: ${b.hexColor || '#4f46e5'}; color: white; border-color: ${b.hexColor || '#4f46e5'}; font-weight: 800; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);`
-            : `background-color: rgba(255,255,255,0.9); color: #1e293b; border-color: rgba(226,232,240,0.8); font-weight: 700;`;
-
-        return `<button onclick="window.setJobFilter('${b.name}')" style="${currentCustomStyle}" class="px-4 py-2 text-xs rounded-xl border transition-all duration-150 tracking-wide">${b.name}</button>`;
+        let targetStyle = isActive ? 'bg-indigo-600 text-white border-indigo-600 shadow-md font-bold' : b.colorClass;
+        return `<button onclick="window.setJobFilter('${b.name}')" class="px-3.5 py-1.5 text-xs font-bold rounded-xl border transition-all duration-150 ${targetStyle}">${b.name}</button>`;
     }).join('');
 }
 
-// LIVE SEARCH, FILTERS & SORTING ENGINE PIPELINE
+// ==========================================
+// 🚀 UNIFIED FILTERING, SORTING & RENDERING PIPELINES
+// ==========================================
 window.executeLiveSearchFiltering = function() {
-    const searchBox = document.getElementById('globalPortalSearchBox');
-    const sortSelector = document.getElementById('globalPortalSortSelector');
+    const searchVal = document.getElementById('globalPortalSearchBox')?.value.trim().toLowerCase() || "";
+    const sortVal = document.getElementById('globalPortalSortSelector')?.value || "newest";
     const feed = document.getElementById('publicCardsFeed');
     
-    if(!feed) return;
-
-    const searchVal = searchBox ? searchBox.value.trim().toLowerCase() : "";
-    const sortVal = sortSelector ? sortSelector.value : "newest";
+    if(!feed) return; 
 
     let dataset = cachedJobsArray.filter(j => {
         if(j.approvalStatus !== 'Live') return false;
@@ -106,32 +120,37 @@ window.executeLiveSearchFiltering = function() {
         dataset.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
     }
 
-    if(dataset.length === 0) {
-        feed.innerHTML = `<div class="col-span-full text-center py-12 text-xs font-bold text-slate-400 bg-white/40 border border-dashed p-6 rounded-2xl">इस श्रेणी में कोई सक्रिय पोस्ट नहीं है।</div>`;
+    const limitedDataPool = dataset.slice(0, maxCardsToDisplayLimit);
+
+    if(limitedDataPool.length === 0) {
+        feed.innerHTML = `<div class="col-span-full text-center py-12 text-xs font-bold text-slate-400 bg-white/40 border border-dashed p-6 rounded-2xl shadow-inner">खोजे गए कीवर्ड या श्रेणी विन्यास अनुसार कोई लाइव रिकॉर्ड नहीं मिला।</div>`;
         return;
     }
 
-    feed.innerHTML = dataset.map(j => {
-        let displayImg = "";
-        if(globalImageVisibilitySetting === 'show' && j.imageUrls && j.imageUrls.length > 0) {
-            displayImg = `<img src="${j.imageUrls[0]}" class="w-full h-44 object-cover rounded-xl mb-3 border border-slate-100" alt="Card Banner">`;
-        }
+    feed.className = `grid grid-cols-1 md:grid-cols-2 ${layoutGridColumnsSetting} gap-6`;
+    feed.innerHTML = limitedDataPool.map(j => {
+        let gridSpanProperty = (j.cardSizeLayout === 'featured') ? 'md:col-span-2 lg:col-span-2 border-l-4 border-l-indigo-500 bg-white' : 'col-span-1 bg-white';
+        let displayImg = (globalImageVisibilitySetting === 'show' && j.imageUrls && j.imageUrls.length > 0 && (j.imgDisplayLocation === 'both' || j.imgDisplayLocation === 'front')) 
+            ? `<img src="${j.imageUrls[0]}" class="w-full h-44 object-cover rounded-xl mb-3 border" alt="Banner">` : "";
 
-        const catObj = activeDynamicCategoriesList.find(c => c.name.toLowerCase() === j.type.toLowerCase());
-        let badgeColorHex = catObj ? catObj.hexColor : '#6366f1';
+        let badgeStyle = 'bg-blue-50 text-blue-700 border-blue-200';
+        if(j.type === 'Admit-Card') badgeStyle = 'bg-orange-50 text-orange-700 border-orange-200';
+        else if(j.type === 'Result') badgeStyle = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+        else if(j.type === 'Yojna') badgeStyle = 'bg-green-50 text-green-700 border-green-200';
+        else if(j.type === 'Scholarship') badgeStyle = 'bg-purple-50 text-purple-700 border-purple-200';
 
         return `
-            <div class="luxury-card p-5 flex flex-col justify-between">
+            <div class="premium-glass-card luxury-card p-5 flex flex-col justify-between ${gridSpanProperty}">
                 <div>
                     ${displayImg}
                     <div class="flex justify-between items-center mb-2.5">
-                        <span style="background-color: ${badgeColorHex}12; color: ${badgeColorHex}; border-color: ${badgeColorHex}25;" class="text-[10px] font-black px-2.5 py-0.5 rounded-md uppercase border tracking-wide">${j.type}</span>
+                        <span class="text-[11px] font-black px-2.5 py-0.5 rounded-md uppercase border ${badgeStyle}">${j.type}</span>
                         <span class="text-[11px] font-bold text-slate-400">📅 ${j.lastDate || 'Active'}</span>
                     </div>
                     <h3 class="font-extrabold text-slate-800 text-sm lg:text-base mb-1.5 leading-snug tracking-tight">${j.title}</h3>
-                    <p class="text-xs text-slate-400 font-bold">🏛️ Board: ${j.authority}</p>
+                    <p class="text-xs text-slate-500 font-bold">🏛️ Board: ${j.authority}</p>
                 </div>
-                <button onclick="window.navigateToHub('detail', '${j.id}')" class="w-full bg-slate-50 hover:bg-indigo-50 border border-slate-100 text-indigo-600 font-extrabold text-xs text-center py-2.5 rounded-xl mt-4 transition-all shadow-sm">
+                <button onclick="window.navigateToHub('detail', '${j.id}')" class="w-full bg-slate-50 hover:bg-indigo-50 border text-indigo-600 font-bold text-xs text-center py-2.5 rounded-xl mt-4 transition-all shadow-sm">
                     View Details ↗
                 </button>
             </div>
@@ -139,7 +158,9 @@ window.executeLiveSearchFiltering = function() {
     }).join('');
 }
 
-// RIGHT SIDEBAR RECOMMENDATION LISTS STACK
+// ==========================================
+// 📑 RIGHT SIDEBAR & EXPANDED NODE RENDERING
+// ==========================================
 function renderRightSidebarRecommendedStack() {
     const sidebar = document.getElementById('rightSidebarRecommendedStack');
     if(!sidebar) return;
@@ -157,16 +178,23 @@ window.renderPostDeepContentView = function(postId) {
     const targetPayloadBox = document.getElementById('detailViewContentPayload');
     const matchedPost = cachedJobsArray.find(item => item.id === postId);
     if(!matchedPost || !targetPayloadBox) return;
-
+    
     targetPayloadBox.innerHTML = `
-        <div class="space-y-4 text-slate-800">
+        <div class="mt-2 text-slate-800 space-y-4">
             <h2 class="text-xl lg:text-3xl font-black text-slate-900 leading-tight">${matchedPost.title}</h2>
-            <p class="text-sm font-extrabold text-indigo-600">🏛️ Board: ${matchedPost.authority}</p>
-            <div class="bg-white/80 border p-4 rounded-xl text-sm leading-relaxed whitespace-pre-wrap font-medium">${matchedPost.description || 'विवरण उपलब्ध नहीं है।'}</div>
+            <p class="text-sm font-bold text-indigo-600">🏛️ Organization: ${matchedPost.authority}</p>
+            <div class="bg-white/60 p-4 rounded-xl my-5 border text-sm leading-relaxed whitespace-pre-wrap">${matchedPost.description || 'विवरण के लिए आधिकारिक दस्तावेज देखें।'}</div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-bold text-slate-500 bg-slate-50 p-4 rounded-xl border">
+                <div>💰 Application Fee Struct: ${matchedPost.feesDetails || 'Review Advertisement PDF'}</div>
+                <div>🎓 Qualification Criteria: ${matchedPost.eligibility || 'Check Documentation Manual'}</div>
+            </div>
         </div>
     `;
 };
 
+// ==========================================
+// 👨‍💻 CONTRIBUTOR PROPOSAL INGESTION PIPELINE
+// ==========================================
 window.executeContributorPostSubmission = async function(e) {
     e.preventDefault();
     try {
@@ -183,29 +211,28 @@ window.executeContributorPostSubmission = async function(e) {
     } catch(err) { window.spawnPremiumToastAlert("Error", err.message, "error"); }
 };
 
-// INITIAL CORES START RUNTIME LOGIC CHANNELS
+// INITIAL CORES START ENGINE LOGIC
 function startApplicationCoreEngine() {
-    onSnapshot(collection(db, "categories"), (snapshot) => {
-        activeDynamicCategoriesList = [{ id: 'all', name: 'All', hexColor: '#4f46e5' }];
-        snapshot.forEach(docSnap => {
-            activeDynamicCategoriesList.push({ id: docSnap.id, name: docSnap.data().name, hexColor: docSnap.data().hexColor || '#1e293b' });
-        });
-        renderDynamicChipsLayout();
-        const cSelect = document.getElementById('cPostType');
-        if(cSelect) {
-            cSelect.innerHTML = activeDynamicCategoriesList.filter(c => c.name !== 'All').map(c => `<option value="${c.name}">${c.name}</option>`).join('');
-        }
-    });
+    renderMulticolorCategoryChips();
 
+    // Load contributor select items dynamically
+    const cSelect = document.getElementById('cPostType');
+    if(cSelect) {
+        cSelect.innerHTML = activeDynamicCategoriesList.filter(c => c.name !== 'All').map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+    }
+
+    // Sync layout configurations params document node schema
     onSnapshot(doc(db, "app_settings", "grid_layout"), (docSnap) => {
         if(docSnap.exists()) {
             const d = docSnap.data();
             layoutGridColumnsSetting = d.columnsClass || 'lg:grid-cols-3';
+            maxCardsToDisplayLimit = d.maxLimitCards || 6;
             globalImageVisibilitySetting = d.imageVisibility || 'show';
         }
         window.executeLiveSearchFiltering();
-    });
+    }, (err) => { window.executeLiveSearchFiltering(); });
 
+    // Sync primary collection streams data payload
     onSnapshot(collection(db, "jobs"), (snapshot) => {
         cachedJobsArray = [];
         snapshot.forEach(docSnap => { cachedJobsArray.push({ id: docSnap.id, ...docSnap.data() }); });
@@ -215,3 +242,4 @@ function startApplicationCoreEngine() {
 }
 
 window.addEventListener('load', startApplicationCoreEngine);
+window.executeLiveSearchFiltering = window.executeLiveSearchFiltering;
