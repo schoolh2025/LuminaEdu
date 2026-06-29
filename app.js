@@ -3,7 +3,7 @@ import { getFirestore, collection, addDoc, doc, setDoc, onSnapshot, updateDoc, d
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js";
 
-// 🚨 APNI AUTHENTIC REAL FIREBASE CONFIG MATRIX
+// 🚨 FIREBASE CONFIG MATRIX
 const firebaseConfig = {
   apiKey: "AIzaSyDEXmjIN8w2s2uXk0FTzC7ri4HhLetzV4E",
   authDomain: "luminaedu-ai786.firebaseapp.com",
@@ -12,10 +12,18 @@ const firebaseConfig = {
   messagingSenderId: "35041307389",
   appId: "1:35041307389:web:846f981017df7ad1382c94"
 };
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
-const messaging = getMessaging(app);
+
+// Safe initialization of messaging for browsers supporting it
+let messaging = null;
+try {
+    messaging = getMessaging(app);
+} catch (e) {
+    console.log("Messaging setup skipped or unsupported in this environment.");
+}
 
 let selectedCategoryFilter = 'All';
 let cachedJobsArray = [];
@@ -37,7 +45,7 @@ window.triggerPlatformPushSubscription = async function() {
     const btn = document.getElementById('btnSubscribePushAlerts');
     const badge = document.getElementById('pushStatusBadge');
     
-    if (!('Notification' in window)) {
+    if (!messaging || !('Notification' in window)) {
         window.spawnPremiumToastAlert("Not Supported", "आपका ब्राउज़र पुश नोटिफिकेशन सपोर्ट नहीं करता है।", "error");
         return;
     }
@@ -45,7 +53,6 @@ window.triggerPlatformPushSubscription = async function() {
     try {
         const permission = await Notification.requestPermission();
         if (permission === 'granted') {
-            // 🚨 Firebase Console Settings -> Cloud Messaging se generate karke apni 'VAPID KEY' yahan replace kijiye
             const currentToken = await getToken(messaging, { vapidKey: 'YOUR_PUBLIC_VAPID_KEY_HERE' });
             
             if (currentToken) {
@@ -56,7 +63,7 @@ window.triggerPlatformPushSubscription = async function() {
                 
                 if(badge) { badge.className = "text-[9px] font-black px-1.5 py-0.5 rounded-md bg-emerald-100 text-emerald-800 uppercase"; badge.innerText = "Active"; }
                 if(btn) { btn.disabled = true; btn.className = "w-full bg-slate-200 text-slate-400 font-bold text-xs py-2 rounded-xl cursor-not-allowed"; btn.innerText = "✓ Subscribed"; }
-                window.spawnPremiumToastAlert("Subscribed", "🎉 नोटिफिकेशन अलर्ट सफलतापूर्वक ऑन हो गया है!", "success");
+                window.spawnPremiumToastAlert("Subscribed", "🎉 Notification Alert Enabled Successfully!", "success");
             }
         } else {
             window.spawnPremiumToastAlert("Blocked", "आपने नोटिफिकेशन ब्लॉक कर दिया है।", "error");
@@ -143,6 +150,11 @@ window.executeForgotRecoveryPipeline = async function() {
     } catch(err) { window.spawnPremiumToastAlert("Error", err.message, "error"); }
 };
 
+window.togglePasswordRevealNode = function() {
+    const element = document.getElementById('usrPass');
+    if(element) element.type = element.type === 'password' ? 'text' : 'password';
+};
+
 // ==========================================
 // ✍️ DRAFTING & APPROVAL MATRIX GATEKEEPERS
 // ==========================================
@@ -215,7 +227,6 @@ window.executeUIRenderPipeline = function() {
     const feed = document.getElementById('publicCardsFeed');
     if(!feed) return;
 
-    // Filter live elements for row infinite expansion matrix
     const filtered = cachedJobsArray.filter(j => {
         if(j.approvalStatus !== 'Live') return false;
         if(selectedCategoryFilter === 'All') return true;
@@ -231,10 +242,10 @@ window.executeUIRenderPipeline = function() {
         const catObj = activeDynamicCategoriesList.find(c => c.name.toLowerCase() === j.type.toLowerCase());
         let badgeColorHex = catObj ? catObj.hexColor : '#6366f1';
         
-        // 🌟 Blinking Badge Real Activation Matrix (48 Hours Limits Evaluation)
         let isNewAd = (Date.now() - (j.timestamp || 0)) < (2 * 24 * 60 * 60 * 1000);
         let blinkBadge = isNewAd ? `<span class="blinking-new-badge ml-2 text-[10px] font-black px-1.5 py-0.5 rounded bg-rose-100 text-rose-700 border border-rose-200 tracking-wide">NEW</span>` : "";
 
+        // 🌟 FIXED LINK PIPELINE: Integrated with performSinglePageRoutingView perfectly
         return `
             <div class="premium-glass-card p-5 flex flex-col justify-between bg-white">
                 <div>
@@ -259,7 +270,7 @@ window.executeSidebarLiveSearchFilters = function() {
     const filteredStack = cachedJobsArray.filter(j => j.approvalStatus === 'Live' && (j.title.toLowerCase().includes(query) || j.authority.toLowerCase().includes(query)));
     
     stack.innerHTML = filteredStack.slice(0, 6).map(j => `
-        <div onclick="window.performSinglePageRoutingView('detail', '${j.id}')" class="bg-white hover:bg-indigo-50/50 p-2.5 rounded-xl border cursor-pointer transition-all text-xs shadow-sm">
+        <div onclick="window.performSinglePageRoutingView('detail', '${j.id}')" class="bg-white hover:bg-indigo-50 p-2.5 rounded-xl border cursor-pointer transition-all text-xs shadow-sm">
             <h5 class="font-bold text-slate-800 truncate">${j.title}</h5>
         </div>
     `).join('');
@@ -286,6 +297,9 @@ function bootstrapApplicationEngine() {
     renderDynamicCategoryChips();
     checkCurrentSubscriptionState();
     
+    // Fallback alignment map binding for button routes compatibility
+    window.navigateToHub = window.performSinglePageRoutingView;
+
     onSnapshot(collection(db, "jobs"), (snapshot) => {
         cachedJobsArray = [];
         let approvalQueueHTML = "";
