@@ -4,12 +4,12 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } f
 
 // 🚨 APNI REAL CONFIGURATION CREDENTIALS KEYS YAHAN BIILKUL SAHI FILL KAREIN:
 const firebaseConfig = {
-    apiKey: "YOUR_REAL_API_KEY_HERE",
-    authDomain: "luminaedu-ai786.firebaseapp.com",
-    projectId: "luminaedu-ai786",
-    storageBucket: "luminaedu-ai786.appspot.com",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID_HERE",
-    appId: "YOUR_APP_ID_HERE"
+  apiKey: "AIzaSyDEXmjIN8w2s2uXk0FTzC7ri4HhLetzV4E",
+  authDomain: "luminaedu-ai786.firebaseapp.com",
+  projectId: "luminaedu-ai786",
+  storageBucket: "luminaedu-ai786.firebasestorage.app",
+  messagingSenderId: "35041307389",
+  appId: "1:35041307389:web:846f981017df7ad1382c94"
 };
 
 const app = initializeApp(firebaseConfig);
