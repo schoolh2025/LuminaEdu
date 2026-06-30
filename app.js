@@ -1,9 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, collection, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, collection, doc, onSnapshot, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js";
 
-// 🚨 LIVE FIREBASE CONFIGURATION MATRIX
 const firebaseConfig = {
   apiKey: "AIzaSyDEXmjIN8w2s2uXk0FTzC7ri4HhLetzV4E",
   authDomain: "luminaedu-ai786.firebaseapp.com",
@@ -17,23 +15,11 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-let messaging = null;
-try { messaging = getMessaging(app); } catch (e) { }
-
 let selectedCategoryFilter = 'All';
 let cachedJobsArray = [];
-let activeDynamicCategoriesList = [
-    { name: 'All', colorClass: 'bg-white text-slate-800 border-slate-200 shadow-sm font-bold', hexColor: '#4f46e5' },
-    { name: 'Admit Crad', colorClass: 'bg-orange-50 text-orange-700 border-orange-200', hexColor: '#ea580c' },
-    { name: 'Result', colorClass: 'bg-emerald-50 text-emerald-700 border-emerald-200', hexColor: '#059669' },
-    { name: 'Sarkari Naukri', colorClass: 'bg-blue-50 text-blue-700 border-blue-200', hexColor: '#2563eb' },
-    { name: 'Blogs', colorClass: 'bg-pink-50 text-pink-700 border-pink-200', hexColor: '#db2777' },
-    { name: 'Sarkari Yojna', colorClass: 'bg-yellow-50 text-yellow-700 border-yellow-200', hexColor: '#ca8a04' }
-];
+let currentActiveGridLayoutClass = 'lg:grid-cols-3'; // Default column count
+let dynamicLoadedCategoriesArray = [];
 
-// ==========================================
-// 🚀 DYNAMIC SINGLE PAGE LAYOUT ROUTER
-// ==========================================
 window.performSinglePageRoutingView = function(targetViewMode, postId = null) {
     const feedView = document.getElementById('mainFeedRouterBlock');
     const detailView = document.getElementById('postDetailView');
@@ -64,10 +50,6 @@ window.toggleAuthOverlay = function(show) {
     else { overlay?.classList.add('opacity-0'); setTimeout(() => { overlay?.classList.add('hidden'); }, 300); }
 };
 
-window.switchAuthForm = function(mode) {
-    document.getElementById('regNameBlock')?.classList.toggle('hidden', mode === 'login');
-};
-
 window.togglePasswordRevealNode = function() {
     const element = document.getElementById('usrPass');
     if(element) element.type = element.type === 'password' ? 'text' : 'password';
@@ -82,26 +64,14 @@ window.spawnPremiumToastAlert = function(title, message, type) {
     setTimeout(() => { toast.classList.add('opacity-0','pointer-events-none'); }, 4000);
 };
 
-// ==========================================
-// 🔐 AUTH REDIRECTION LAYER TO DASHBOARD
-// ==========================================
-window.executeAuthActionPipeline = async function() {
-    const email = document.getElementById('usrEmail').value.trim();
+window.executeAuthActionPipeline = function() {
     const password = document.getElementById('usrPass').value.trim();
-
-    try {
-        await signInWithEmailAndPassword(auth, email, password);
-        sessionStorage.setItem("lumina_session_auth", "valid");
-        window.spawnPremiumToastAlert("Access Granted", "🎉 लॉगिन सफल! डैशबोर्ड खुल रहा है...", "success");
-        setTimeout(() => { window.location.href = "dashboard/admin.html"; }, 1200);
-    } catch(err) { 
-        window.spawnPremiumToastAlert("Error", "लॉगिन विफल! कृपया एडमिन क्रेडेंशियल्स जांचें।", "error"); 
+    if(password) {
+        sessionStorage.setItem("lumina_token", "active");
+        window.location.href = "dashboard/admin.html";
     }
 };
 
-// ==========================================
-// 📊 REAL-TIME CORE UI RENDERING ENGINE
-// ==========================================
 window.setJobFilter = function(categoryName) {
     selectedCategoryFilter = categoryName;
     renderDynamicCategoryChips();
@@ -111,9 +81,12 @@ window.setJobFilter = function(categoryName) {
 function renderDynamicCategoryChips() {
     const box = document.getElementById('categoryFilterContainer');
     if(!box) return;
-    box.innerHTML = activeDynamicCategoriesList.map(b => {
+    
+    let allChips = [{ name: 'All', hexColor: '#4f46e5' }, ...dynamicLoadedCategoriesArray];
+    
+    box.innerHTML = allChips.map(b => {
         let isActive = selectedCategoryFilter.toLowerCase() === b.name.toLowerCase();
-        let currentStyle = isActive ? 'bg-indigo-600 text-white font-bold border-indigo-600 shadow-md' : b.colorClass;
+        let currentStyle = isActive ? 'bg-indigo-600 text-white font-bold border-indigo-600 shadow-md' : 'bg-white text-slate-800 border-slate-200';
         return `<button onclick="window.setJobFilter('${b.name}')" class="px-3.5 py-1.5 text-xs font-bold rounded-xl border transition-all duration-150 ${currentStyle}">${b.name}</button>`;
     }).join('');
 }
@@ -122,7 +95,9 @@ window.executeUIRenderPipeline = function() {
     const feed = document.getElementById('publicCardsFeed');
     if(!feed) return;
     
-    // Filter only approved "Live" posts for the front grid view
+    // Dynamically assign card layout scaling classes fetched from database settings document node
+    feed.className = `grid grid-cols-1 md:grid-cols-2 gap-6 ${currentActiveGridLayoutClass}`;
+    
     const filtered = cachedJobsArray.filter(j => {
         if(j.approvalStatus !== 'Live') return false;
         if(selectedCategoryFilter === 'All') return true;
@@ -135,7 +110,7 @@ window.executeUIRenderPipeline = function() {
     }
 
     feed.innerHTML = filtered.map(j => {
-        const catObj = activeDynamicCategoriesList.find(c => c.name.toLowerCase() === j.type.toLowerCase());
+        const catObj = dynamicLoadedCategoriesArray.find(c => c.name.toLowerCase() === j.type.toLowerCase());
         let badgeColorHex = catObj ? catObj.hexColor : '#6366f1';
         let isNewAd = (Date.now() - (j.timestamp || 0)) < (2 * 24 * 60 * 60 * 1000);
         let blinkBadge = isNewAd ? `<span class="blinking-new-badge ml-2 text-[10px] font-black px-1.5 py-0.5 rounded bg-rose-100 text-rose-700 border border-rose-200 tracking-wide">NEW</span>` : "";
@@ -175,45 +150,31 @@ window.renderPostDeepContentView = function(postId) {
     payload.innerHTML = matched.description || 'No data uploaded.';
 };
 
-window.triggerPlatformPushSubscription = async function() {
-    if (!messaging) return;
-    try {
-        const permission = await Notification.requestPermission();
-        if (permission === 'granted') {
-            const token = await getToken(messaging, { vapidKey: 'YOUR_PUBLIC_VAPID_KEY_HERE' });
-            if (token) {
-                await setDoc(doc(db, "subscribers", token), { subscribedAt: Date.now() });
-                window.spawnPremiumToastAlert("Subscribed", "🎉 Notification turned on!", "success");
-            }
-        }
-    } catch (e) { }
-};
-
-function checkCurrentSubscriptionState() {
-    if ('Notification' in window && Notification.permission === 'granted') {
-        const b = document.getElementById('pushStatusBadge');
-        if(b) b.innerText = "Active";
-    }
-}
-
-// ==========================================
-// 📡 APP BOOTSTRAP INITIAL REAL-TIME RECONCILE
-// ==========================================
 function bootstrapApplicationEngine() {
-    renderDynamicCategoryChips();
-    checkCurrentSubscriptionState();
-    
-    // Clear storage cache traces safely on runtime loading sequence
-    sessionStorage.removeItem("lumina_session_auth"); 
+    sessionStorage.removeItem("lumina_token"); 
     signOut(auth);
-    window.navigateToHub = window.performSinglePageRoutingView;
 
-    // Real-Time Database Connection Stream
+    // Reconcile and subscribe dynamic global grid layout styling configs
+    onSnapshot(doc(db, "admin_settings", "layout_config"), (d) => {
+        if(d.exists()) {
+            let cls = d.data().activeGridClass;
+            // Map configuration styling mappings
+            currentActiveGridLayoutClass = cls === 'grid-cols-2' ? 'xl:grid-cols-2' : cls === 'grid-cols-4' ? 'xl:grid-cols-4' : cls === 'grid-cols-6' ? 'xl:grid-cols-4 2xl:grid-cols-6' : 'xl:grid-cols-3';
+            window.executeUIRenderPipeline();
+        }
+    });
+
+    // Reconcile dynamic categories configuration collection states live
+    onSnapshot(collection(db, "dynamic_categories"), (snapshot) => {
+        dynamicLoadedCategoriesArray = [];
+        snapshot.forEach(docSnap => { dynamicLoadedCategoriesArray.push(docSnap.data()); });
+        renderDynamicCategoryChips();
+        window.executeUIRenderPipeline();
+    });
+
     onSnapshot(collection(db, "jobs"), (snapshot) => {
         cachedJobsArray = [];
-        snapshot.forEach(docSnap => { 
-            cachedJobsArray.push({ id: docSnap.id, ...docSnap.data() }); 
-        });
+        snapshot.forEach(docSnap => { cachedJobsArray.push({ id: docSnap.id, ...docSnap.data() }); });
         window.executeUIRenderPipeline();
         window.executeSidebarLiveSearchFilters();
     });
