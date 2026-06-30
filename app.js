@@ -1,8 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, collection, doc, onSnapshot, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, collection, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-// 🚨 FIREBASE SYNCHRONIZED CONFIGURATION MATRIX
 const firebaseConfig = {
   apiKey: "AIzaSyDEXmjIN8w2s2uXk0FTzC7ri4HhLetzV4E",
   authDomain: "luminaedu-ai786.firebaseapp.com",
@@ -62,12 +61,13 @@ window.spawnPremiumToastAlert = function(title, message, type) {
     document.getElementById('toastTitleSlot').innerText = title;
     document.getElementById('toastMessageSlot').innerText = message;
     toast.className = `fixed top-5 left-1/2 transform -translate-x-1/2 z-[100] max-w-sm w-full mx-4 bg-white border p-4 rounded-2xl shadow-2xl flex items-start gap-3 transition-all duration-300 opacity-100 translate-y-0 ${type==='error'?'border-rose-200 bg-rose-50':'border-emerald-200 bg-emerald-50'}`;
+    setTimeout(() => { toast.classList.add('opacity-0','pointer-events-none'); }, 5000);
 };
 
 window.executeAuthActionPipeline = function() {
     const password = document.getElementById('usrPass').value.trim();
     if(password) {
-        sessionStorage.setItem("lumina_token", "active");
+        sessionStorage.setItem("lumina_token", password);
         window.location.href = "dashboard/admin.html";
     }
 };
@@ -148,41 +148,42 @@ window.renderPostDeepContentView = function(postId) {
 };
 
 function bootstrapApplicationEngine() {
-    sessionStorage.removeItem("lumina_token"); 
-    signOut(auth);
-
-    onSnapshot(doc(db, "admin_settings", "layout_config"), (d) => {
-        if(d.exists()) {
-            let cls = d.data().activeGridClass;
-            currentActiveGridLayoutClass = cls === 'grid-cols-2' ? 'xl:grid-cols-2' : cls === 'grid-cols-4' ? 'xl:grid-cols-4' : cls === 'grid-cols-6' ? 'xl:grid-cols-4 2xl:grid-cols-6' : 'xl:grid-cols-3';
-            window.executeUIRenderPipeline();
-        }
-    });
-
-    onSnapshot(collection(db, "dynamic_categories"), (snapshot) => {
-        dynamicLoadedCategoriesArray = [];
-        snapshot.forEach(docSnap => { dynamicLoadedCategoriesArray.push(docSnap.data()); });
-        renderDynamicCategoryChips();
-        window.executeUIRenderPipeline();
-    });
-
-    onSnapshot(collection(db, "jobs"), (snapshot) => {
-        cachedJobsArray = [];
-        snapshot.forEach(docSnap => { cachedJobsArray.push({ id: docSnap.id, ...docSnap.data() }); });
-        window.executeUIRenderPipeline();
-        window.executeSidebarLiveSearchFilters();
-    });
-
-    onSnapshot(collection(db, "pdf_tools"), (snapshot) => {
-        const container = document.getElementById('publicPdfToolsListTargetStack');
-        if(!container) return;
-        let html = "";
-        snapshot.forEach(d => {
-            const t = d.data();
-            html += `<a href="${t.url}" target="_blank" class="block w-full text-left bg-slate-50 hover:bg-purple-50 hover:text-purple-700 text-slate-700 text-xs font-bold p-2.5 rounded-xl border truncate transition-all">🛠️ ${t.title}</a>`;
+    try {
+        onSnapshot(doc(db, "admin_settings", "layout_config"), (d) => {
+            if(d.exists()) {
+                let cls = d.data().activeGridClass;
+                currentActiveGridLayoutClass = cls === 'grid-cols-2' ? 'xl:grid-cols-2' : cls === 'grid-cols-4' ? 'xl:grid-cols-4' : cls === 'grid-cols-6' ? 'xl:grid-cols-4 2xl:grid-cols-6' : 'xl:grid-cols-3';
+                window.executeUIRenderPipeline();
+            }
         });
-        container.innerHTML = html || `<p class="text-[10px] font-bold text-slate-400 px-2">No tools active.</p>`;
-    });
+
+        onSnapshot(collection(db, "dynamic_categories"), (snapshot) => {
+            dynamicLoadedCategoriesArray = [];
+            snapshot.forEach(docSnap => { dynamicLoadedCategoriesArray.push(docSnap.data()); });
+            renderDynamicCategoryChips();
+            window.executeUIRenderPipeline();
+        });
+
+        onSnapshot(collection(db, "jobs"), (snapshot) => {
+            cachedJobsArray = [];
+            snapshot.forEach(docSnap => { cachedJobsArray.push({ id: docSnap.id, ...docSnap.data() }); });
+            window.executeUIRenderPipeline();
+            window.executeSidebarLiveSearchFilters();
+        });
+
+        onSnapshot(collection(db, "pdf_tools"), (snapshot) => {
+            const container = document.getElementById('publicPdfToolsListTargetStack');
+            if(!container) return;
+            let html = "";
+            snapshot.forEach(d => {
+                const t = d.data();
+                html += `<a href="${t.url}" target="_blank" class="block w-full text-left bg-slate-50 hover:bg-purple-50 text-slate-700 text-xs font-bold p-2.5 rounded-xl border truncate transition-all">🛠️ ${t.title}</a>`;
+            });
+            container.innerHTML = html || `<p class="text-[10px] font-bold text-slate-400 px-2">No tools active.</p>`;
+        });
+    } catch(err) {
+        console.log("Firebase sync warning safely bypassed on client feed initialization.");
+    }
 }
 
 window.addEventListener('DOMContentLoaded', bootstrapApplicationEngine);
