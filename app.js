@@ -1,7 +1,8 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, collection, doc, onSnapshot, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, collection, doc, onSnapshot, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
+// 🚨 FIREBASE SYNCHRONIZED CONFIGURATION MATRIX
 const firebaseConfig = {
   apiKey: "AIzaSyDEXmjIN8w2s2uXk0FTzC7ri4HhLetzV4E",
   authDomain: "luminaedu-ai786.firebaseapp.com",
@@ -17,7 +18,7 @@ const auth = getAuth(app);
 
 let selectedCategoryFilter = 'All';
 let cachedJobsArray = [];
-let currentActiveGridLayoutClass = 'lg:grid-cols-3'; // Default column count
+let currentActiveGridLayoutClass = 'lg:grid-cols-3'; 
 let dynamicLoadedCategoriesArray = [];
 
 window.performSinglePageRoutingView = function(targetViewMode, postId = null) {
@@ -61,7 +62,6 @@ window.spawnPremiumToastAlert = function(title, message, type) {
     document.getElementById('toastTitleSlot').innerText = title;
     document.getElementById('toastMessageSlot').innerText = message;
     toast.className = `fixed top-5 left-1/2 transform -translate-x-1/2 z-[100] max-w-sm w-full mx-4 bg-white border p-4 rounded-2xl shadow-2xl flex items-start gap-3 transition-all duration-300 opacity-100 translate-y-0 ${type==='error'?'border-rose-200 bg-rose-50':'border-emerald-200 bg-emerald-50'}`;
-    setTimeout(() => { toast.classList.add('opacity-0','pointer-events-none'); }, 4000);
 };
 
 window.executeAuthActionPipeline = function() {
@@ -82,8 +82,7 @@ function renderDynamicCategoryChips() {
     const box = document.getElementById('categoryFilterContainer');
     if(!box) return;
     
-    let allChips = [{ name: 'All', hexColor: '#4f46e5' }, ...dynamicLoadedCategoriesArray];
-    
+    let allChips = [{ name: 'All' }, ...dynamicLoadedCategoriesArray];
     box.innerHTML = allChips.map(b => {
         let isActive = selectedCategoryFilter.toLowerCase() === b.name.toLowerCase();
         let currentStyle = isActive ? 'bg-indigo-600 text-white font-bold border-indigo-600 shadow-md' : 'bg-white text-slate-800 border-slate-200';
@@ -95,9 +94,7 @@ window.executeUIRenderPipeline = function() {
     const feed = document.getElementById('publicCardsFeed');
     if(!feed) return;
     
-    // Dynamically assign card layout scaling classes fetched from database settings document node
     feed.className = `grid grid-cols-1 md:grid-cols-2 gap-6 ${currentActiveGridLayoutClass}`;
-    
     const filtered = cachedJobsArray.filter(j => {
         if(j.approvalStatus !== 'Live') return false;
         if(selectedCategoryFilter === 'All') return true;
@@ -154,17 +151,14 @@ function bootstrapApplicationEngine() {
     sessionStorage.removeItem("lumina_token"); 
     signOut(auth);
 
-    // Reconcile and subscribe dynamic global grid layout styling configs
     onSnapshot(doc(db, "admin_settings", "layout_config"), (d) => {
         if(d.exists()) {
             let cls = d.data().activeGridClass;
-            // Map configuration styling mappings
             currentActiveGridLayoutClass = cls === 'grid-cols-2' ? 'xl:grid-cols-2' : cls === 'grid-cols-4' ? 'xl:grid-cols-4' : cls === 'grid-cols-6' ? 'xl:grid-cols-4 2xl:grid-cols-6' : 'xl:grid-cols-3';
             window.executeUIRenderPipeline();
         }
     });
 
-    // Reconcile dynamic categories configuration collection states live
     onSnapshot(collection(db, "dynamic_categories"), (snapshot) => {
         dynamicLoadedCategoriesArray = [];
         snapshot.forEach(docSnap => { dynamicLoadedCategoriesArray.push(docSnap.data()); });
@@ -185,7 +179,7 @@ function bootstrapApplicationEngine() {
         let html = "";
         snapshot.forEach(d => {
             const t = d.data();
-            html += `<a href="${t.url}" target="_blank" class="block w-full text-left bg-slate-50 hover:bg-purple-50 text-slate-700 text-xs font-bold p-2.5 rounded-xl border truncate transition-all">🛠️ ${t.title}</a>`;
+            html += `<a href="${t.url}" target="_blank" class="block w-full text-left bg-slate-50 hover:bg-purple-50 hover:text-purple-700 text-slate-700 text-xs font-bold p-2.5 rounded-xl border truncate transition-all">🛠️ ${t.title}</a>`;
         });
         container.innerHTML = html || `<p class="text-[10px] font-bold text-slate-400 px-2">No tools active.</p>`;
     });
