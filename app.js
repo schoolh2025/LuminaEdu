@@ -3,7 +3,6 @@ import { getFirestore, collection, addDoc, doc, setDoc, onSnapshot, updateDoc, d
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js";
 
-// 🚨 LIVE SYNCHRONIZED CONFIGURATION MATRIX
 const firebaseConfig = {
   apiKey: "AIzaSyDEXmjIN8w2s2uXk0FTzC7ri4HhLetzV4E",
   authDomain: "luminaedu-ai786.firebaseapp.com",
@@ -22,6 +21,7 @@ try { messaging = getMessaging(app); } catch (e) { }
 
 let selectedCategoryFilter = 'All';
 let cachedJobsArray = [];
+let layoutGridColumnsSetting = 'lg:grid-cols-3'; 
 let activeDynamicCategoriesList = [
     { name: 'All', colorClass: 'bg-white text-slate-800 border-slate-200 shadow-sm font-bold', hexColor: '#4f46e5' },
     { name: 'Admit Crad', colorClass: 'bg-orange-50 text-orange-700 border-orange-200', hexColor: '#ea580c' },
@@ -32,7 +32,7 @@ let activeDynamicCategoriesList = [
 ];
 
 // ==========================================
-// 🌟 SINGLE-PAGE ROUTING CONSOLE WITH GATEKEEPER SECURITIES
+// 🌟 SINGLE-PAGE ROUTING WINDOW SCOPE ENGINE
 // ==========================================
 window.performSinglePageRoutingView = function(targetViewMode, postId = null) {
     const feedView = document.getElementById('mainFeedRouterBlock');
@@ -43,10 +43,10 @@ window.performSinglePageRoutingView = function(targetViewMode, postId = null) {
     const contributorView = document.getElementById('contributorDashboardView');
     const adminView = document.getElementById('adminMasterConsoleView');
     
-    // 🔐 REFRESH / SECURE ACCESS GATEKEEPER SECURITY CHECK
+    // 🔐 REFRESH AUTH SECURITY GATEKEEPER CHECK
     const currentUser = auth.currentUser;
     if ((targetViewMode === 'admin' || targetViewMode === 'contributor') && !currentUser) {
-        window.spawnPremiumToastAlert("Security Alert", "कृपया पहले लॉगिन करें, रिफ्रेश करने पर दोबारा लॉगिन करना अनिवार्य है।", "error");
+        window.spawnPremiumToastAlert("Security Refused", "कृपया पहले लॉगिन पैनल से सत्यापन पूर्ण करें।", "error");
         window.toggleAuthOverlay(true);
         return;
     }
@@ -130,7 +130,7 @@ window.applyRichFormatting = function(textareaId, mode) {
         if(url) replacement = `<a href="${url}" target="_blank" style="color:#2563eb;text-decoration:underline;font-weight:bold;">${selectedText || 'Link Text'}</a>`;
     } else if(mode === 'img') {
         const imgUrl = prompt("Enter complete image asset URL:", "https://");
-        if(imgUrl) replacement = `<img src="${imgUrl}" class="max-w-full h-auto rounded-xl my-4 shadow-sm border block mx-auto" alt="Post Asset Inline">`;
+        if(imgUrl) replacement = `<img src="${imgUrl}" class="max-w-full h-auto rounded-xl my-4 shadow-sm border block mx-auto" alt="Inline Media Visual">`;
     } else if(mode === 'color') {
         const hex = prompt("Enter Hex Color code:", "#ff0000");
         if(hex) replacement = `<span style="color:${hex};font-weight:bold;">${selectedText || 'Colored text'}</span>`;
@@ -143,7 +143,7 @@ window.applyRichFormatting = function(textareaId, mode) {
 };
 
 // ==========================================
-// ⚙️ AUTHENTICATION CONTROL PIPELINES
+// ⚙️ AUTHENTICATION CHANNELS PIPELINES
 // ==========================================
 window.executeAuthActionPipeline = async function() {
     const email = document.getElementById('usrEmail').value.trim();
@@ -154,7 +154,7 @@ window.executeAuthActionPipeline = async function() {
         const fullname = document.getElementById('usrName').value.trim();
         try {
             const credential = await createUserWithEmailAndPassword(auth, email, password);
-            await setDoc(doc(doc(db, "users", credential.user.uid)), { name: fullname, role: "UserContributor", email: email });
+            await setDoc(doc(db, "users", credential.user.uid), { name: fullname, role: "UserContributor", email: email });
             window.spawnPremiumToastAlert("Success", "🎉 पंजीकरण सफल!", "success");
             window.toggleAuthOverlay(false);
             window.performSinglePageRoutingView('contributor');
@@ -277,6 +277,14 @@ window.executePublishNewToolNode = async function() {
     } catch(e) { alert(e.message); }
 };
 
+window.executeRemoveSidebarToolNode = async function(id) {
+    if(!confirm("Erase this sidebar tool connection link node?")) return;
+    try {
+        await deleteDoc(doc(db, "pdf_tools", id));
+        window.spawnPremiumToastAlert("Removed", "Tool removed from system.", "error");
+    } catch(e) { alert(e.message); }
+};
+
 window.approvePostItemNode = async function(id) {
     try {
         await updateDoc(doc(db, "jobs", id), { approvalStatus: "Live" });
@@ -357,7 +365,7 @@ window.renderPostDeepContentView = function(postId) {
     const payload = document.getElementById('detailViewContentPayload');
     const matched = cachedJobsArray.find(item => item.id === postId);
     if(!matched || !payload) return;
-    payload.innerHTML = matched.description || 'No data uploaded.';
+    payload.innerHTML = matched.description || 'No contents uploaded.';
 };
 
 window.triggerPlatformPushSubscription = async function() {
@@ -382,13 +390,13 @@ function checkCurrentSubscriptionState() {
 }
 
 // ==========================================
-// 📡 APP REAL-TIME SUBSCRIPTION BOOTSTRAP ENGINE
+// 📡 APPLICATION LIFECYCLE INITIALIZER ENGINE
 // ==========================================
 function bootstrapApplicationEngine() {
     renderDynamicCategoryChips();
     checkCurrentSubscriptionState();
     
-    // 🌟 REFRESH LOCK: Automatic strict logout on initialization channel to block unauthorized access
+    // 🌟 FULL HARD FORCED RESET ENGINE: Clears session memory state completely on reload
     signOut(auth).then(() => {
         window.navigateToHub = window.performSinglePageRoutingView;
     });
@@ -433,13 +441,25 @@ function bootstrapApplicationEngine() {
 
     onSnapshot(collection(db, "pdf_tools"), (snapshot) => {
         const container = document.getElementById('publicPdfToolsListTargetStack');
+        const adminToolsContainer = document.getElementById('adminLiveToolsListDeleteStack');
         if(!container) return;
+        
         let html = "";
+        let adminHtml = "";
+        
         snapshot.forEach(d => {
+            const id = d.id;
             const t = d.data();
             html += `<a href="${t.url}" target="_blank" class="block w-full text-left bg-slate-50 hover:bg-purple-50 hover:text-purple-700 text-slate-700 text-xs font-bold p-2.5 rounded-xl border border-slate-100 truncate transition-all">🛠️ ${t.title}</a>`;
+            adminHtml += `
+                <div class="p-2 bg-slate-50 border rounded-xl flex items-center justify-between gap-2 text-xs">
+                    <span class="font-bold text-slate-700 truncate flex-1">${t.title}</span>
+                    <button onclick="window.executeRemoveSidebarToolNode('${id}')" class="text-rose-600 font-bold hover:underline text-[11px]">Delete</button>
+                </div>`;
         });
+        
         container.innerHTML = html || `<p class="text-[10px] font-bold text-slate-400 px-2">No tools active.</p>`;
+        if(adminToolsContainer) adminToolsContainer.innerHTML = adminHtml || `<p class="text-xs text-slate-400 text-center py-2">No tools created.</p>`;
     });
 }
 window.addEventListener('DOMContentLoaded', bootstrapApplicationEngine);
