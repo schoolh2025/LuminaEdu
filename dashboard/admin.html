@@ -30,6 +30,7 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
+    <!-- TOP HEADER -->
     <header class="w-full bg-white/70 backdrop-blur-md border-b border-slate-200/60 px-4 lg:px-10 py-3.5 flex items-center justify-between shadow-sm shrink-0">
         <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='../index.html'">
             <div class="bg-indigo-600 text-white font-black p-2.5 rounded-xl text-lg shadow-md">LE</div>
@@ -40,26 +41,31 @@
         </div>
     </header>
 
+    <!-- MAIN CONTROL DESK -->
     <main class="flex-1 max-w-[1600px] w-full mx-auto p-4 lg:p-6">
         
+        <!-- SECURITY GATEWAY INTERFACE -->
         <div id="dashboardAuthGatewayGate" class="max-w-md mx-auto my-12 p-6 bg-white premium-glass-card space-y-4">
             <div class="text-center space-y-1">
                 <h2 class="text-xl font-black text-slate-900">🔒 System Authentication Gateway</h2>
                 <p class="text-xs text-slate-500 font-medium">डैशबोर्ड को अनलॉक करने के लिए क्रेडेंशियल्स दर्ज करें।</p>
             </div>
-            <div class="space-y-3">
+            <div class="space-y-4 text-slate-800">
                 <div>
                     <label class="block text-xs font-bold text-slate-600 mb-1">रूटर सिक्योरिटी पासवर्ड</label>
                     <div class="relative">
                         <input type="password" id="dashPass" class="w-full bg-slate-50 border border-slate-200 text-sm p-3 pr-10 rounded-xl outline-none font-mono tracking-widest text-slate-900" placeholder="••••••••••••">
+                        <span onclick="window.toggleLockRevealField()" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 cursor-pointer select-none text-xs font-bold">👁️</span>
                     </div>
                 </div>
                 <button onclick="window.executeDashboardIdentityLoginPipeline()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm py-3.5 rounded-xl shadow-md transition-all">Unlock Command Desk ⚡</button>
             </div>
         </div>
 
+        <!-- MASTER CONTROL PANEL CONSOLE -->
         <div id="adminMasterConsoleView" class="hidden w-full space-y-6">
             
+            <!-- STATS HUB -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
                 <div class="bg-white premium-glass-card p-5 border-l-4 border-indigo-600 flex items-center justify-between">
                     <div><p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Total Active Posts</p><h3 id="statTotalCount" class="text-2xl font-black text-slate-800 mt-1">0</h3></div>
@@ -77,10 +83,12 @@
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
                 
+                <!-- COLUMN ENGINE WORKSPACE -->
                 <div class="lg:col-span-8 space-y-6 bg-white premium-glass-card p-5 border">
                     
+                    <!-- GRID COLS MANAGER -->
                     <div class="bg-slate-50 border p-4 rounded-xl space-y-3">
-                        <h4 class="font-extrabold text-xs text-indigo-950 uppercase tracking-wide flex items-center gap-1">📱 Front-Page Responsive Grid Matrix Columns Layout Controller</h4>
+                        <h4 class="font-extrabold text-xs text-indigo-950 uppercase tracking-wide">📱 Front-Page Responsive Grid Matrix Columns Layout Controller</h4>
                         <p class="text-[11px] text-slate-500 font-bold">बड़ी स्क्रीन (Desktop) पर फ्रंट-पेज के कार्ड्स को कितने कॉलम में फैलाना है, यहाँ से सेट करें:</p>
                         <div class="flex gap-2 flex-wrap" id="gridLayoutActionContainer">
                             <button onclick="window.executeSetGridLayoutColumnsNode('grid-cols-2')" class="layout-grid-btn px-4 py-1.5 text-xs font-bold rounded-xl border bg-white shadow-sm">2 Columns</button>
@@ -90,6 +98,7 @@
                         </div>
                     </div>
 
+                    <!-- DYNAMIC CATEGORY CREATOR -->
                     <div class="bg-slate-50 border p-4 rounded-xl space-y-3">
                         <h4 class="font-extrabold text-xs text-amber-700 uppercase tracking-wide">🏷️ Dynamic Category Master Configurator (Add / Delete / Color Picker)</h4>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end">
@@ -105,6 +114,7 @@
                         </div>
                     </div>
 
+                    <!-- CENTRAL INGESTION POST LISTING MODULE FORM -->
                     <div class="space-y-4 pt-2">
                         <h3 id="adminFormHeadlineLabel" class="font-extrabold text-base text-slate-900 flex items-center gap-2">Create Direct Live Post Node</h3>
                         <input type="hidden" id="adminTargetEditingId" value="">
@@ -153,6 +163,7 @@
                         </div>
                     </div>
                     
+                    <!-- TOOLS LINK CONTROLLER -->
                     <div class="pt-4 border-t mt-4 space-y-3">
                         <h4 class="font-bold text-xs text-purple-700 uppercase">🧰 Link Tools Manager Module (JPG/PDF/XYZ Link Manager)</h4>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-slate-800">
@@ -163,6 +174,7 @@
                     </div>
                 </div>
 
+                <!-- RIGHT SIDEBARS STACK -->
                 <div class="lg:col-span-4 space-y-5">
                     <div class="bg-white premium-glass-card p-4 border">
                         <h3 class="font-bold text-sm text-rose-600 border-b pb-1">User Contributor Approval Queue</h3>
@@ -189,8 +201,10 @@
         </div>
     </main>
 
+    <!-- FLOATING RICH PROMPT INPUT MODAL -->
     <div id="premiumRichFormatModalOverlay" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[150] flex items-center justify-center hidden opacity-0 transition-all duration-200">
         <div class="bg-white max-w-sm w-full m-4 p-5 rounded-2xl shadow-2xl border text-slate-800 space-y-4 relative">
+            <button onclick="window.closePremiumTextEditorModal(false)" class="absolute top-3 right-3 text-slate-400 hover:text-slate-600 font-bold p-1">✕</button>
             <div>
                 <h4 id="premiumModalTitleLabel" class="text-sm font-black text-slate-800 uppercase tracking-wide">Dynamic Input Engine</h4>
                 <p id="premiumModalSubLabel" class="text-[11px] text-slate-400 font-semibold mt-0.5">Please provide value below.</p>
@@ -203,6 +217,7 @@
         </div>
     </div>
 
+    <!-- TOAST NOTIFICATION (WITH DEDICATED working CLOSABLE PORT ON RIGHT SIDE) -->
     <div id="premiumToastNotification" class="fixed top-5 left-1/2 transform -translate-x-1/2 z-[200] max-w-sm w-full mx-4 bg-white border p-4 rounded-2xl shadow-2xl flex items-start gap-3 opacity-0 pointer-events-none transition-all duration-300">
         <div id="toastIconSlot" class="text-lg">✨</div>
         <div class="flex-1">
@@ -211,6 +226,11 @@
         </div>
         <button onclick="document.getElementById('premiumToastNotification').classList.add('opacity-0','pointer-events-none')" class="text-slate-400 hover:text-slate-600 font-bold text-sm px-1.5">✕</button>
     </div>
+
+    <!-- RESTORED COMPLIANT SYSTEM FOOTER -->
+    <footer class="w-full bg-white/60 border-t p-5 text-xs text-slate-500 text-center shrink-0">
+        <p class="font-semibold">LuminaEdu Network © 2026 | Powered by Firebase CMS Control Panel</p>
+    </footer>
 
     <script type="module" src="admin.js"></script>
 </body>
