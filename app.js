@@ -3,7 +3,6 @@ import { getFirestore, collection, addDoc, doc, setDoc, onSnapshot, updateDoc, d
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js";
 
-// 🚨 FIREBASE CONDUIT CONNECTOR CONFIG MATRIX
 const firebaseConfig = {
   apiKey: "AIzaSyDEXmjIN8w2s2uXk0FTzC7ri4HhLetzV4E",
   authDomain: "luminaedu-ai786.firebaseapp.com",
@@ -32,7 +31,7 @@ let activeDynamicCategoriesList = [
 ];
 
 // ==========================================
-// 🔐 SINGLE-PAGE ROUTING GATEWAY SECURITY DESK
+// 🌟 SECURE SESSION TOKEN METHOD STATE DECK
 // ==========================================
 window.performSinglePageRoutingView = function(targetViewMode, postId = null) {
     const feedView = document.getElementById('mainFeedRouterBlock');
@@ -43,10 +42,10 @@ window.performSinglePageRoutingView = function(targetViewMode, postId = null) {
     const contributorView = document.getElementById('contributorDashboardView');
     const adminView = document.getElementById('adminMasterConsoleView');
     
-    // Strict enforcement gateway lock checks
-    const sessionToken = sessionStorage.getItem("platform_active_session");
-    if ((targetViewMode === 'admin' || targetViewMode === 'contributor') && !sessionToken) {
-        window.spawnPremiumToastAlert("Access Denied", "सुरक्षा कारणों से रिफ्रेश करने पर दोबारा लॉगिन करना अनिवार्य है।", "error");
+    // 🔐 ENFORCED TOKEN VALIDATOR LAYER (BLOCKS INTRUDERS ON REFRESH)
+    const activeSession = sessionStorage.getItem("lumina_authenticated_session");
+    if ((targetViewMode === 'admin' || targetViewMode === 'contributor') && !activeSession) {
+        window.spawnPremiumToastAlert("Security Alert", "सत्र समाप्त! रिफ्रेश करने पर दोबारा लॉगिन करना अनिवार्य है।", "error");
         window.toggleAuthOverlay(true);
         return;
     }
@@ -116,7 +115,7 @@ window.spawnPremiumToastAlert = function(title, message, type) {
 };
 
 // ==========================================
-// 🎨 INDUSTRIAL UNIVERSAL TEXT TOOLBAR ENGINE
+// 🎨 INDUSTRIAL MULTI-TEXT BOX RICH EDITOR TOOLBAR
 // ==========================================
 window.applyRichFormatting = function(textareaId, mode) {
     const txtArea = document.getElementById(textareaId);
@@ -127,24 +126,24 @@ window.applyRichFormatting = function(textareaId, mode) {
     let replacement = "";
     
     if(mode === 'link') {
-        const url = prompt("Enter complete URL:", "https://");
-        if(url) replacement = `<a href="${url}" target="_blank" style="color:#2563eb;text-decoration:underline;font-weight:bold;">${selectedText || 'Link Text'}</a>`;
+        const url = prompt("Enter complete action path URL:", "https://");
+        if(url) replacement = `<a href="${url}" target="_blank" style="color:#2563eb;text-decoration:underline;font-weight:bold;">${selectedText || 'Link'}</a>`;
     } else if(mode === 'img') {
-        const imgUrl = prompt("Enter asset Image URL link:", "https://");
-        if(imgUrl) replacement = `<img src="${imgUrl}" class="max-w-full h-auto rounded-xl my-4 shadow-sm border block mx-auto" alt="Embedded Asset Content">`;
+        const imgUrl = prompt("Enter complete image asset web link URL address:", "https://");
+        if(imgUrl) replacement = `<img src="${imgUrl}" class="max-w-full h-auto rounded-xl my-4 shadow-sm border block mx-auto" alt="Embedded Content Visual Node">`;
     } else if(mode === 'color') {
         const hex = prompt("Enter text Hex Color Code:", "#ff0000");
-        if(hex) replacement = `<span style="color:${hex};font-weight:bold;">${selectedText || 'Colored text'}</span>`;
+        if(hex) replacement = `<span style="color:${hex};font-weight:bold;">${selectedText || 'Text'}</span>`;
     } else if(mode === 'size') {
-        const size = prompt("Enter precise font size parameters (e.g. 14px, 18px, 24px):", "16px");
-        if(size) replacement = `<span style="font-size:${size};font-weight:800;line-height:1.4;">${selectedText || 'Sized text'}</span>`;
+        const size = prompt("Enter font parameters (e.g. 14px, 18px, 24px):", "16px");
+        if(size) replacement = `<span style="font-size:${size};font-weight:800;line-height:1.4;">${selectedText || 'Text'}</span>`;
     }
     
     if(replacement) txtArea.value = txtArea.value.substring(0, start) + replacement + txtArea.value.substring(end);
 };
 
 // ==========================================
-// 🔐 IDENTITY SECURE AUTH STAGES
+// ⚙️ AUTHENTICATED VERIFICATION DESK DATA PIPELINES
 // ==========================================
 window.executeAuthActionPipeline = async function() {
     const email = document.getElementById('usrEmail').value.trim();
@@ -156,7 +155,7 @@ window.executeAuthActionPipeline = async function() {
         try {
             const credential = await createUserWithEmailAndPassword(auth, email, password);
             await setDoc(doc(db, "users", credential.user.uid), { name: fullname, role: "UserContributor", email: email });
-            sessionStorage.setItem("platform_active_session", "true");
+            sessionStorage.setItem("lumina_authenticated_session", "true");
             window.spawnPremiumToastAlert("Success", "🎉 पंजीकरण सफल!", "success");
             window.toggleAuthOverlay(false);
             window.performSinglePageRoutingView('contributor');
@@ -164,7 +163,7 @@ window.executeAuthActionPipeline = async function() {
     } else {
         try {
             const credential = await signInWithEmailAndPassword(auth, email, password);
-            sessionStorage.setItem("platform_active_session", "true");
+            sessionStorage.setItem("lumina_authenticated_session", "true");
             window.spawnPremiumToastAlert("Access Granted", "🎉 लॉगिन सफल!", "success");
             window.toggleAuthOverlay(false);
             
@@ -184,14 +183,11 @@ window.executeForgotRecoveryPipeline = async function() {
     const email = document.getElementById('forgotUsrEmail').value.trim();
     try {
         await sendPasswordResetEmail(auth, email);
-        window.spawnPremiumToastAlert("Dispatched", "🔑 Password reset mail path sent.", "success");
+        window.spawnPremiumToastAlert("Dispatched", "🔑 Recovery mail sent.", "success");
         window.toggleAuthOverlay(false);
     } catch(err) { window.spawnPremiumToastAlert("Error", err.message, "error"); }
 };
 
-// ==========================================
-// ✍️ DATA SUBMISSIONS WORKSPACE CHANNELS
-// ==========================================
 window.submitProposalPipeline = async function() {
     try {
         await addDoc(collection(db, "jobs"), {
@@ -281,7 +277,7 @@ window.executePublishNewToolNode = async function() {
 };
 
 window.executeRemoveSidebarToolNode = async function(id) {
-    if(!confirm("Erase this linked tool node completely?")) return;
+    if(!confirm("Erase this sidebar tool connector node link permanently?")) return;
     try {
         await deleteDoc(doc(db, "pdf_tools", id));
         window.spawnPremiumToastAlert("Removed", "Tool removed permanently.", "error");
@@ -291,7 +287,7 @@ window.executeRemoveSidebarToolNode = async function(id) {
 window.approvePostItemNode = async function(id) {
     try {
         await updateDoc(doc(db, "jobs", id), { approvalStatus: "Live" });
-        window.spawnPremiumToastAlert("Approved", "पोस्ट फ्रंटपेज पर लाइव कर दी गई है!", "success");
+        window.spawnPremiumToastAlert("Approved", "विज्ञापन फ्रंटपेज पर लाइव कर दिया गया है!", "success");
     } catch(e) { alert(e.message); }
 };
 
@@ -302,9 +298,6 @@ window.rejectPostItemNode = async function(id) {
     } catch(e) { alert(e.message); }
 };
 
-// ==========================================
-// 🚀 ENGINE RENDERING UI MATRIX PORTS
-// ==========================================
 window.setJobFilter = function(categoryName) {
     selectedCategoryFilter = categoryName;
     renderDynamicCategoryChips();
@@ -396,17 +389,17 @@ function checkCurrentSubscriptionState() {
 }
 
 // ==========================================
-// 📡 ASYNC LIFE CYCLE APP ENTRY CHANNELS BOOTSTRAP
+// 📡 APPLICATION LIFECYCLE INITIALIZER ENGINE
 // ==========================================
 function bootstrapApplicationEngine() {
     renderDynamicCategoryChips();
     checkCurrentSubscriptionState();
     
-    // 🌟 RELOAD RESET LOCK LOGIC: Flush storage memory tokens on refresh to prevent automated entries
-    sessionStorage.removeItem("platform_active_session");
+    // 🌟 REFRESH STATE FLUSH SECURE HARMONIZATION LOCK
+    sessionStorage.removeItem("lumina_authenticated_session");
     window.navigateToHub = window.performSinglePageRoutingView;
 
-    // Real-Time Listener: Continuous synchronization regardless of credentials layer rules
+    // Real-Time Database Streams Sync Loops
     onSnapshot(collection(db, "jobs"), (snapshot) => {
         cachedJobsArray = [];
         let approvalQueueHTML = "";
