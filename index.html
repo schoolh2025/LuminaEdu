@@ -31,12 +31,13 @@
         }
         @keyframes blinkMode { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
         .blinking-new-badge { animation: blinkMode 1.2s infinite; }
-        .rich-editor-btn { background: #f1f5f9; border: 1px solid #cbd5e1; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; display: inline-block; }
+        .rich-editor-btn { background: #f1f5f9; border: 1px solid #cbd5e1; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; display: inline-block; cursor: pointer; }
         .rich-editor-btn:hover { background: #e2e8f0; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
+    <!-- ✨ TOP HEADER (Login Buttons Removed From Public View) -->
     <header class="w-full bg-white/70 backdrop-blur-md border-b border-slate-200/60 px-4 lg:px-10 py-3.5 flex items-center justify-between shadow-sm shrink-0">
         <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.reload()">
             <div class="bg-indigo-600 text-white font-black p-2.5 rounded-xl text-lg shadow-md">LE</div>
@@ -45,14 +46,16 @@
         <div class="flex items-center gap-3">
             <button id="adminPortalHeaderBtn" onclick="window.performSinglePageRoutingView('admin')" class="hidden bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-md transition-all">Admin Console 🛠️</button>
             <button id="authLogoutHeaderBtn" onclick="window.performSecurePlatformLogout()" class="hidden bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-md transition-all">Logout 🚪</button>
-            <button id="authTriggerActionBtn" onclick="window.toggleAuthOverlay(true)" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs md:text-sm px-5 py-2.5 rounded-xl shadow-md transition-all whitespace-nowrap">Contributor Login 🚀</button>
         </div>
     </header>
 
+    <!-- CONTENT WRAPPER CONTAINER -->
     <div class="flex-1 w-full flex flex-col md:flex-row min-h-0">
         
+        <!-- SIDEBAR LEFT NAV PANEL -->
         <aside id="mainLeftSidebarNode" class="w-full md:w-64 bg-white/80 backdrop-blur-md border-r border-slate-200/60 p-5 flex flex-col justify-between shrink-0">
             <div class="space-y-6">
+                <!-- Push Subscription Module -->
                 <div class="mb-4 bg-indigo-50/80 border border-indigo-100 p-3.5 rounded-2xl space-y-2">
                     <div class="flex items-center justify-between">
                         <span class="text-xs font-black text-indigo-950 uppercase tracking-wide flex items-center gap-1.5">🔔 Push Alerts</span>
@@ -67,6 +70,7 @@
                     <button onclick="window.setJobFilter('All')" class="w-full flex items-center gap-3 px-4 py-2.5 bg-indigo-50 text-indigo-700 font-bold text-sm rounded-xl">💼 All Updates</button>
                 </nav>
                 
+                <!-- PUBLIC SIDEBAR TOOLS ACCESSIBLE LAYER -->
                 <div class="pt-4 border-t px-2">
                     <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">🧰 Useful Tools</p>
                     <div id="publicPdfToolsListTargetStack" class="space-y-1"></div>
@@ -74,11 +78,13 @@
             </div>
         </aside>
 
+        <!-- MASTER CENTRAL CANVAS PORT -->
         <div class="flex-1 flex flex-col w-full min-w-0">
             <div class="p-4 lg:p-8 max-w-[1400px] w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                 
                 <div id="coreContentLayoutViewRegion" class="lg:col-span-12 space-y-6 min-w-0 w-full">
                     
+                    <!-- VIEW 1: FRONT FEED SYSTEM (1 TO 6 COLUMN SCALE) -->
                     <div id="mainFeedRouterBlock" class="space-y-6">
                         <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white/40 p-4 rounded-2xl border border-white/60">
                             <div>
@@ -90,11 +96,13 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 gap-6" id="publicCardsFeed"></div>
                     </div>
 
+                    <!-- VIEW 2: SUB PAGE POST DETAILS -->
                     <div id="postDetailView" class="hidden premium-glass-card p-6 lg:p-8 bg-white w-full">
                         <button onclick="window.performSinglePageRoutingView('front')" class="mb-6 inline-flex items-center gap-2 text-xs font-bold text-indigo-600 bg-indigo-50 border border-indigo-100 px-4 py-2 rounded-xl">← मुख्य पृष्ठ (Back to Home)</button>
                         <div id="detailViewContentPayload" class="prose max-w-none"></div>
                     </div>
 
+                    <!-- VIEW 3: CONTRIBUTOR DRAFTING WORKSPACE -->
                     <div id="contributorDashboardView" class="hidden premium-glass-card p-6 lg:p-8 bg-white w-full space-y-6">
                         <h2 class="text-xl font-black text-slate-900 border-b pb-3">👨‍💻 Propose New Post Listing Form</h2>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -140,84 +148,14 @@
                         <button onclick="window.submitProposalPipeline()" class="w-full bg-indigo-600 text-white font-bold text-sm py-3 rounded-xl shadow-md">Submit to Admin Queue 🚀</button>
                     </div>
 
+                    <!-- 🌟 SECURED EMPTY ADMINISTRATIVE PORT INTERFACE BLOCK -->
                     <div id="adminMasterConsoleView" class="hidden premium-glass-card p-6 lg:p-8 bg-white w-full space-y-6">
-                        <h2 class="text-xl font-black text-slate-900 border-b pb-2"> Super Admin Control Desk Terminal</h2>
-                        
-                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                            <div class="lg:col-span-2 space-y-4 bg-slate-50 p-4 rounded-xl border">
-                                <h3 id="adminFormHeadlineLabel" class="font-bold text-sm text-indigo-600 border-b pb-1">Create Direct Live Post Node</h3>
-                                <input type="hidden" id="adminTargetEditingId" value="">
-                                
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="block text-xs font-bold mb-1 text-slate-700">Advertisement Job Title</label>
-                                        <div class="flex gap-1 mb-1"><button onclick="window.applyRichFormatting('aTitle','link')" class="rich-editor-btn">🔗 Link</button><button onclick="window.applyRichFormatting('aTitle','img')" class="rich-editor-btn">🖼️ Img</button><button onclick="window.applyRichFormatting('aTitle','color')" class="rich-editor-btn">🎨 Color</button><button onclick="window.applyRichFormatting('aTitle','size')" class="rich-editor-btn">📐 Size</button></div>
-                                        <input type="text" id="aTitle" class="w-full bg-white border text-sm p-2.5 rounded-xl outline-none">
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs font-bold mb-1 text-slate-700">Authority Organization Board</label>
-                                        <div class="flex gap-1 mb-1"><button onclick="window.applyRichFormatting('aAuth','link')" class="rich-editor-btn">🔗 Link</button><button onclick="window.applyRichFormatting('aAuth','img')" class="rich-editor-btn">🖼️ Img</button><button onclick="window.applyRichFormatting('aAuth','color')" class="rich-editor-btn">🎨 Color</button><button onclick="window.applyRichFormatting('aAuth','size')" class="rich-editor-btn">📐 Size</button></div>
-                                        <input type="text" id="aAuth" class="w-full bg-white border text-sm p-2.5 rounded-xl outline-none">
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs font-bold mb-1 text-slate-700">Select Target Category</label>
-                                        <select id="aType" class="w-full bg-white border text-sm p-3 rounded-xl outline-none font-bold">
-                                            <option value="Admit Crad">Admit Crad</option><option value="Result">Result</option><option value="Sarkari Naukri">Sarkari Naukri</option><option value="Blogs">Blogs</option><option value="Sarkari Yojna">Sarkari Yojna</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs font-bold mb-1 text-slate-700">Last Date Submission</label>
-                                        <div class="flex gap-1 mb-1"><button onclick="window.applyRichFormatting('aLastDate','link')" class="rich-editor-btn">🔗 Link</button><button onclick="window.applyRichFormatting('aLastDate','img')" class="rich-editor-btn">🖼️ Img</button><button onclick="window.applyRichFormatting('aLastDate','color')" class="rich-editor-btn">🎨 Color</button><button onclick="window.applyRichFormatting('aLastDate','size')" class="rich-editor-btn">📐 Size</button></div>
-                                        <input type="text" id="aLastDate" class="w-full bg-white border text-sm p-2.5 rounded-xl outline-none">
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs font-bold mb-1 text-slate-700">Application Fees Info Text</label>
-                                        <div class="flex gap-1 mb-1"><button onclick="window.applyRichFormatting('aFees','link')" class="rich-editor-btn">🔗 Link</button><button onclick="window.applyRichFormatting('aFees','img')" class="rich-editor-btn">🖼️ Img</button><button onclick="window.applyRichFormatting('aFees','color')" class="rich-editor-btn">🎨 Color</button><button onclick="window.applyRichFormatting('aFees','size')" class="rich-editor-btn">📐 Size</button></div>
-                                        <textarea id="aFees" rows="2" class="w-full bg-white border text-xs p-2 rounded-xl outline-none"></textarea>
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs font-bold mb-1 text-slate-700">Eligibility Criteria Text</label>
-                                        <div class="flex gap-1 mb-1"><button onclick="window.applyRichFormatting('aElig','link')" class="rich-editor-btn">🔗 Link</button><button onclick="window.applyRichFormatting('aElig','img')" class="rich-editor-btn">🖼️ Img</button><button onclick="window.applyRichFormatting('aElig','color')" class="rich-editor-btn">🎨 Color</button><button onclick="window.applyRichFormatting('aElig','size')" class="rich-editor-btn">📐 Size</button></div>
-                                        <textarea id="aElig" rows="2" class="w-full bg-white border text-xs p-2 rounded-xl outline-none"></textarea>
-                                    </div>
-                                </div>
-                                <div class="pt-2">
-                                    <label class="block text-xs font-bold mb-1 text-slate-700">Description Meta Text Content</label>
-                                    <div class="flex gap-1 bg-slate-200 p-1.5 rounded-t-xl border border-b-0">
-                                        <button onclick="window.applyRichFormatting('aDesc','link')" class="rich-editor-btn">🔗 Link</button><button onclick="window.applyRichFormatting('aDesc','img')" class="rich-editor-btn">🖼️ Img</button><button onclick="window.applyRichFormatting('aDesc','color')" class="rich-editor-btn">🎨 Color</button><button onclick="window.applyRichFormatting('aDesc','size')" class="rich-editor-btn">📐 Size</button>
-                                    </div>
-                                    <textarea id="aDesc" rows="4" class="w-full bg-white border text-xs p-2.5 rounded-b-xl outline-none font-mono"></textarea>
-                                </div>
-                                <div class="flex gap-2">
-                                    <button id="adminSubmitPrimaryActionBtn" onclick="window.publishDirectAdminNode()" class="flex-1 bg-emerald-600 text-white font-bold text-xs py-2.5 rounded-xl shadow-md">Publish Instantly Live ⚡</button>
-                                    <button id="adminCancelEditNodeBtn" onclick="window.clearAdminEditingFormFieldsState()" class="hidden bg-slate-400 text-white font-bold text-xs px-4 py-2.5 rounded-xl">Cancel Edit</button>
-                                </div>
-                                
-                                <div class="pt-4 border-t mt-4 space-y-3">
-                                    <h4 class="font-bold text-xs text-purple-700 uppercase">🧰 Useful Link Tools Integration Module</h4>
-                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                        <div><label class="block text-[10px] font-bold mb-1">Tool / JPG Asset Label Name</label><input type="text" id="toolTitle" class="w-full bg-white border text-xs p-2 rounded-xl outline-none" placeholder="e.g. JPG to PDF Tool"></div>
-                                        <div><label class="block text-[10px] font-bold mb-1">Target Redirection Action Web URL</label><input type="text" id="toolUrl" class="w-full bg-white border text-xs p-2 rounded-xl outline-none" placeholder="https://"></div>
-                                    </div>
-                                    <button onclick="window.executePublishNewToolNode()" class="bg-purple-600 text-white font-bold text-[11px] px-4 py-2 rounded-lg shadow">Publish Link Tool Node ➕</button>
-                                </div>
-                            </div>
-                            
-                            <div class="space-y-4 bg-white p-4 rounded-xl border shrink-0">
-                                <h3 class="font-bold text-sm text-rose-600 border-b pb-1">User Contributor Post Approval Queue</h3>
-                                <div id="adminApprovalQueueTargetList" class="space-y-3 max-h-[250px] overflow-y-auto"></div>
-                                
-                                <h3 class="font-bold text-sm text-slate-800 border-b pt-4 pb-1">Edit / Update Published Live Posts</h3>
-                                <div id="adminLivePostsListEditableTargetStack" class="space-y-2 max-h-[300px] overflow-y-auto"></div>
-                                
-                                <h3 class="font-bold text-sm text-purple-800 border-b pt-4 pb-1">Erase / Delete Sidebar Useful Tools</h3>
-                                <div id="adminLiveToolsListDeleteStack" class="space-y-2 max-h-[200px] overflow-y-auto"></div>
-                            </div>
-                        </div>
+                        <!-- Content Injected via Authenticated app.js Only -->
                     </div>
 
                 </div>
 
+                <!-- RIGHT SIDEBAR PANEL -->
                 <aside id="subPageRightSidebarNode" class="hidden lg:col-span-4 space-y-4 w-full">
                     <div class="premium-glass-card p-5 space-y-4 bg-white/90 border-slate-200">
                         <div class="border-b pb-2"><h4 class="text-xs font-black uppercase text-slate-800 tracking-wider">🔎 Search & Filters Sidebar</h4></div>
@@ -236,6 +174,7 @@
         </div>
     </div>
 
+    <!-- AUTH POPUP LAYERS MODAL -->
     <div id="authModalOverlay" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-all duration-300">
         <div class="bg-white max-w-sm w-full m-4 p-6 rounded-3xl shadow-2xl relative border border-slate-100">
             <button onclick="window.toggleAuthOverlay(false)" class="absolute top-4 right-4 text-slate-400 font-bold hover:text-slate-600 text-sm p-1">✕</button>
@@ -255,18 +194,12 @@
                         </div>
                     </div>
                     <button onclick="window.executeAuthActionPipeline()" class="w-full bg-indigo-600 text-white font-bold text-sm py-3.5 rounded-xl shadow-md">प्रवेश / लॉग इन करें ⚡</button>
-                    <button onclick="window.toggleForgotFormModeView(true)" class="w-full text-center text-xs text-slate-400 hover:text-indigo-600 font-bold">पासवर्ड भूल गए? (Forgot Password)</button>
                 </div>
-            </div>
-            <div id="authForgotFormGroupBlock" class="hidden space-y-4">
-                <h3 class="text-sm font-black uppercase text-slate-800 border-b pb-1.5">🔑 Account Recovery</h3>
-                <div><label class="block text-xs font-bold text-slate-600 mb-1">पंजीकृत ईमेल</label><input type="email" id="forgotUsrEmail" class="w-full bg-slate-50 border text-sm p-3 rounded-xl outline-none"></div>
-                <button onclick="window.executeForgotRecoveryPipeline()" class="w-full bg-slate-900 text-white font-bold text-xs py-3.5 rounded-xl shadow-md">Reset Link 📡</button>
-                <button onclick="window.toggleForgotFormModeView(false)" class="w-full text-center text-xs font-bold text-indigo-600 underline">Back to Log In</button>
             </div>
         </div>
     </div>
 
+    <!-- SYSTEM TOAST alerts console -->
     <div id="premiumToastNotification" class="fixed top-5 left-1/2 transform -translate-x-1/2 z-[100] max-w-sm w-full mx-4 bg-white border p-4 rounded-2xl shadow-2xl flex items-start gap-3 opacity-0 pointer-events-none transition-all duration-300">
         <div id="toastIconSlot" class="text-lg">✨</div>
         <div class="flex-1">
@@ -277,7 +210,7 @@
     </div>
 
     <footer class="bg-white/60 border-t p-6 text-xs text-slate-500 text-center shrink-0">
-        <p class="font-semibold">LuminaEdu Network © 2026 | Powered by Firebase CMS Control Panel</p>
+        <p class="font-semibold">LuminaEdu Network © 2026 | Powered by Firebase CMS</p>
     </footer>
 
     <script type="module" src="app.js"></script>
