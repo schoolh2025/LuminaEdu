@@ -1,279 +1,142 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, collection, addDoc, doc, setDoc, onSnapshot, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDEXmjIN8w2s2uXk0FTzC7ri4HhLetzV4E",
-  authDomain: "luminaedu-ai786.firebaseapp.com",
-  projectId: "luminaedu-ai786",
-  storageBucket: "luminaedu-ai786.firebasestorage.app",
-  messagingSenderId: "35041307389",
-  appId: "1:35041307389:web:846f981017df7ad1382c94"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
-
-let cachedJobsArray = [];
-let formattingTargetTextareaId = "";
-let formattingTargetMode = "";
-
-// ==========================================
-// 🛡️ REFRESH SECURE COMPLIANCE LAYER
-// ==========================================
-window.executeDashboardIdentityLoginPipeline = async function() {
-    const email = document.getElementById('dashEmail').value.trim();
-    const password = document.getElementById('dashPass').value.trim();
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LuminaEdu | Premium Career Hub</title>
     
-    try {
-        const credential = await signInWithEmailAndPassword(auth, email, password);
-        document.getElementById('dashboardAuthGatewayGate').classList.add('hidden');
-        
-        onSnapshot(doc(db, "users", credential.user.uid), (docSnap) => {
-            if(docSnap.exists() && docSnap.data().role === 'Admin') {
-                document.getElementById('adminMasterConsoleView').classList.remove('hidden');
-            } else {
-                document.getElementById('contributorDashboardView').classList.remove('hidden');
-            }
-            window.spawnPremiumToastAlert("Access Granted", "🎉 पैनल सफलतापूर्वक अनलॉक हो चुका है!", "success");
-        });
-    } catch(err) { window.spawnPremiumToastAlert("Auth Failed", err.message, "error"); }
-};
-
-window.performSecurePlatformLogout = async function() {
-    await signOut(auth);
-    window.location.reload();
-};
-
-window.spawnPremiumToastAlert = function(title, message, type) {
-    const toast = document.getElementById('premiumToastNotification');
-    if(!toast) return;
-    document.getElementById('toastTitleSlot').innerText = title;
-    document.getElementById('toastMessageSlot').innerText = message;
-    document.getElementById('toastIconSlot').innerText = type === 'error' ? "❌" : "✨";
-    toast.className = `fixed top-5 left-1/2 transform -translate-x-1/2 z-[200] max-w-sm w-full mx-4 bg-white border p-4 rounded-2xl shadow-2xl flex items-start gap-3 transition-all duration-300 opacity-100 translate-y-0 ${type==='error'?'border-rose-200 bg-rose-50':'border-emerald-200 bg-emerald-50'}`;
-    setTimeout(() => { toast.className += " opacity-0 translate-y-[-20px] pointer-events-none"; }, 4000);
-};
-
-// ==========================================
-// 🎨 PREMIUM PREMIUM FLOATING TEXT EDITOR ENGINE (REPLACES PROMPT)
-// ==========================================
-window.openPremiumTextEditorModal = function(textareaId, mode) {
-    formattingTargetTextareaId = textareaId;
-    formattingTargetMode = mode;
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Noto+Sans+Devanagari:wght@400;600;700;800&display=swap" rel="stylesheet">
     
-    const overlay = document.getElementById('premiumRichFormatModalOverlay');
-    const input = document.getElementById('premiumModalInputField');
-    const title = document.getElementById('premiumModalTitleLabel');
-    const subLabel = document.getElementById('premiumModalSubLabel');
-    
-    if(!overlay || !input) return;
-    input.value = mode === 'link' ? 'https://' : mode === 'color' ? '#ff0000' : '16px';
-    
-    if(mode === 'link') { title.innerText = "🔗 Insert Action Link"; subLabel.innerText = "Enter full target redirect path URL address:"; }
-    else if(mode === 'img') { title.innerText = "🖼️ Insert Media Banner"; subLabel.innerText = "Enter asset picture address destination link:"; input.value = "https://"; }
-    else if(mode === 'color') { title.innerText = "🎨 Apply Text Hex Color"; subLabel.innerText = "Provide color value code asset below:"; }
-    else if(mode === 'size') { title.innerText = "📐 Set Font Dimensions"; subLabel.innerText = "Define font bounds scale (e.g. 14px, 20px):"; }
-    
-    overlay.classList.remove('hidden');
-    setTimeout(() => { overlay.classList.remove('opacity-0'); input.focus(); }, 50);
-};
-
-window.closePremiumTextEditorModal = function(shouldApply) {
-    const overlay = document.getElementById('premiumRichFormatModalOverlay');
-    const input = document.getElementById('premiumModalInputField');
-    if(!overlay || !input) return;
-
-    if(shouldApply && input.value.trim()) {
-        const txtArea = document.getElementById(formattingTargetTextareaId);
-        if(txtArea) {
-            const start = txtArea.selectionStart;
-            const end = txtArea.selectionEnd;
-            const selectedText = txtArea.value.substring(start, end);
-            let replacement = "";
-            let val = input.value.trim();
-
-            if(formattingTargetMode === 'link') replacement = `<a href="${val}" target="_blank" style="color:#2563eb;text-decoration:underline;font-weight:bold;">${selectedText || 'Link'}</a>`;
-            else if(formattingTargetMode === 'img') replacement = `<img src="${val}" class="max-w-full h-auto rounded-xl my-4 border shadow-inner block mx-auto" alt="Media Inline Content">`;
-            else if(formattingTargetMode === 'color') replacement = `<span style="color:${val};font-weight:bold;">${selectedText || 'Text'}</span>`;
-            else if(formattingTargetMode === 'size') replacement = `<span style="font-size:${val};font-weight:800;line-height:1.4;">${selectedText || 'Text'}</span>`;
-
-            txtArea.value = txtArea.value.substring(0, start) + replacement + txtArea.value.substring(end);
+    <style>
+        body { 
+            font-family: 'Plus Jakarta Sans', 'Noto Sans Devanagari', sans-serif; 
+            background: linear-gradient(135deg, #e0f2fe 0%, #fae8ff 100%);
+            color: #1e293b;
+            background-attachment: fixed;
         }
-    }
-    overlay.classList.add('opacity-0');
-    setTimeout(() => { overlay.classList.add('hidden'); }, 200);
-};
+        .premium-glass-card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 1.25rem;
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        .premium-glass-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 30px -5px rgba(99, 102, 241, 0.15);
+        }
+        @keyframes blinkMode { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        .blinking-new-badge { animation: blinkMode 1.2s infinite; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
 
-// ==========================================
-// ✍️ DRAFTING ENGINE CORE PIPELINES
-// ==========================================
-window.submitProposalPipeline = async function() {
-    try {
-        await addDoc(collection(db, "jobs"), {
-            title: document.getElementById('cTitle').value.trim(),
-            authority: document.getElementById('cAuth').value.trim(),
-            type: document.getElementById('cType').value,
-            lastDate: document.getElementById('cLastDate').value.trim(),
-            description: `
-                <div class="p-4 bg-indigo-50/50 border rounded-xl my-4 text-xs font-bold text-slate-600">
-                    <p>💰 Application Fee: ${document.getElementById('cFees').value.trim() || 'Review PDF'}</p>
-                    <p class="mt-1">🎓 Eligibility Matrix: ${document.getElementById('cElig').value.trim() || 'Review Details'}</p>
+    <header class="w-full bg-white/70 backdrop-blur-md border-b border-slate-200/60 px-4 lg:px-10 py-3.5 flex items-center justify-between shadow-sm shrink-0">
+        <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.reload()">
+            <div class="bg-indigo-600 text-white font-black p-2.5 rounded-xl text-lg shadow-md">LE</div>
+            <h1 class="text-xl md:text-2xl font-black text-slate-900 tracking-tight">Lumina<span class="text-indigo-600">Edu</span></h1>
+        </div>
+        <div class="flex items-center gap-3">
+            <button id="authTriggerActionBtn" onclick="window.toggleAuthOverlay(true)" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs md:text-sm px-5 py-2.5 rounded-xl shadow-md transition-all whitespace-nowrap">Contributor Login 🚀</button>
+        </div>
+    </header>
+
+    <div class="flex-1 w-full flex flex-col md:flex-row min-h-0">
+        <aside id="mainLeftSidebarNode" class="w-full md:w-64 bg-white/80 backdrop-blur-md border-r border-slate-200/60 p-5 flex flex-col justify-between shrink-0">
+            <div class="space-y-6">
+                <div class="mb-4 bg-indigo-50/80 border border-indigo-100 p-3.5 rounded-2xl space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-black text-indigo-950 uppercase tracking-wide flex items-center gap-1.5">🔔 Push Alerts</span>
+                        <span id="pushStatusBadge" class="text-[9px] font-black px-1.5 py-0.5 rounded-md bg-slate-200 text-slate-600 uppercase">Checking</span>
+                    </div>
+                    <p class="text-[10px] font-bold text-slate-500 leading-snug">नए जॉब और अपडेट्स का तुरंत अलर्ट पाने के लिए सब्सक्राइब करें।</p>
+                    <button id="btnSubscribePushAlerts" onclick="window.triggerPlatformPushSubscription()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs py-2 rounded-xl shadow-sm transition-all">📢 Subscribe Now</button>
                 </div>
-                <div class="text-sm font-medium mt-2">${document.getElementById('cDesc').value.trim()}</div>`,
-            approvalStatus: "Pending", 
-            timestamp: Date.now()
-        });
-        window.spawnPremiumToastAlert("Sent", "🎉 समीक्षा हेतु एडमिन कतार में भेजा गया!", "success");
-    } catch(e) { alert(e.message); }
-};
 
-window.publishDirectAdminNode = async function() {
-    const editId = document.getElementById('adminTargetEditingId').value;
-    const postPayload = {
-        title: document.getElementById('aTitle').value.trim(),
-        authority: document.getElementById('aAuth').value.trim(),
-        type: document.getElementById('aType').value,
-        lastDate: document.getElementById('aLastDate').value.trim(),
-        description: `
-            <div class="p-4 bg-indigo-50/50 border rounded-xl my-4 text-xs font-bold text-slate-600">
-                <p>💰 Application Fee: ${document.getElementById('aFees').value.trim() || 'Review PDF'}</p>
-                <p class="mt-1">🎓 Eligibility Matrix: ${document.getElementById('aElig').value.trim() || 'Review Details'}</p>
+                <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-2 mb-2">Navigation Links</p>
+                <nav class="space-y-1">
+                    <button onclick="window.setJobFilter('All')" class="w-full flex items-center gap-3 px-4 py-2.5 bg-indigo-50 text-indigo-700 font-bold text-sm rounded-xl">💼 All Updates</button>
+                </nav>
+                <div class="pt-4 border-t px-2">
+                    <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">🧰 Useful Tools</p>
+                    <div id="publicPdfToolsListTargetStack" class="space-y-1"></div>
+                </div>
             </div>
-            <div class="text-sm font-medium mt-2">${document.getElementById('aDesc').value.trim()}</div>`,
-        approvalStatus: "Live"
-    };
+        </aside>
 
-    try {
-        if(editId) {
-            await updateDoc(doc(db, "jobs", editId), postPayload);
-            window.spawnPremiumToastAlert("Updated", "🚀 विज्ञापन सफलतापूर्वक अपडेट हो गया है!", "success");
-            window.clearAdminEditingFormFieldsState();
-        } else {
-            postPayload.timestamp = Date.now();
-            await addDoc(collection(db, "jobs"), postPayload);
-            window.spawnPremiumToastAlert("Live", "🚀 फ्रंटपेज पर लाइव हो चुका है!", "success");
-            window.clearAdminEditingFormFieldsState();
-        }
-    } catch(e) { window.spawnPremiumToastAlert("Error", e.message, "error"); }
-};
-
-window.triggerAdminPostEditSelectMode = function(id) {
-    const post = cachedJobsArray.find(j => j.id === id);
-    if(!post) return;
-    
-    document.getElementById('adminTargetEditingId').value = id;
-    document.getElementById('adminFormHeadlineLabel').innerText = "📝 Edit / Update Post Node";
-    document.getElementById('adminSubmitPrimaryActionBtn').innerText = "Update & Save Changes 💾";
-    document.getElementById('adminCancelEditNodeBtn').classList.remove('hidden');
-
-    document.getElementById('aTitle').value = post.title || "";
-    document.getElementById('aAuth').value = post.authority || "";
-    document.getElementById('aType').value = post.type || "Admit Crad";
-    document.getElementById('aLastDate').value = post.lastDate || "";
-    document.getElementById('aDesc').value = post.description || "";
-};
-
-window.clearAdminEditingFormFieldsState = function() {
-    document.getElementById('adminTargetEditingId').value = "";
-    document.getElementById('adminFormHeadlineLabel').innerText = "Create Direct Live Post Node";
-    document.getElementById('adminSubmitPrimaryActionBtn').innerText = "Publish Instantly Live ⚡";
-    document.getElementById('adminCancelEditNodeBtn').classList.add('hidden');
-    document.getElementById('aTitle').value = ""; document.getElementById('aAuth').value = "";
-    document.getElementById('aLastDate').value = ""; document.getElementById('aDesc').value = "";
-    document.getElementById('aFees').value = ""; document.getElementById('aElig').value = "";
-};
-
-window.executePublishNewToolNode = async function() {
-    const title = document.getElementById('toolTitle').value.trim();
-    const url = document.getElementById('toolUrl').value.trim();
-    if(!title || !url) return;
-    try {
-        await addDoc(collection(db, "pdf_tools"), { title, url, timestamp: Date.now() });
-        document.getElementById('toolTitle').value = ""; document.getElementById('toolUrl').value = "";
-        window.spawnPremiumToastAlert("Added", "Tool linked successfully!", "success");
-    } catch(e) { alert(e.message); }
-};
-
-window.executeRemoveSidebarToolNode = async function(id) {
-    if(!confirm("Erase this tool?")) return;
-    try {
-        await deleteDoc(doc(db, "pdf_tools", id));
-        window.spawnPremiumToastAlert("Removed", "Tool removed permanently.", "error");
-    } catch(e) { alert(e.message); }
-};
-
-window.approvePostItemNode = async function(id) {
-    try {
-        await updateDoc(doc(db, "jobs", id), { approvalStatus: "Live" });
-        window.spawnPremiumToastAlert("Approved", "विज्ञापन लाइव हो चुका है!", "success");
-    } catch(e) { alert(e.message); }
-};
-
-window.rejectPostItemNode = async function(id) {
-    try {
-        await deleteDoc(doc(db, "jobs", id));
-        window.spawnPremiumToastAlert("Removed", "विज्ञापन हटा दिया गया है।", "error");
-    } catch(e) { alert(e.message); }
-};
-
-// ==========================================
-// 📡 SYNC CHANNELS DATASTREAM LOOPS
-// ==========================================
-function startDatabaseListenersEngine() {
-    onSnapshot(collection(db, "jobs"), (snapshot) => {
-        cachedJobsArray = [];
-        let approvalQueueHTML = "";
-        let editablePostsHTML = "";
-        
-        snapshot.forEach(docSnap => {
-            const data = docSnap.data();
-            const id = docSnap.id;
-            cachedJobsArray.push({ id, ...data });
-            
-            if(data.approvalStatus === 'Pending') {
-                approvalQueueHTML += `
-                    <div class="p-3 bg-white border rounded-xl space-y-2 text-xs shadow-sm">
-                        <h4 class="font-bold text-slate-800 text-[11px] leading-tight">${data.title}</h4>
-                        <div class="flex gap-2">
-                            <button onclick="window.approvePostItemNode('${id}')" class="bg-emerald-600 text-white px-2.5 py-1 rounded font-bold text-[10px]">Approve</button>
-                            <button onclick="window.rejectPostItemNode('${id}')" class="bg-rose-600 text-white px-2.5 py-1 rounded font-bold text-[10px]">Reject</button>
+        <div class="flex-1 flex flex-col w-full min-w-0">
+            <div class="p-4 lg:p-8 max-w-[1400px] w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                <div id="coreContentLayoutViewRegion" class="lg:col-span-12 space-y-6 min-w-0 w-full">
+                    <div id="mainFeedRouterBlock" class="space-y-6">
+                        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white/40 p-4 rounded-2xl border border-white/60">
+                            <div>
+                                <h2 class="text-xl lg:text-2xl font-black text-slate-900 tracking-tight">Sarkari Yojana, Jobs & Results</h2>
+                                <p class="text-xs font-semibold text-slate-500">Real-time verification portal dashboard stream.</p>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5" id="categoryFilterContainer"></div>
                         </div>
-                    </div>`;
-            } else if(data.approvalStatus === 'Live') {
-                editablePostsHTML += `
-                    <div class="p-2.5 bg-slate-50 hover:bg-slate-100 border rounded-xl flex items-center justify-between gap-2 text-xs">
-                        <span class="font-bold text-slate-700 truncate flex-1">${data.title}</span>
-                        <button onclick="window.triggerAdminPostEditSelectMode('${id}')" class="bg-indigo-600 text-white px-3 py-1 rounded font-bold text-[10px]">Edit 📝</button>
-                    </div>`;
-            }
-        });
-        
-        const qBox = document.getElementById('adminApprovalQueueTargetList');
-        if(qBox) qBox.innerHTML = approvalQueueHTML || `<p class="text-xs font-bold text-slate-400 text-center py-4">कोई लंबित पोस्ट नहीं है।</p>`;
-        const eBox = document.getElementById('adminLivePostsListEditableTargetStack');
-        if(eBox) eBox.innerHTML = editablePostsHTML || `<p class="text-xs font-bold text-slate-400 text-center py-4">कोई लाइव पोस्ट नहीं है।</p>`;
-    });
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 gap-6" id="publicCardsFeed"></div>
+                    </div>
 
-    onSnapshot(collection(db, "pdf_tools"), (snapshot) => {
-        const container = document.getElementById('publicPdfToolsListTargetStack');
-        const adminToolsContainer = document.getElementById('adminLiveToolsListDeleteStack');
-        let html = ""; let adminHtml = "";
-        
-        snapshot.forEach(d => {
-            const id = d.id; const t = d.data();
-            html += `<a href="${t.url}" target="_blank" class="block w-full text-left bg-slate-50 hover:bg-purple-50 text-slate-700 text-xs font-bold p-2.5 rounded-xl border truncate">🛠️ ${t.title}</a>`;
-            adminHtml += `
-                <div class="p-2 bg-slate-50 border rounded-xl flex items-center justify-between gap-2 text-xs">
-                    <span class="font-bold text-slate-700 truncate flex-1">${t.title}</span>
-                    <button onclick="window.executeRemoveSidebarToolNode('${id}')" class="text-rose-600 font-bold hover:underline text-[11px]">Delete</button>
-                </div>`;
-        });
-        if(container) container.innerHTML = html || `<p class="text-[10px] font-bold text-slate-400 px-2">No tools active.</p>`;
-        if(adminToolsContainer) adminToolsContainer.innerHTML = adminHtml || `<p class="text-xs text-slate-400 text-center py-2">No tools created.</p>`;
-    });
-}
+                    <div id="postDetailView" class="hidden premium-glass-card p-6 lg:p-8 bg-white w-full">
+                        <button onclick="window.performSinglePageRoutingView('front')" class="mb-6 inline-flex items-center gap-2 text-xs font-bold text-indigo-600 bg-indigo-50 border border-indigo-100 px-4 py-2 rounded-xl">← मुख्य पृष्ठ (Back to Home)</button>
+                        <div id="detailViewContentPayload" class="prose max-w-none"></div>
+                    </div>
+                </div>
 
-window.addEventListener('DOMContentLoaded', startDatabaseListenersEngine);
-signOut(auth); // Clean runtime cache traces upon reload initialization loops
+                <aside id="subPageRightSidebarNode" class="hidden lg:col-span-4 space-y-4 w-full">
+                    <div class="premium-glass-card p-5 space-y-4 bg-white/90 border-slate-200">
+                        <div class="border-b pb-2"><h4 class="text-xs font-black uppercase text-slate-800 tracking-wider">🔎 Search & Filters Sidebar</h4></div>
+                        <div class="relative">
+                            <input type="text" id="sidebarLiveSearchBox" oninput="window.executeSidebarLiveSearchFilters()" class="w-full bg-slate-50 border text-xs p-2.5 pl-8 rounded-xl outline-none font-semibold text-slate-800" placeholder="Search keywords...">
+                            <span class="absolute left-2.5 top-3 text-slate-400 text-xs">🔍</span>
+                        </div>
+                        <div class="pt-2">
+                            <p class="text-[11px] font-bold text-slate-400 mb-2 uppercase">⚡ Top Live Advertisements</p>
+                            <div id="rightSidebarLiveCollectionStack" class="space-y-2"></div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </div>
+
+    <div id="authModalOverlay" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-all duration-300">
+        <div class="bg-white max-w-sm w-full m-4 p-6 rounded-3xl shadow-2xl relative border border-slate-100">
+            <button onclick="window.toggleAuthOverlay(false)" class="absolute top-4 right-4 text-slate-400 font-bold hover:text-slate-600 text-sm p-1">✕</button>
+            <div id="authMainFormGroupBlock">
+                <div class="flex border-b text-sm font-bold mb-4">
+                    <button id="tabLogin" onclick="window.switchAuthForm('login')" class="flex-1 pb-2 border-b-2 border-indigo-600 text-indigo-600">लॉगिन</button>
+                    <button id="tabReg" onclick="window.switchAuthForm('reg')" class="flex-1 pb-2 text-slate-400">रजिस्ट्रेशन</button>
+                </div>
+                <div class="space-y-4 text-slate-900">
+                    <div id="regNameBlock" class="hidden"><label class="block text-xs font-bold text-slate-600 mb-1">पूरा नाम</label><input type="text" id="usrName" class="w-full bg-slate-50 border text-sm p-3 rounded-xl outline-none"></div>
+                    <div><label class="block text-xs font-bold text-slate-600 mb-1">ईमेल</label><input type="email" id="usrEmail" class="w-full bg-slate-50 border text-sm p-3 rounded-xl outline-none"></div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">पासवर्ड</label>
+                        <div class="relative">
+                            <input type="password" id="usrPass" class="w-full bg-slate-50 border text-sm p-3 pr-10 rounded-xl outline-none font-mono">
+                            <button type="button" onclick="window.togglePasswordRevealNode()" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 font-bold text-xs">👁️</button>
+                        </div>
+                    </div>
+                    <button onclick="window.executeAuthActionPipeline()" class="w-full bg-indigo-600 text-white font-bold text-sm py-3.5 rounded-xl shadow-md">प्रवेश / लॉग इन करें ⚡</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="premiumToastNotification" class="fixed top-5 left-1/2 transform -translate-x-1/2 z-[100] max-w-sm w-full mx-4 bg-white border p-4 rounded-2xl shadow-2xl flex items-start gap-3 opacity-0 pointer-events-none transition-all duration-300">
+        <div id="toastIconSlot" class="text-lg">✨</div>
+        <div class="flex-1">
+            <h4 id="toastTitleSlot" class="text-xs font-black uppercase text-slate-900">System Notify</h4>
+            <p id="toastMessageSlot" class="text-xs font-semibold text-slate-600 mt-0.5"></p>
+        </div>
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
