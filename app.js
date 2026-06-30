@@ -1,142 +1,233 @@
-<!DOCTYPE html>
-<html lang="hi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LuminaEdu | Premium Career Hub</title>
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getFirestore, collection, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js";
+
+// 🚨 LIVE FIREBASE CONFIGURATION MATRIX
+const firebaseConfig = {
+  apiKey: "AIzaSyDEXmjIN8w2s2uXk0FTzC7ri4HhLetzV4E",
+  authDomain: "luminaedu-ai786.firebaseapp.com",
+  projectId: "luminaedu-ai786",
+  storageBucket: "luminaedu-ai786.firebasestorage.app",
+  messagingSenderId: "35041307389",
+  appId: "1:35041307389:web:846f981017df7ad1382c94"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+let messaging = null;
+try { messaging = getMessaging(app); } catch (e) { }
+
+let selectedCategoryFilter = 'All';
+let cachedJobsArray = [];
+let activeDynamicCategoriesList = [
+    { name: 'All', colorClass: 'bg-white text-slate-800 border-slate-200 shadow-sm font-bold', hexColor: '#4f46e5' },
+    { name: 'Admit Crad', colorClass: 'bg-orange-50 text-orange-700 border-orange-200', hexColor: '#ea580c' },
+    { name: 'Result', colorClass: 'bg-emerald-50 text-emerald-700 border-emerald-200', hexColor: '#059669' },
+    { name: 'Sarkari Naukri', colorClass: 'bg-blue-50 text-blue-700 border-blue-200', hexColor: '#2563eb' },
+    { name: 'Blogs', colorClass: 'bg-pink-50 text-pink-700 border-pink-200', hexColor: '#db2777' },
+    { name: 'Sarkari Yojna', colorClass: 'bg-yellow-50 text-yellow-700 border-yellow-200', hexColor: '#ca8a04' }
+];
+
+// ==========================================
+// 🚀 DYNAMIC SINGLE PAGE LAYOUT ROUTER
+// ==========================================
+window.performSinglePageRoutingView = function(targetViewMode, postId = null) {
+    const feedView = document.getElementById('mainFeedRouterBlock');
+    const detailView = document.getElementById('postDetailView');
+    const leftSidebar = document.getElementById('mainLeftSidebarNode');
+    const rightSidebar = document.getElementById('subPageRightSidebarNode');
+    const mainContentRegion = document.getElementById('coreContentLayoutViewRegion');
+
+    feedView?.classList.add('hidden'); detailView?.classList.add('hidden');
+    leftSidebar?.classList.add('hidden'); rightSidebar?.classList.add('hidden');
+    if(mainContentRegion) mainContentRegion.className = "lg:col-span-12 space-y-6 min-w-0 w-full";
+
+    if(targetViewMode === 'detail') {
+        detailView?.classList.remove('hidden');
+        rightSidebar?.classList.remove('hidden');
+        if(mainContentRegion) mainContentRegion.className = "lg:col-span-8 space-y-6 min-w-0 w-full";
+        window.renderPostDeepContentView(postId);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+        leftSidebar?.classList.remove('hidden');
+        feedView?.classList.remove('hidden');
+        window.executeUIRenderPipeline();
+    }
+};
+
+window.toggleAuthOverlay = function(show) {
+    const overlay = document.getElementById('authModalOverlay');
+    if(show) { overlay?.classList.remove('hidden'); setTimeout(() => { overlay?.classList.remove('opacity-0'); }, 10); }
+    else { overlay?.classList.add('opacity-0'); setTimeout(() => { overlay?.classList.add('hidden'); }, 300); }
+};
+
+window.switchAuthForm = function(mode) {
+    document.getElementById('regNameBlock')?.classList.toggle('hidden', mode === 'login');
+};
+
+window.togglePasswordRevealNode = function() {
+    const element = document.getElementById('usrPass');
+    if(element) element.type = element.type === 'password' ? 'text' : 'password';
+};
+
+window.spawnPremiumToastAlert = function(title, message, type) {
+    const toast = document.getElementById('premiumToastNotification');
+    if(!toast) return;
+    document.getElementById('toastTitleSlot').innerText = title;
+    document.getElementById('toastMessageSlot').innerText = message;
+    toast.className = `fixed top-5 left-1/2 transform -translate-x-1/2 z-[100] max-w-sm w-full mx-4 bg-white border p-4 rounded-2xl shadow-2xl flex items-start gap-3 transition-all duration-300 opacity-100 translate-y-0 ${type==='error'?'border-rose-200 bg-rose-50':'border-emerald-200 bg-emerald-50'}`;
+    setTimeout(() => { toast.classList.add('opacity-0','pointer-events-none'); }, 4000);
+};
+
+// ==========================================
+// 🔐 AUTH REDIRECTION LAYER TO DASHBOARD
+// ==========================================
+window.executeAuthActionPipeline = async function() {
+    const email = document.getElementById('usrEmail').value.trim();
+    const password = document.getElementById('usrPass').value.trim();
+
+    try {
+        await signInWithEmailAndPassword(auth, email, password);
+        sessionStorage.setItem("lumina_session_auth", "valid");
+        window.spawnPremiumToastAlert("Access Granted", "🎉 लॉगिन सफल! डैशबोर्ड खुल रहा है...", "success");
+        setTimeout(() => { window.location.href = "dashboard/admin.html"; }, 1200);
+    } catch(err) { 
+        window.spawnPremiumToastAlert("Error", "लॉगिन विफल! कृपया एडमिन क्रेडेंशियल्स जांचें।", "error"); 
+    }
+};
+
+// ==========================================
+// 📊 REAL-TIME CORE UI RENDERING ENGINE
+// ==========================================
+window.setJobFilter = function(categoryName) {
+    selectedCategoryFilter = categoryName;
+    renderDynamicCategoryChips();
+    window.executeUIRenderPipeline();
+};
+
+function renderDynamicCategoryChips() {
+    const box = document.getElementById('categoryFilterContainer');
+    if(!box) return;
+    box.innerHTML = activeDynamicCategoriesList.map(b => {
+        let isActive = selectedCategoryFilter.toLowerCase() === b.name.toLowerCase();
+        let currentStyle = isActive ? 'bg-indigo-600 text-white font-bold border-indigo-600 shadow-md' : b.colorClass;
+        return `<button onclick="window.setJobFilter('${b.name}')" class="px-3.5 py-1.5 text-xs font-bold rounded-xl border transition-all duration-150 ${currentStyle}">${b.name}</button>`;
+    }).join('');
+}
+
+window.executeUIRenderPipeline = function() {
+    const feed = document.getElementById('publicCardsFeed');
+    if(!feed) return;
     
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Noto+Sans+Devanagari:wght@400;600;700;800&display=swap" rel="stylesheet">
+    // Filter only approved "Live" posts for the front grid view
+    const filtered = cachedJobsArray.filter(j => {
+        if(j.approvalStatus !== 'Live') return false;
+        if(selectedCategoryFilter === 'All') return true;
+        return j.type.toLowerCase() === selectedCategoryFilter.toLowerCase();
+    });
+
+    if(filtered.length === 0) {
+        feed.innerHTML = `<div class="col-span-full text-center py-12 text-xs font-bold text-slate-400 bg-white/50 border border-dashed p-6 rounded-xl">इस श्रेणी में कोई सक्रिय पोस्ट उपलब्ध नहीं है।</div>`;
+        return;
+    }
+
+    feed.innerHTML = filtered.map(j => {
+        const catObj = activeDynamicCategoriesList.find(c => c.name.toLowerCase() === j.type.toLowerCase());
+        let badgeColorHex = catObj ? catObj.hexColor : '#6366f1';
+        let isNewAd = (Date.now() - (j.timestamp || 0)) < (2 * 24 * 60 * 60 * 1000);
+        let blinkBadge = isNewAd ? `<span class="blinking-new-badge ml-2 text-[10px] font-black px-1.5 py-0.5 rounded bg-rose-100 text-rose-700 border border-rose-200 tracking-wide">NEW</span>` : "";
+
+        return `
+            <div class="premium-glass-card p-5 flex flex-col justify-between bg-white">
+                <div>
+                    <div class="flex justify-between items-center mb-2.5">
+                        <span style="background-color: ${badgeColorHex}15; color: ${badgeColorHex}; border-color: ${badgeColorHex}30;" class="text-[10px] font-black px-2.5 py-0.5 rounded-md uppercase border">${j.type}</span>
+                        <span class="text-[11px] font-bold text-slate-400">📅 ${j.lastDate || 'Active'}</span>
+                    </div>
+                    <h3 class="font-extrabold text-slate-800 text-sm lg:text-base mb-1.5 leading-snug tracking-tight">${j.title} ${blinkBadge}</h3>
+                    <p class="text-[11px] text-slate-400 font-bold">🏛️ Board: ${j.authority}</p>
+                </div>
+                <button onclick="window.performSinglePageRoutingView('detail', '${j.id}')" class="w-full bg-slate-50 hover:bg-indigo-50 border text-indigo-600 font-bold text-xs text-center py-2.5 rounded-xl mt-4 transition-all shadow-sm">View Complete Details ↗</button>
+            </div>
+        `;
+    }).join('');
+};
+
+window.executeSidebarLiveSearchFilters = function() {
+    const query = document.getElementById('sidebarLiveSearchBox')?.value.trim().toLowerCase() || "";
+    const stack = document.getElementById('rightSidebarLiveCollectionStack');
+    if(!stack) return;
+    const filteredStack = cachedJobsArray.filter(j => j.approvalStatus === 'Live' && (j.title.toLowerCase().includes(query) || j.authority.toLowerCase().includes(query)));
+    stack.innerHTML = filteredStack.slice(0, 6).map(j => `
+        <div onclick="window.performSinglePageRoutingView('detail', '${j.id}')" class="bg-white hover:bg-indigo-50 p-2.5 rounded-xl border cursor-pointer text-xs shadow-sm">
+            <h5 class="font-bold text-slate-800 truncate">${j.title}</h5>
+        </div>
+    `).join('');
+};
+
+window.renderPostDeepContentView = function(postId) {
+    const payload = document.getElementById('detailViewContentPayload');
+    const matched = cachedJobsArray.find(item => item.id === postId);
+    if(!matched || !payload) return;
+    payload.innerHTML = matched.description || 'No data uploaded.';
+};
+
+window.triggerPlatformPushSubscription = async function() {
+    if (!messaging) return;
+    try {
+        const permission = await Notification.requestPermission();
+        if (permission === 'granted') {
+            const token = await getToken(messaging, { vapidKey: 'YOUR_PUBLIC_VAPID_KEY_HERE' });
+            if (token) {
+                await setDoc(doc(db, "subscribers", token), { subscribedAt: Date.now() });
+                window.spawnPremiumToastAlert("Subscribed", "🎉 Notification turned on!", "success");
+            }
+        }
+    } catch (e) { }
+};
+
+function checkCurrentSubscriptionState() {
+    if ('Notification' in window && Notification.permission === 'granted') {
+        const b = document.getElementById('pushStatusBadge');
+        if(b) b.innerText = "Active";
+    }
+}
+
+// ==========================================
+// 📡 APP BOOTSTRAP INITIAL REAL-TIME RECONCILE
+// ==========================================
+function bootstrapApplicationEngine() {
+    renderDynamicCategoryChips();
+    checkCurrentSubscriptionState();
     
-    <style>
-        body { 
-            font-family: 'Plus Jakarta Sans', 'Noto Sans Devanagari', sans-serif; 
-            background: linear-gradient(135deg, #e0f2fe 0%, #fae8ff 100%);
-            color: #1e293b;
-            background-attachment: fixed;
-        }
-        .premium-glass-card {
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            border-radius: 1.25rem;
-            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-        }
-        .premium-glass-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 15px 30px -5px rgba(99, 102, 241, 0.15);
-        }
-        @keyframes blinkMode { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-        .blinking-new-badge { animation: blinkMode 1.2s infinite; }
-    </style>
-</head>
-<body class="min-h-screen flex flex-col">
+    // Clear storage cache traces safely on runtime loading sequence
+    sessionStorage.removeItem("lumina_session_auth"); 
+    signOut(auth);
+    window.navigateToHub = window.performSinglePageRoutingView;
 
-    <header class="w-full bg-white/70 backdrop-blur-md border-b border-slate-200/60 px-4 lg:px-10 py-3.5 flex items-center justify-between shadow-sm shrink-0">
-        <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.reload()">
-            <div class="bg-indigo-600 text-white font-black p-2.5 rounded-xl text-lg shadow-md">LE</div>
-            <h1 class="text-xl md:text-2xl font-black text-slate-900 tracking-tight">Lumina<span class="text-indigo-600">Edu</span></h1>
-        </div>
-        <div class="flex items-center gap-3">
-            <button id="authTriggerActionBtn" onclick="window.toggleAuthOverlay(true)" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs md:text-sm px-5 py-2.5 rounded-xl shadow-md transition-all whitespace-nowrap">Contributor Login 🚀</button>
-        </div>
-    </header>
+    // Real-Time Database Connection Stream
+    onSnapshot(collection(db, "jobs"), (snapshot) => {
+        cachedJobsArray = [];
+        snapshot.forEach(docSnap => { 
+            cachedJobsArray.push({ id: docSnap.id, ...docSnap.data() }); 
+        });
+        window.executeUIRenderPipeline();
+        window.executeSidebarLiveSearchFilters();
+    });
 
-    <div class="flex-1 w-full flex flex-col md:flex-row min-h-0">
-        <aside id="mainLeftSidebarNode" class="w-full md:w-64 bg-white/80 backdrop-blur-md border-r border-slate-200/60 p-5 flex flex-col justify-between shrink-0">
-            <div class="space-y-6">
-                <div class="mb-4 bg-indigo-50/80 border border-indigo-100 p-3.5 rounded-2xl space-y-2">
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs font-black text-indigo-950 uppercase tracking-wide flex items-center gap-1.5">🔔 Push Alerts</span>
-                        <span id="pushStatusBadge" class="text-[9px] font-black px-1.5 py-0.5 rounded-md bg-slate-200 text-slate-600 uppercase">Checking</span>
-                    </div>
-                    <p class="text-[10px] font-bold text-slate-500 leading-snug">नए जॉब और अपडेट्स का तुरंत अलर्ट पाने के लिए सब्सक्राइब करें।</p>
-                    <button id="btnSubscribePushAlerts" onclick="window.triggerPlatformPushSubscription()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs py-2 rounded-xl shadow-sm transition-all">📢 Subscribe Now</button>
-                </div>
+    onSnapshot(collection(db, "pdf_tools"), (snapshot) => {
+        const container = document.getElementById('publicPdfToolsListTargetStack');
+        if(!container) return;
+        let html = "";
+        snapshot.forEach(d => {
+            const t = d.data();
+            html += `<a href="${t.url}" target="_blank" class="block w-full text-left bg-slate-50 hover:bg-purple-50 text-slate-700 text-xs font-bold p-2.5 rounded-xl border truncate transition-all">🛠️ ${t.title}</a>`;
+        });
+        container.innerHTML = html || `<p class="text-[10px] font-bold text-slate-400 px-2">No tools active.</p>`;
+    });
+}
 
-                <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-2 mb-2">Navigation Links</p>
-                <nav class="space-y-1">
-                    <button onclick="window.setJobFilter('All')" class="w-full flex items-center gap-3 px-4 py-2.5 bg-indigo-50 text-indigo-700 font-bold text-sm rounded-xl">💼 All Updates</button>
-                </nav>
-                <div class="pt-4 border-t px-2">
-                    <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">🧰 Useful Tools</p>
-                    <div id="publicPdfToolsListTargetStack" class="space-y-1"></div>
-                </div>
-            </div>
-        </aside>
-
-        <div class="flex-1 flex flex-col w-full min-w-0">
-            <div class="p-4 lg:p-8 max-w-[1400px] w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                <div id="coreContentLayoutViewRegion" class="lg:col-span-12 space-y-6 min-w-0 w-full">
-                    <div id="mainFeedRouterBlock" class="space-y-6">
-                        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white/40 p-4 rounded-2xl border border-white/60">
-                            <div>
-                                <h2 class="text-xl lg:text-2xl font-black text-slate-900 tracking-tight">Sarkari Yojana, Jobs & Results</h2>
-                                <p class="text-xs font-semibold text-slate-500">Real-time verification portal dashboard stream.</p>
-                            </div>
-                            <div class="flex flex-wrap gap-1.5" id="categoryFilterContainer"></div>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 gap-6" id="publicCardsFeed"></div>
-                    </div>
-
-                    <div id="postDetailView" class="hidden premium-glass-card p-6 lg:p-8 bg-white w-full">
-                        <button onclick="window.performSinglePageRoutingView('front')" class="mb-6 inline-flex items-center gap-2 text-xs font-bold text-indigo-600 bg-indigo-50 border border-indigo-100 px-4 py-2 rounded-xl">← मुख्य पृष्ठ (Back to Home)</button>
-                        <div id="detailViewContentPayload" class="prose max-w-none"></div>
-                    </div>
-                </div>
-
-                <aside id="subPageRightSidebarNode" class="hidden lg:col-span-4 space-y-4 w-full">
-                    <div class="premium-glass-card p-5 space-y-4 bg-white/90 border-slate-200">
-                        <div class="border-b pb-2"><h4 class="text-xs font-black uppercase text-slate-800 tracking-wider">🔎 Search & Filters Sidebar</h4></div>
-                        <div class="relative">
-                            <input type="text" id="sidebarLiveSearchBox" oninput="window.executeSidebarLiveSearchFilters()" class="w-full bg-slate-50 border text-xs p-2.5 pl-8 rounded-xl outline-none font-semibold text-slate-800" placeholder="Search keywords...">
-                            <span class="absolute left-2.5 top-3 text-slate-400 text-xs">🔍</span>
-                        </div>
-                        <div class="pt-2">
-                            <p class="text-[11px] font-bold text-slate-400 mb-2 uppercase">⚡ Top Live Advertisements</p>
-                            <div id="rightSidebarLiveCollectionStack" class="space-y-2"></div>
-                        </div>
-                    </div>
-                </aside>
-            </div>
-        </div>
-    </div>
-
-    <div id="authModalOverlay" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-all duration-300">
-        <div class="bg-white max-w-sm w-full m-4 p-6 rounded-3xl shadow-2xl relative border border-slate-100">
-            <button onclick="window.toggleAuthOverlay(false)" class="absolute top-4 right-4 text-slate-400 font-bold hover:text-slate-600 text-sm p-1">✕</button>
-            <div id="authMainFormGroupBlock">
-                <div class="flex border-b text-sm font-bold mb-4">
-                    <button id="tabLogin" onclick="window.switchAuthForm('login')" class="flex-1 pb-2 border-b-2 border-indigo-600 text-indigo-600">लॉगिन</button>
-                    <button id="tabReg" onclick="window.switchAuthForm('reg')" class="flex-1 pb-2 text-slate-400">रजिस्ट्रेशन</button>
-                </div>
-                <div class="space-y-4 text-slate-900">
-                    <div id="regNameBlock" class="hidden"><label class="block text-xs font-bold text-slate-600 mb-1">पूरा नाम</label><input type="text" id="usrName" class="w-full bg-slate-50 border text-sm p-3 rounded-xl outline-none"></div>
-                    <div><label class="block text-xs font-bold text-slate-600 mb-1">ईमेल</label><input type="email" id="usrEmail" class="w-full bg-slate-50 border text-sm p-3 rounded-xl outline-none"></div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-600 mb-1">पासवर्ड</label>
-                        <div class="relative">
-                            <input type="password" id="usrPass" class="w-full bg-slate-50 border text-sm p-3 pr-10 rounded-xl outline-none font-mono">
-                            <button type="button" onclick="window.togglePasswordRevealNode()" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 font-bold text-xs">👁️</button>
-                        </div>
-                    </div>
-                    <button onclick="window.executeAuthActionPipeline()" class="w-full bg-indigo-600 text-white font-bold text-sm py-3.5 rounded-xl shadow-md">प्रवेश / लॉग इन करें ⚡</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="premiumToastNotification" class="fixed top-5 left-1/2 transform -translate-x-1/2 z-[100] max-w-sm w-full mx-4 bg-white border p-4 rounded-2xl shadow-2xl flex items-start gap-3 opacity-0 pointer-events-none transition-all duration-300">
-        <div id="toastIconSlot" class="text-lg">✨</div>
-        <div class="flex-1">
-            <h4 id="toastTitleSlot" class="text-xs font-black uppercase text-slate-900">System Notify</h4>
-            <p id="toastMessageSlot" class="text-xs font-semibold text-slate-600 mt-0.5"></p>
-        </div>
-    </div>
-
-    <script type="module" src="app.js"></script>
-</body>
-</html>
+window.addEventListener('DOMContentLoaded', bootstrapApplicationEngine);
