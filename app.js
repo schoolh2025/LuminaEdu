@@ -3,6 +3,7 @@ import { getFirestore, collection, addDoc, doc, setDoc, onSnapshot, updateDoc, d
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js";
 
+// 🚨 FIREBASE CONDUIT CONNECTOR CONFIG MATRIX
 const firebaseConfig = {
   apiKey: "AIzaSyDEXmjIN8w2s2uXk0FTzC7ri4HhLetzV4E",
   authDomain: "luminaedu-ai786.firebaseapp.com",
@@ -21,7 +22,6 @@ try { messaging = getMessaging(app); } catch (e) { }
 
 let selectedCategoryFilter = 'All';
 let cachedJobsArray = [];
-let layoutGridColumnsSetting = 'lg:grid-cols-3'; 
 let activeDynamicCategoriesList = [
     { name: 'All', colorClass: 'bg-white text-slate-800 border-slate-200 shadow-sm font-bold', hexColor: '#4f46e5' },
     { name: 'Admit Crad', colorClass: 'bg-orange-50 text-orange-700 border-orange-200', hexColor: '#ea580c' },
@@ -32,7 +32,7 @@ let activeDynamicCategoriesList = [
 ];
 
 // ==========================================
-// 🌟 SINGLE-PAGE ROUTING WINDOW SCOPE ENGINE
+// 🔐 SINGLE-PAGE ROUTING GATEWAY SECURITY DESK
 // ==========================================
 window.performSinglePageRoutingView = function(targetViewMode, postId = null) {
     const feedView = document.getElementById('mainFeedRouterBlock');
@@ -43,10 +43,10 @@ window.performSinglePageRoutingView = function(targetViewMode, postId = null) {
     const contributorView = document.getElementById('contributorDashboardView');
     const adminView = document.getElementById('adminMasterConsoleView');
     
-    // 🔐 REFRESH AUTH SECURITY GATEKEEPER CHECK
-    const currentUser = auth.currentUser;
-    if ((targetViewMode === 'admin' || targetViewMode === 'contributor') && !currentUser) {
-        window.spawnPremiumToastAlert("Security Refused", "कृपया पहले लॉगिन पैनल से सत्यापन पूर्ण करें।", "error");
+    // Strict enforcement gateway lock checks
+    const sessionToken = sessionStorage.getItem("platform_active_session");
+    if ((targetViewMode === 'admin' || targetViewMode === 'contributor') && !sessionToken) {
+        window.spawnPremiumToastAlert("Access Denied", "सुरक्षा कारणों से रिफ्रेश करने पर दोबारा लॉगिन करना अनिवार्य है।", "error");
         window.toggleAuthOverlay(true);
         return;
     }
@@ -78,6 +78,7 @@ window.performSinglePageRoutingView = function(targetViewMode, postId = null) {
 };
 
 window.performSecurePlatformLogout = async function() {
+    sessionStorage.clear();
     await signOut(auth);
     window.location.reload();
 };
@@ -115,7 +116,7 @@ window.spawnPremiumToastAlert = function(title, message, type) {
 };
 
 // ==========================================
-// 🎨 INDUSTRIAL RICH TEXT TOOLBAR INJECTOR
+// 🎨 INDUSTRIAL UNIVERSAL TEXT TOOLBAR ENGINE
 // ==========================================
 window.applyRichFormatting = function(textareaId, mode) {
     const txtArea = document.getElementById(textareaId);
@@ -126,16 +127,16 @@ window.applyRichFormatting = function(textareaId, mode) {
     let replacement = "";
     
     if(mode === 'link') {
-        const url = prompt("Enter URL link path:", "https://");
+        const url = prompt("Enter complete URL:", "https://");
         if(url) replacement = `<a href="${url}" target="_blank" style="color:#2563eb;text-decoration:underline;font-weight:bold;">${selectedText || 'Link Text'}</a>`;
     } else if(mode === 'img') {
-        const imgUrl = prompt("Enter complete image asset URL:", "https://");
-        if(imgUrl) replacement = `<img src="${imgUrl}" class="max-w-full h-auto rounded-xl my-4 shadow-sm border block mx-auto" alt="Inline Media Visual">`;
+        const imgUrl = prompt("Enter asset Image URL link:", "https://");
+        if(imgUrl) replacement = `<img src="${imgUrl}" class="max-w-full h-auto rounded-xl my-4 shadow-sm border block mx-auto" alt="Embedded Asset Content">`;
     } else if(mode === 'color') {
-        const hex = prompt("Enter Hex Color code:", "#ff0000");
+        const hex = prompt("Enter text Hex Color Code:", "#ff0000");
         if(hex) replacement = `<span style="color:${hex};font-weight:bold;">${selectedText || 'Colored text'}</span>`;
     } else if(mode === 'size') {
-        const size = prompt("Enter text size parameters (e.g. 14px, 18px, 24px):", "16px");
+        const size = prompt("Enter precise font size parameters (e.g. 14px, 18px, 24px):", "16px");
         if(size) replacement = `<span style="font-size:${size};font-weight:800;line-height:1.4;">${selectedText || 'Sized text'}</span>`;
     }
     
@@ -143,7 +144,7 @@ window.applyRichFormatting = function(textareaId, mode) {
 };
 
 // ==========================================
-// ⚙️ AUTHENTICATION CHANNELS PIPELINES
+// 🔐 IDENTITY SECURE AUTH STAGES
 // ==========================================
 window.executeAuthActionPipeline = async function() {
     const email = document.getElementById('usrEmail').value.trim();
@@ -155,6 +156,7 @@ window.executeAuthActionPipeline = async function() {
         try {
             const credential = await createUserWithEmailAndPassword(auth, email, password);
             await setDoc(doc(db, "users", credential.user.uid), { name: fullname, role: "UserContributor", email: email });
+            sessionStorage.setItem("platform_active_session", "true");
             window.spawnPremiumToastAlert("Success", "🎉 पंजीकरण सफल!", "success");
             window.toggleAuthOverlay(false);
             window.performSinglePageRoutingView('contributor');
@@ -162,6 +164,7 @@ window.executeAuthActionPipeline = async function() {
     } else {
         try {
             const credential = await signInWithEmailAndPassword(auth, email, password);
+            sessionStorage.setItem("platform_active_session", "true");
             window.spawnPremiumToastAlert("Access Granted", "🎉 लॉगिन सफल!", "success");
             window.toggleAuthOverlay(false);
             
@@ -181,13 +184,13 @@ window.executeForgotRecoveryPipeline = async function() {
     const email = document.getElementById('forgotUsrEmail').value.trim();
     try {
         await sendPasswordResetEmail(auth, email);
-        window.spawnPremiumToastAlert("Dispatched", "🔑 Recovery mail sent.", "success");
+        window.spawnPremiumToastAlert("Dispatched", "🔑 Password reset mail path sent.", "success");
         window.toggleAuthOverlay(false);
     } catch(err) { window.spawnPremiumToastAlert("Error", err.message, "error"); }
 };
 
 // ==========================================
-// DESK CONTROLLERS & DATA WORKSPACE LOGIC
+// ✍️ DATA SUBMISSIONS WORKSPACE CHANNELS
 // ==========================================
 window.submitProposalPipeline = async function() {
     try {
@@ -278,27 +281,30 @@ window.executePublishNewToolNode = async function() {
 };
 
 window.executeRemoveSidebarToolNode = async function(id) {
-    if(!confirm("Erase this sidebar tool connection link node?")) return;
+    if(!confirm("Erase this linked tool node completely?")) return;
     try {
         await deleteDoc(doc(db, "pdf_tools", id));
-        window.spawnPremiumToastAlert("Removed", "Tool removed from system.", "error");
+        window.spawnPremiumToastAlert("Removed", "Tool removed permanently.", "error");
     } catch(e) { alert(e.message); }
 };
 
 window.approvePostItemNode = async function(id) {
     try {
         await updateDoc(doc(db, "jobs", id), { approvalStatus: "Live" });
-        window.spawnPremiumToastAlert("Approved", "पोस्ट लाइव हो गई है!", "success");
+        window.spawnPremiumToastAlert("Approved", "पोस्ट फ्रंटपेज पर लाइव कर दी गई है!", "success");
     } catch(e) { alert(e.message); }
 };
 
 window.rejectPostItemNode = async function(id) {
     try {
         await deleteDoc(doc(db, "jobs", id));
-        window.spawnPremiumToastAlert("Removed", "हटा दिया गया है।", "error");
+        window.spawnPremiumToastAlert("Removed", "विज्ञापन कतार से खारिज कर दिया गया है।", "error");
     } catch(e) { alert(e.message); }
 };
 
+// ==========================================
+// 🚀 ENGINE RENDERING UI MATRIX PORTS
+// ==========================================
 window.setJobFilter = function(categoryName) {
     selectedCategoryFilter = categoryName;
     renderDynamicCategoryChips();
@@ -365,7 +371,7 @@ window.renderPostDeepContentView = function(postId) {
     const payload = document.getElementById('detailViewContentPayload');
     const matched = cachedJobsArray.find(item => item.id === postId);
     if(!matched || !payload) return;
-    payload.innerHTML = matched.description || 'No contents uploaded.';
+    payload.innerHTML = matched.description || 'No data uploaded.';
 };
 
 window.triggerPlatformPushSubscription = async function() {
@@ -390,17 +396,17 @@ function checkCurrentSubscriptionState() {
 }
 
 // ==========================================
-// 📡 APPLICATION LIFECYCLE INITIALIZER ENGINE
+// 📡 ASYNC LIFE CYCLE APP ENTRY CHANNELS BOOTSTRAP
 // ==========================================
 function bootstrapApplicationEngine() {
     renderDynamicCategoryChips();
     checkCurrentSubscriptionState();
     
-    // 🌟 FULL HARD FORCED RESET ENGINE: Clears session memory state completely on reload
-    signOut(auth).then(() => {
-        window.navigateToHub = window.performSinglePageRoutingView;
-    });
+    // 🌟 RELOAD RESET LOCK LOGIC: Flush storage memory tokens on refresh to prevent automated entries
+    sessionStorage.removeItem("platform_active_session");
+    window.navigateToHub = window.performSinglePageRoutingView;
 
+    // Real-Time Listener: Continuous synchronization regardless of credentials layer rules
     onSnapshot(collection(db, "jobs"), (snapshot) => {
         cachedJobsArray = [];
         let approvalQueueHTML = "";
@@ -414,7 +420,7 @@ function bootstrapApplicationEngine() {
             if(data.approvalStatus === 'Pending') {
                 approvalQueueHTML += `
                     <div class="p-3 bg-white border rounded-xl space-y-2 text-xs shadow-sm">
-                        <h4 class="font-bold text-slate-800">${data.title}</h4>
+                        <h4 class="font-bold text-slate-800 text-[11px] leading-tight">${data.title}</h4>
                         <div class="flex gap-2">
                             <button onclick="window.approvePostItemNode('${id}')" class="bg-emerald-600 text-white px-2.5 py-1 rounded font-bold text-[10px]">Approve & Live</button>
                             <button onclick="window.rejectPostItemNode('${id}')" class="bg-rose-600 text-white px-2.5 py-1 rounded font-bold text-[10px]">Reject</button>
