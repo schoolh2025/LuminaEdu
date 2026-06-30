@@ -1,5 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, collection, addDoc, doc, onSnapshot, updateDoc, deleteDoc, setDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, doc, onSnapshot, updateDoc, deleteDoc, getDocs, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDEXmjIN8w2s2uXk0FTzC7ri4HhLetzV4E",
@@ -12,20 +13,17 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app);
 
 let cachedJobsArray = [];
 let formattingTargetTextareaId = "";
 let formattingTargetMode = "";
 
-// ==========================================
-// 🔒 PURE HIGH-SPEED CLIENT VALIDATION PASSWORDS ENGINE (ANTI-PERMISSION ERROR CRYPTO METHOD)
-// ==========================================
 window.executeDashboardIdentityLoginPipeline = async function() {
     const enteredPassword = document.getElementById('dashPass').value.trim();
     if(!enteredPassword) return;
 
     try {
-        // Reads via public open lookup query layer to bypass missing auth roles checks
         const snapshot = await getDocs(collection(db, "admin_settings"));
         let correctSecureKey = "";
         
@@ -46,7 +44,7 @@ window.executeDashboardIdentityLoginPipeline = async function() {
             window.spawnPremiumToastAlert("Failed", "❌ पासवर्ड गलत है, कृपया दोबारा जांचें।", "error");
         }
     } catch(err) {
-        window.spawnPremiumToastAlert("System Error", "डेटाबेस सिंक विफल! फायरबेस रूल्स पब्लिश करें।", "error");
+        window.spawnPremiumToastAlert("Permission Refused", "डेटाबेस सिंक विफल! फायरबेस रूल्स पब्लिश करें।", "error");
     }
 };
 
@@ -66,12 +64,8 @@ window.spawnPremiumToastAlert = function(title, message, type) {
     document.getElementById('toastTitleSlot').innerText = title;
     document.getElementById('toastMessageSlot').innerText = message;
     toast.className = `fixed top-5 left-1/2 transform -translate-x-1/2 z-[200] max-w-sm w-full mx-4 bg-white border p-4 rounded-2xl shadow-2xl flex items-start gap-3 transition-all duration-300 opacity-100 translate-y-0 ${type==='error'?'border-rose-200 bg-rose-50':'border-emerald-200 bg-emerald-50'}`;
-    setTimeout(() => { toast.classList.add('opacity-0','pointer-events-none'); }, 5000);
 };
 
-// ==========================================
-// 🎨 TIMELY CLOSABLE RICH FORMAT MODAL ENGINE
-// ==========================================
 window.openPremiumTextEditorModal = function(textareaId, mode) {
     formattingTargetTextareaId = textareaId;
     formattingTargetMode = mode;
@@ -118,9 +112,6 @@ window.closePremiumTextEditorModal = function(shouldApply) {
     setTimeout(() => { overlay.classList.add('hidden'); }, 200);
 };
 
-// ==========================================
-// 📢 WORKSPACE CORE BUSINESS LOGIC
-// ==========================================
 window.publishDirectAdminNode = async function() {
     const editId = document.getElementById('adminTargetEditingId').value;
     const postPayload = {
@@ -199,7 +190,7 @@ window.executeRemoveCategoryNode = async function(id) {
 window.executeSetGridLayoutColumnsNode = async function(columnStyleClass) {
     try {
         await setDoc(doc(db, "admin_settings", "layout_config"), { activeGridClass: columnStyleClass });
-        window.spawnPremiumToastAlert("Layout Synced", `फ्रंटपेज ग्रिड अब ${columnStyleClass} पर सेट है!`, "success");
+        window.spawnPremiumToastAlert("Layout Synced", `ग्रिड अब ${columnStyleClass} पर सेट है!`, "success");
         highlightActiveGridLayoutMatrixButtons(columnStyleClass);
     } catch(e) { alert(e.message); }
 };
@@ -247,9 +238,6 @@ window.rejectPostItemNode = async function(id) {
     } catch(e) { alert(e.message); }
 };
 
-// ==========================================
-// 🏗️ INITIALIZE LIFECYCLE LISTENERS RUNTIME
-// ==========================================
 function startDatabaseListenersEngine() {
     onSnapshot(collection(db, "dynamic_categories"), (snapshot) => {
         const selectElement = document.getElementById('aType');
@@ -339,4 +327,5 @@ function verifyPreExistingSession() {
     }
 }
 
+window.verifyPreExistingSession = verifyPreExistingSession;
 window.addEventListener('DOMContentLoaded', verifyPreExistingSession);
