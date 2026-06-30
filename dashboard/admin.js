@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, collection, addDoc, doc, onSnapshot, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, doc, onSnapshot, updateDoc, deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDEXmjIN8w2s2uXk0FTzC7ri4HhLetzV4E",
@@ -17,33 +17,46 @@ let cachedJobsArray = [];
 let formattingTargetTextareaId = "";
 let formattingTargetMode = "";
 
-// 🔒 THE EXCLUSIVE MASTER SYSTEM PASSWORD DEFINED
-const ROOT_COMMAND_PHRASE = "LuminaAdmin@2026"; 
+// ==========================================
+// 🔒 FIREBASE FIRESTORE BACKEND PASSWORD AUTH PIPELINE
+// ==========================================
+window.executeDashboardIdentityLoginPipeline = async function() {
+    const enteredPassword = document.getElementById('dashPass').value.trim();
+    if(!enteredPassword) return;
 
-// ==========================================
-// 🛡️ PASSWORD ONLY INGRESS VALIDATION GATEWAY
-// ==========================================
-window.executeDashboardIdentityLoginPipeline = function() {
-    const enteredPassword = document.getElementById('dashPass').value;
-    
-    if (enteredPassword === ROOT_COMMAND_PHRASE) {
-        sessionStorage.setItem("lumina_session_auth", "authorized_root");
-        window.spawnPremiumToastAlert("Engine Unlocked", "🎉 System Panel successfully decrypted!", "success");
-        initiateConsoleWorkspaceEngine();
-    } else {
-        window.spawnPremiumToastAlert("Access Denied", "❌ Incorrect Security Credentials!", "error");
+    try {
+        // Fetch securely from admin_settings/root_config document node inside Firebase
+        const configDoc = await getDoc(doc(db, "admin_settings", "root_config"));
+        
+        if (configDoc.exists()) {
+            const serverPassword = configDoc.data().master_password;
+            
+            if (enteredPassword === serverPassword) {
+                sessionStorage.setItem("lumina_session_auth", "authorized_root");
+                window.spawnPremiumToastAlert("Engine Unlocked", "🎉 Core system dashboard successfully decrypted!", "success");
+                initiateConsoleWorkspaceEngine();
+            } else {
+                window.spawnPremiumToastAlert("Access Denied", "❌ Security key validation failed!", "error");
+            }
+        } else {
+            window.spawnPremiumToastAlert("Configuration Error", "Database setup missing. Create admin_settings/root_config path first.", "error");
+        }
+    } catch(err) {
+        window.spawnPremiumToastAlert("Database Error", err.message, "error");
     }
 };
 
 window.toggleLockRevealField = function() {
     const input = document.getElementById('dashPass');
-    const label = document.getElementById('passEyeIcon');
-    if(input.type === "password") {
+    const eyeLabel = document.getElementById('passEyeIcon');
+    if(!input || !eyeLabel) return;
+
+    if (input.type === "password") {
         input.type = "text";
-        label.innerText = "🔒";
+        eyeLabel.innerText = "🔒";
     } else {
         input.type = "password";
-        label.innerText = "👁️";
+        eyeLabel.innerText = "👁️";
     }
 };
 
@@ -71,7 +84,7 @@ window.spawnPremiumToastAlert = function(title, message, type) {
 };
 
 // ==========================================
-// 🎨 CUSTOM RICH FORMAT ENGINE CONTROL
+// 🎨 RICH FORMAT MODAL ENGINE
 // ==========================================
 window.openPremiumTextEditorModal = function(textareaId, mode) {
     formattingTargetTextareaId = textareaId;
@@ -188,7 +201,7 @@ window.executeRemoveSidebarToolNode = async function(id) {
     if(!confirm("Erase this system sidebar tool link?")) return;
     try {
         await deleteDoc(doc(db, "pdf_tools", id));
-        window.spawnPremiumToastAlert("Removed", "Tool wiped permanently.", "error");
+        window.spawnPremiumToastAlert("Removed", "Tool removed permanently.", "error");
     } catch(e) { alert(e.message); }
 };
 
@@ -207,7 +220,7 @@ window.rejectPostItemNode = async function(id) {
 };
 
 // ==========================================
-// 🏗️ RENDER DYNAMIC CONTROL DESK CONSOLE
+// 🏗️ INITIALIZE COMMAND CORE
 // ==========================================
 function initiateConsoleWorkspaceEngine() {
     document.getElementById("dashboardAuthGatewayGate").classList.add("hidden");
