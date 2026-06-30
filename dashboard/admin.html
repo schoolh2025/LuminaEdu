@@ -40,19 +40,18 @@
         </div>
     </header>
 
-    <main class="flex-1 max-w-[1500px] w-full mx-auto p-4 lg:p-8">
+    <main class="flex-1 max-w-[1600px] w-full mx-auto p-4 lg:p-6">
         
         <div id="dashboardAuthGatewayGate" class="max-w-md mx-auto my-12 p-6 bg-white premium-glass-card space-y-4">
             <div class="text-center space-y-1">
                 <h2 class="text-xl font-black text-slate-900">🔒 System Authentication Gateway</h2>
                 <p class="text-xs text-slate-500 font-medium">डैशबोर्ड को अनलॉक करने के लिए क्रेडेंशियल्स दर्ज करें।</p>
             </div>
-            <div class="space-y-3 text-slate-800">
+            <div class="space-y-3">
                 <div>
                     <label class="block text-xs font-bold text-slate-600 mb-1">रूटर सिक्योरिटी पासवर्ड</label>
                     <div class="relative">
                         <input type="password" id="dashPass" class="w-full bg-slate-50 border border-slate-200 text-sm p-3 pr-10 rounded-xl outline-none font-mono tracking-widest text-slate-900" placeholder="••••••••••••">
-                        <span onclick="window.toggleLockRevealField()" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 cursor-pointer select-none text-xs font-bold">👁️</span>
                     </div>
                 </div>
                 <button onclick="window.executeDashboardIdentityLoginPipeline()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm py-3.5 rounded-xl shadow-md transition-all">Unlock Command Desk ⚡</button>
@@ -63,67 +62,95 @@
             
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
                 <div class="bg-white premium-glass-card p-5 border-l-4 border-indigo-600 flex items-center justify-between">
-                    <div><p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Total Active Stream</p><h3 id="statTotalCount" class="text-2xl font-black text-slate-800 mt-1">0</h3></div>
+                    <div><p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Total Active Posts</p><h3 id="statTotalCount" class="text-2xl font-black text-slate-800 mt-1">0</h3></div>
                     <div class="text-xl bg-indigo-50 p-2.5 rounded-xl text-indigo-600">📊</div>
                 </div>
                 <div class="bg-white premium-glass-card p-5 border-l-4 border-rose-600 flex items-center justify-between">
-                    <div><p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Pending Submissions</p><h3 id="statPendingCount" class="text-2xl font-black text-rose-600 mt-1">0</h3></div>
+                    <div><p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Pending Approvals</p><h3 id="statPendingCount" class="text-2xl font-black text-rose-600 mt-1">0</h3></div>
                     <div class="text-xl bg-rose-50 p-2.5 rounded-xl text-rose-600">⏳</div>
                 </div>
                 <div class="bg-white premium-glass-card p-5 border-l-4 border-purple-600 flex items-center justify-between">
-                    <div><p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Active Stream Tools</p><h3 id="statToolsCount" class="text-2xl font-black text-purple-600 mt-1">0</h3></div>
+                    <div><p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Active Sidebar Tools</p><h3 id="statToolsCount" class="text-2xl font-black text-purple-600 mt-1">0</h3></div>
                     <div class="text-xl bg-purple-50 p-2.5 rounded-xl text-purple-600">🧰</div>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div class="lg:col-span-2 space-y-4 bg-white premium-glass-card p-5 border">
-                    <h3 id="adminFormHeadlineLabel" class="font-extrabold text-base text-indigo-600 border-b pb-2">Create Direct Live Post Node</h3>
-                    <input type="hidden" id="adminTargetEditingId" value="">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                
+                <div class="lg:col-span-8 space-y-6 bg-white premium-glass-card p-5 border">
                     
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-slate-800">
-                        <div>
-                            <label class="block text-xs font-bold mb-1">Advertisement Job Title</label>
-                            <div class="flex gap-1 mb-1.5"><span onclick="window.openPremiumTextEditorModal('aTitle','link')" class="rich-editor-btn">🔗 Link</span><span onclick="window.openPremiumTextEditorModal('aTitle','img')" class="rich-editor-btn">🖼️ Img</span><span onclick="window.openPremiumTextEditorModal('aTitle','color')" class="rich-editor-btn">🎨 Color</span><span onclick="window.openPremiumTextEditorModal('aTitle','size')" class="rich-editor-btn">📐 Size</span></div>
-                            <input type="text" id="aTitle" class="w-full bg-slate-50 border text-sm p-2.5 rounded-xl outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold mb-1">Authority Organization Board</label>
-                            <div class="flex gap-1 mb-1.5"><span onclick="window.openPremiumTextEditorModal('aAuth','link')" class="rich-editor-btn">🔗 Link</span><span onclick="window.openPremiumTextEditorModal('aAuth','img')" class="rich-editor-btn">🖼️ Img</span><span onclick="window.openPremiumTextEditorModal('aAuth','color')" class="rich-editor-btn">🎨 Color</span><span onclick="window.openPremiumTextEditorModal('aAuth','size')" class="rich-editor-btn">📐 Size</span></div>
-                            <input type="text" id="aAuth" class="w-full bg-white border text-sm p-2.5 rounded-xl outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold mb-1">Select Target Category</label>
-                            <select id="aType" class="w-full bg-white border text-sm p-3 rounded-xl outline-none font-bold">
-                                <option value="Admit Crad">Admit Crad</option><option value="Result">Result</option><option value="Sarkari Naukri">Sarkari Naukri</option><option value="Blogs">Blogs</option><option value="Sarkari Yojna">Sarkari Yojna</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold mb-1">Last Date Submission</label>
-                            <div class="flex gap-1 mb-1.5"><span onclick="window.openPremiumTextEditorModal('aLastDate','link')" class="rich-editor-btn">🔗 Link</span><span onclick="window.openPremiumTextEditorModal('aLastDate','img')" class="rich-editor-btn">🖼️ Img</span><span onclick="window.openPremiumTextEditorModal('aLastDate','color')" class="rich-editor-btn">🎨 Color</span><span onclick="window.openPremiumTextEditorModal('aLastDate','size')" class="rich-editor-btn">📐 Size</span></div>
-                            <input type="text" id="aLastDate" class="w-full bg-white border text-sm p-2.5 rounded-xl outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold mb-1">Application Fees Info Text</label>
-                            <div class="flex gap-1 mb-1.5"><span onclick="window.openPremiumTextEditorModal('aFees','link')" class="rich-editor-btn">🔗 Link</span><span onclick="window.openPremiumTextEditorModal('aFees','img')" class="rich-editor-btn">🖼️ Img</span><span onclick="window.openPremiumTextEditorModal('aFees','color')" class="rich-editor-btn">🎨 Color</span><span onclick="window.openPremiumTextEditorModal('aFees','size')" class="rich-editor-btn">📐 Size</span></div>
-                            <textarea id="aFees" rows="2" class="w-full bg-white border text-xs p-2 rounded-xl outline-none"></textarea>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold mb-1">Eligibility Criteria Text</label>
-                            <div class="flex gap-1 mb-1.5"><span onclick="window.openPremiumTextEditorModal('aElig','link')" class="rich-editor-btn">🔗 Link</span><span onclick="window.openPremiumTextEditorModal('aElig','img')" class="rich-editor-btn">🖼️ Img</span><span onclick="window.openPremiumTextEditorModal('aElig','color')" class="rich-editor-btn">🎨 Color</span><span onclick="window.openPremiumTextEditorModal('aElig','size')" class="rich-editor-btn">📐 Size</span></div>
-                            <textarea id="aElig" rows="2" class="w-full bg-white border text-xs p-2 rounded-xl outline-none"></textarea>
+                    <div class="bg-slate-50 border p-4 rounded-xl space-y-3">
+                        <h4 class="font-extrabold text-xs text-indigo-950 uppercase tracking-wide flex items-center gap-1">📱 Front-Page Responsive Grid Matrix Columns Layout Controller</h4>
+                        <p class="text-[11px] text-slate-500 font-bold">बड़ी स्क्रीन (Desktop) पर फ्रंट-पेज के कार्ड्स को कितने कॉलम में फैलाना है, यहाँ से सेट करें:</p>
+                        <div class="flex gap-2 flex-wrap" id="gridLayoutActionContainer">
+                            <button onclick="window.executeSetGridLayoutColumnsNode('grid-cols-2')" class="layout-grid-btn px-4 py-1.5 text-xs font-bold rounded-xl border bg-white shadow-sm">2 Columns</button>
+                            <button onclick="window.executeSetGridLayoutColumnsNode('grid-cols-3')" class="layout-grid-btn px-4 py-1.5 text-xs font-bold rounded-xl border bg-white shadow-sm">3 Columns</button>
+                            <button onclick="window.executeSetGridLayoutColumnsNode('grid-cols-4')" class="layout-grid-btn px-4 py-1.5 text-xs font-bold rounded-xl border bg-white shadow-sm">4 Columns</button>
+                            <button onclick="window.executeSetGridLayoutColumnsNode('grid-cols-6')" class="layout-grid-btn px-4 py-1.5 text-xs font-bold rounded-xl border bg-white shadow-sm">6 Columns</button>
                         </div>
                     </div>
-                    <div class="pt-2 text-slate-800">
-                        <label class="block text-xs font-bold mb-1">Description Meta Text Content</label>
-                        <div class="flex gap-1 bg-slate-100 p-1.5 rounded-t-xl border border-b-0">
-                            <span onclick="window.openPremiumTextEditorModal('aDesc','link')" class="rich-editor-btn">🔗 Link</span><span onclick="window.openPremiumTextEditorModal('aDesc','img')" class="rich-editor-btn">🖼️ Img</span><span onclick="window.openPremiumTextEditorModal('aDesc','color')" class="rich-editor-btn">🎨 Color</span><span onclick="window.openPremiumTextEditorModal('aDesc','size')" class="rich-editor-btn">📐 Size</span>
+
+                    <div class="bg-slate-50 border p-4 rounded-xl space-y-3">
+                        <h4 class="font-extrabold text-xs text-amber-700 uppercase tracking-wide">🏷️ Dynamic Category Master Configurator (Add / Delete / Color Picker)</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end">
+                            <div><label class="block text-[10px] font-black text-slate-600 uppercase mb-1">Category Name</label><input type="text" id="newCatName" class="w-full bg-white border text-xs p-2.5 rounded-xl outline-none" placeholder="e.g. Admit Card"></div>
+                            <div>
+                                <label class="block text-[10px] font-black text-slate-600 uppercase mb-1">Select Chip Color Accent</label>
+                                <div class="flex items-center gap-2 bg-white border p-1 rounded-xl">
+                                    <input type="color" id="newCatHex" class="w-10 h-8 rounded-lg border cursor-pointer bg-transparent" value="#6366f1">
+                                    <span class="text-xs font-bold text-slate-400">Color Picker</span>
+                                </div>
+                            </div>
+                            <button onclick="window.executeAddNewCategoryNode()" class="bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs py-3 rounded-xl shadow">Create Category ➕</button>
                         </div>
-                        <textarea id="aDesc" rows="4" class="w-full bg-white border text-xs p-2.5 rounded-b-xl outline-none font-mono"></textarea>
                     </div>
-                    <div class="flex gap-2">
-                        <button id="adminSubmitPrimaryActionBtn" onclick="window.publishDirectAdminNode()" class="flex-1 bg-emerald-600 text-white font-bold text-xs py-2.5 rounded-xl shadow-md">Publish Live ⚡</button>
-                        <button id="adminCancelEditNodeBtn" onclick="window.clearAdminEditingFormFieldsState()" class="hidden bg-slate-400 text-white font-bold text-xs px-4 py-2.5 rounded-xl">Cancel Edit</button>
+
+                    <div class="space-y-4 pt-2">
+                        <h3 id="adminFormHeadlineLabel" class="font-extrabold text-base text-slate-900 flex items-center gap-2">Create Direct Live Post Node</h3>
+                        <input type="hidden" id="adminTargetEditingId" value="">
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-slate-800">
+                            <div>
+                                <label class="block text-xs font-bold mb-1">Advertisement Job Title</label>
+                                <div class="flex gap-1 mb-1.5"><span onclick="window.openPremiumTextEditorModal('aTitle','link')" class="rich-editor-btn">🔗 Link</span><span onclick="window.openPremiumTextEditorModal('aTitle','img')" class="rich-editor-btn">🖼️ Img</span><span onclick="window.openPremiumTextEditorModal('aTitle','color')" class="rich-editor-btn">🎨 Color</span><span onclick="window.openPremiumTextEditorModal('aTitle','size')" class="rich-editor-btn">📐 Size</span></div>
+                                <input type="text" id="aTitle" class="w-full bg-slate-50 border text-sm p-2.5 rounded-xl outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold mb-1">Authority Organization Board</label>
+                                <div class="flex gap-1 mb-1.5"><span onclick="window.openPremiumTextEditorModal('aAuth','link')" class="rich-editor-btn">🔗 Link</span><span onclick="window.openPremiumTextEditorModal('aAuth','img')" class="rich-editor-btn">🖼️ Img</span><span onclick="window.openPremiumTextEditorModal('aAuth','color')" class="rich-editor-btn">🎨 Color</span><span onclick="window.openPremiumTextEditorModal('aAuth','size')" class="rich-editor-btn">📐 Size</span></div>
+                                <input type="text" id="aAuth" class="w-full bg-white border text-sm p-2.5 rounded-xl outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold mb-1">Select Target Category</label>
+                                <select id="aType" class="w-full bg-white border text-sm p-3 rounded-xl outline-none font-bold"></select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold mb-1">Last Date Submission</label>
+                                <div class="flex gap-1 mb-1.5"><span onclick="window.openPremiumTextEditorModal('aLastDate','link')" class="rich-editor-btn">🔗 Link</span><span onclick="window.openPremiumTextEditorModal('aLastDate','img')" class="rich-editor-btn">🖼️ Img</span><span onclick="window.openPremiumTextEditorModal('aLastDate','color')" class="rich-editor-btn">🎨 Color</span><span onclick="window.openPremiumTextEditorModal('aLastDate','size')" class="rich-editor-btn">📐 Size</span></div>
+                                <input type="text" id="aLastDate" class="w-full bg-white border text-sm p-2.5 rounded-xl outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold mb-1">Application Fees Info Text</label>
+                                <div class="flex gap-1 mb-1.5"><span onclick="window.openPremiumTextEditorModal('aFees','link')" class="rich-editor-btn">🔗 Link</span><span onclick="window.openPremiumTextEditorModal('aFees','img')" class="rich-editor-btn">🖼️ Img</span><span onclick="window.openPremiumTextEditorModal('aFees','color')" class="rich-editor-btn">🎨 Color</span><span onclick="window.openPremiumTextEditorModal('aFees','size')" class="rich-editor-btn">📐 Size</span></div>
+                                <textarea id="aFees" rows="2" class="w-full bg-white border text-xs p-2 rounded-xl outline-none"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold mb-1">Eligibility Criteria Text</label>
+                                <div class="flex gap-1 mb-1.5"><span onclick="window.openPremiumTextEditorModal('aElig','link')" class="rich-editor-btn">🔗 Link</span><span onclick="window.openPremiumTextEditorModal('aElig','img')" class="rich-editor-btn">🖼️ Img</span><span onclick="window.openPremiumTextEditorModal('aElig','color')" class="rich-editor-btn">🎨 Color</span><span onclick="window.openPremiumTextEditorModal('aElig','size')" class="rich-editor-btn">📐 Size</span></div>
+                                <textarea id="aElig" rows="2" class="w-full bg-white border text-xs p-2 rounded-xl outline-none"></textarea>
+                            </div>
+                        </div>
+                        <div class="pt-2 text-slate-800">
+                            <label class="block text-xs font-bold mb-1">Description Meta Text Content</label>
+                            <div class="flex gap-1 bg-slate-100 p-1.5 rounded-t-xl border border-b-0">
+                                <span onclick="window.openPremiumTextEditorModal('aDesc','link')" class="rich-editor-btn">🔗 Link</span><span onclick="window.openPremiumTextEditorModal('aDesc','img')" class="rich-editor-btn">🖼️ Img</span><span onclick="window.openPremiumTextEditorModal('aDesc','color')" class="rich-editor-btn">🎨 Color</span><span onclick="window.openPremiumTextEditorModal('aDesc','size')" class="rich-editor-btn">📐 Size</span>
+                            </div>
+                            <textarea id="aDesc" rows="4" class="w-full bg-white border text-xs p-2.5 rounded-b-xl outline-none font-mono"></textarea>
+                        </div>
+                        <div class="flex gap-2">
+                            <button id="adminSubmitPrimaryActionBtn" onclick="window.publishDirectAdminNode()" class="flex-1 bg-emerald-600 text-white font-bold text-xs py-2.5 rounded-xl shadow-md">Publish Live ⚡</button>
+                            <button id="adminCancelEditNodeBtn" onclick="window.clearAdminEditingFormFieldsState()" class="hidden bg-slate-400 text-white font-bold text-xs px-4 py-2.5 rounded-xl">Cancel Edit</button>
+                        </div>
                     </div>
                     
                     <div class="pt-4 border-t mt-4 space-y-3">
@@ -136,16 +163,28 @@
                     </div>
                 </div>
 
-                <div class="space-y-4 bg-white premium-glass-card p-4 border">
-                    <h3 class="font-bold text-sm text-rose-600 border-b pb-1">User Contributor Approval Queue</h3>
-                    <div id="adminApprovalQueueTargetList" class="space-y-3 max-h-[250px] overflow-y-auto pt-2"></div>
+                <div class="lg:col-span-4 space-y-5">
+                    <div class="bg-white premium-glass-card p-4 border">
+                        <h3 class="font-bold text-sm text-rose-600 border-b pb-1">User Contributor Approval Queue</h3>
+                        <div id="adminApprovalQueueTargetList" class="space-y-3 max-h-[200px] overflow-y-auto pt-2"></div>
+                    </div>
                     
-                    <h3 class="font-bold text-sm text-slate-800 border-b pt-4 pb-1">Edit Live Published Posts</h3>
-                    <div id="adminLivePostsListEditableTargetStack" class="space-y-2 max-h-[300px] overflow-y-auto pt-2"></div>
+                    <div class="bg-white premium-glass-card p-4 border">
+                        <h3 class="font-bold text-sm text-amber-600 border-b pb-1">Erase / Delete Active Categories</h3>
+                        <div id="adminLiveCategoriesDeleteListStack" class="space-y-2 max-h-[200px] overflow-y-auto pt-2"></div>
+                    </div>
+
+                    <div class="bg-white premium-glass-card p-4 border">
+                        <h3 class="font-bold text-sm text-slate-800 border-b pb-1">Edit Live Published Cards (Erase/Modify)</h3>
+                        <div id="adminLivePostsListEditableTargetStack" class="space-y-2 max-h-[250px] overflow-y-auto pt-2"></div>
+                    </div>
                     
-                    <h3 class="font-bold text-sm text-purple-800 border-b pt-4 pb-1">Erase Sidebar Useful Tools</h3>
-                    <div id="adminLiveToolsListDeleteStack" class="space-y-2 max-h-[200px] overflow-y-auto pt-2"></div>
+                    <div class="bg-white premium-glass-card p-4 border">
+                        <h3 class="font-bold text-sm text-purple-800 border-b pb-1">Erase Sidebar Useful Tools</h3>
+                        <div id="adminLiveToolsListDeleteStack" class="space-y-2 max-h-[200px] overflow-y-auto pt-2"></div>
+                    </div>
                 </div>
+
             </div>
         </div>
     </main>
