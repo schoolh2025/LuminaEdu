@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LuminaEdu | Workspace Control Desk</title>
+    <title>LuminaEdu | Secured Workspace Control Desk</title>
     
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -33,6 +33,7 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
+    <!-- TOP HEADER -->
     <header class="w-full bg-white/70 backdrop-blur-md border-b border-slate-200/60 px-4 lg:px-10 py-3.5 flex items-center justify-between shadow-sm shrink-0">
         <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='../index.html'">
             <div class="bg-indigo-600 text-white font-black p-2.5 rounded-xl text-lg shadow-md">LE</div>
@@ -43,8 +44,10 @@
         </div>
     </header>
 
+    <!-- CORE DESK HUB -->
     <main class="flex-1 max-w-[1600px] w-full mx-auto p-4 lg:p-6">
         
+        <!-- SECURITY GATEWAY INTERFACE (Always visible by default until verified) -->
         <div id="dashboardAuthGatewayGate" class="max-w-md mx-auto my-12 p-6 bg-white premium-glass-card space-y-4">
             <div class="text-center space-y-1">
                 <h2 class="text-xl font-black text-slate-900">🔒 System Authentication Gateway</h2>
@@ -53,14 +56,16 @@
             <div class="space-y-4 text-slate-800">
                 <div>
                     <label class="block text-xs font-bold text-slate-600 mb-1">रूटर सिक्योरिटी पासवर्ड</label>
-                    <input type="password" id="dashPass" class="w-full bg-slate-50 border border-slate-200 text-sm p-3 rounded-xl outline-none font-mono tracking-widest text-slate-900" placeholder="••••••••••••">
+                    <input type="password" id="dashPass" class="w-full bg-slate-50 border border-slate-200 text-sm p-3 rounded-xl outline-none font-mono tracking-widest text-slate-900" placeholder="••••••••••••" onkeydown="if(event.key==='Enter') window.executeDashboardIdentityLoginPipeline()">
                 </div>
                 <button onclick="window.executeDashboardIdentityLoginPipeline()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm py-3.5 rounded-xl shadow-md transition-all">Unlock Command Desk ⚡</button>
             </div>
         </div>
 
-        <div id="adminMasterConsoleView" class="hidden w-full space-y-6">
+        <!-- MASTER CONTROL PANEL CONSOLE (STRICTLY STYLE HIDDEN BY DEFAULT) -->
+        <div id="adminMasterConsoleView" style="display: none !important;" class="w-full space-y-6">
             
+            <!-- STATS HUB -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
                 <div class="bg-white premium-glass-card p-5 border-l-4 border-indigo-600 flex items-center justify-between">
                     <div><p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Total Active Posts</p><h3 id="statTotalCount" class="text-2xl font-black text-slate-800 mt-1">0</h3></div>
@@ -78,8 +83,10 @@
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
                 
+                <!-- COLUMN ENGINE WORKSPACE -->
                 <div class="lg:col-span-8 space-y-6 bg-white premium-glass-card p-5 border">
                     
+                    <!-- GRID COLS MANAGER -->
                     <div class="bg-slate-50 border p-4 rounded-xl space-y-3">
                         <h4 class="font-extrabold text-xs text-indigo-950 uppercase tracking-wide">📱 Front-Page Responsive Grid Columns Layout Controller</h4>
                         <div class="flex gap-2 flex-wrap" id="gridLayoutActionContainer">
@@ -90,6 +97,7 @@
                         </div>
                     </div>
 
+                    <!-- DYNAMIC CATEGORY CREATOR -->
                     <div class="bg-slate-50 border p-4 rounded-xl space-y-3">
                         <h4 class="font-extrabold text-xs text-amber-700 uppercase tracking-wide">🏷️ Dynamic Category Master Configurator</h4>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end">
@@ -105,6 +113,7 @@
                         </div>
                     </div>
 
+                    <!-- CENTRALIZED MASTER TEXT EDITOR BAR -->
                     <div class="bg-slate-100 border p-3 rounded-xl sticky top-2 z-30 flex flex-wrap gap-2 items-center shadow-inner">
                         <span class="text-[10px] font-black text-slate-500 uppercase mr-1">📝 Selector Toolbar:</span>
                         <button onclick="window.executeMasterFormatStyleCommand('link')" class="rich-editor-btn">🔗 Link</button>
@@ -116,10 +125,12 @@
                         </div>
                     </div>
 
+                    <!-- CENTRAL INGESTION FORM -->
                     <div class="space-y-4 pt-2">
                         <div class="flex items-center justify-between border-b pb-2">
                             <h3 id="adminFormHeadlineLabel" class="font-extrabold text-base text-slate-900">Create Direct Live Post Node</h3>
                             
+                            <!-- MODE SWITCHER -->
                             <div class="bg-slate-100 p-1 rounded-xl flex gap-1 border">
                                 <button id="modeVisualBtn" onclick="window.togglePostInputWorkspaceMode('visual')" class="tab-active px-3 py-1 text-xs font-bold rounded-lg transition-all">Post in Visual</button>
                                 <button id="modeHtmlBtn" onclick="window.togglePostInputWorkspaceMode('html')" class="px-3 py-1 text-xs font-bold rounded-lg transition-all">Post in HTML</button>
@@ -154,6 +165,7 @@
                                 </select>
                             </div>
 
+                            <!-- VISUAL BOX ARCHITECTURE CONTAINER -->
                             <div id="workspaceVisualBlockContainer" class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-xs font-bold mb-1.5">Application Fees Info Text</label>
@@ -166,6 +178,7 @@
                             </div>
                         </div>
 
+                        <!-- CONTENT EDITABLE CONTAINER INTERFACE -->
                         <div class="text-slate-800">
                             <label id="mainContentTextBoxLabel" class="block text-xs font-bold mb-1.5">Description Content Workspace Area</label>
                             
@@ -174,7 +187,7 @@
                                 <div id="richVisualEditorField" contenteditable="true" class="editable-editor-div bg-white"></div>
                             </div>
                             
-                            <textarea id="aDesc" rows="8" class="hidden w-full premium-input text-sm p-3 rounded-xl border outline-none font-mono tracking-wide leading-relaxed" placeholder=""></textarea>
+                            <textarea id="aDesc" rows="8" class="hidden w-full premium-input text-sm p-3 rounded-xl border outline-none font-mono tracking-wide leading-relaxed" placeholder="<!-- Raw HTML payload strings context -->"></textarea>
                         </div>
 
                         <div class="flex gap-2">
@@ -184,6 +197,7 @@
                     </div>
                 </div>
 
+                <!-- QUEUES SIDEBAR -->
                 <div class="lg:col-span-4 space-y-5">
                     <div class="bg-white premium-glass-card p-4 border">
                         <h3 class="font-bold text-sm text-rose-600 border-b pb-1">User Contributor Approval Queue</h3>
@@ -206,6 +220,7 @@
         </div>
     </main>
 
+    <!-- PREMIUM INPUT MODAL DIALOG -->
     <div id="premiumRichFormatModalOverlay" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[150] flex items-center justify-center hidden opacity-0 transition-all duration-200">
         <div class="bg-white max-w-sm w-full m-4 p-5 rounded-2xl shadow-2xl border text-slate-800 space-y-4 relative">
             <div>
@@ -220,6 +235,7 @@
         </div>
     </div>
 
+    <!-- PREMIUM SYSTEM TOAST -->
     <div id="premiumToastNotification" class="fixed top-5 left-1/2 transform -translate-x-1/2 z-[200] max-w-sm w-full mx-4 bg-white border p-4 rounded-2xl shadow-2xl flex items-start gap-3 opacity-0 pointer-events-none transition-all duration-300">
         <div id="toastIconSlot" class="text-lg">✨</div>
         <div class="flex-1">
