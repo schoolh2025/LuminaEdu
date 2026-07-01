@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LuminaEdu Master Center Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; }
+        .tab-active { background: #4f46e5 !important; color: white !important; }
+    </style>
+</head>
+<body class="min-h-screen pb-12">
+
+    <div id="adminAuthCover" class="fixed inset-0 bg-slate-900 z-[999] flex flex-col items-center justify-center p-4">
+        <div class="max-w-md w-full bg-white p-8 rounded-3xl shadow-2xl text-center space-y-6">
+            <div>
+                <h2 class="text-2xl font-black text-slate-900 tracking-tight">Console Lock active</h2>
+                <p class="text-xs text-slate-400 font-bold mt-1">Provide cluster security passkey sequence.</p>
+            </div>
+            <input type="password" id="adminSecretKey" class="w-full bg-slate-50 border p-3.5 rounded-xl text-center text-sm font-mono tracking-widest outline-none focus:border-indigo-500" placeholder="••••••••">
+            <button onclick="window.executeAdminGatewayUnlockEngine()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-black py-3.5 rounded-xl text-sm tracking-wide">Unlock Workspace 🔓</button>
+        </div>
+    </div>
+
+    <div id="premiumRichFormatModalOverlay" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[500] flex items-center justify-center p-4 transition-all duration-200 opacity-0">
+        <div class="bg-white max-w-sm w-full p-6 rounded-2xl shadow-2xl border space-y-4">
+            <h3 id="premiumModalTitleLabel" class="text-sm font-black text-slate-800">Add Style Attribute Target</h3>
+            <p id="premiumModalSubLabel" class="text-[11px] font-bold text-slate-400">Map string node address below:</p>
+            <input type="text" id="premiumModalInputField" class="w-full bg-slate-50 border p-3 rounded-xl text-xs outline-none focus:border-indigo-500 font-semibold text-slate-700">
+            <div class="flex items-center justify-end gap-2 text-xs font-black pt-1">
+                <button onclick="window.closePremiumTextEditorModal(false)" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-500 rounded-xl">Cancel ✕</button>
+                <button onclick="window.closePremiumTextEditorModal(true)" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl">Inject Link/Image ✔</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="premiumToastNotification" class="hidden">
+        <div><h4 id="toastTitleSlot" class="font-bold text-xs">Alert</h4><p id="toastMessageSlot" class="text-[11px] font-semibold mt-0.5"></p></div>
+    </div>
+
+    <div id="adminConsoleWorkspace" class="hidden animate-fadeIn">
+        <header class="w-full bg-slate-900 text-white px-6 py-4 flex items-center justify-between shadow-md">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 text-white font-black px-2.5 py-1.5 rounded-xl text-xs">ROOT</div>
+                <h1 class="font-extrabold text-sm tracking-tight">LuminaEdu Command Dashboard Desk</h1>
+            </div>
+            <button onclick="window.performSecurePlatformLogout()" class="bg-rose-600 hover:bg-rose-700 font-bold text-xs px-4 py-2 rounded-xl transition-all">Terminate Desk Session ⛔</button>
+        </header>
+
+        <main class="max-w-[1500px] mx-auto p-4 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div class="lg:col-span-7 bg-white border p-6 rounded-2xl shadow-sm space-y-5">
+                <div class="border-b pb-3 flex justify-between items-center">
+                    <div>
+                        <h2 class="text-base font-black text-slate-900">Broadcast Node Publisher Terminal</h2>
+                        <p class="text-[11px] font-bold text-slate-400 mt-0.5">Publish jobs data updates arrays into cloud ledger indexes.</p>
+                    </div>
+                    <div class="flex border rounded-lg overflow-hidden bg-slate-100 p-0.5">
+                        <button id="modeVisualBtn" onclick="window.togglePostInputWorkspaceMode('visual')" class="tab-active px-3 py-1 text-xs font-bold rounded-lg">Visual Form Builder</button>
+                        <button id="modeHtmlBtn" onclick="window.togglePostInputWorkspaceMode('html')" class="px-3 py-1 text-xs font-bold rounded-lg">Raw Custom HTML</button>
+                    </div>
+                </div>
+
+                <input type="hidden" id="adminTargetEditingId">
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1">Post / Job Heading Title *</label>
+                        <input type="text" id="aTitle" class="w-full bg-slate-50 border p-3 rounded-xl text-xs outline-none focus:border-indigo-500 font-semibold text-slate-800" placeholder="UP Police Constable Online Form">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1">Authority / Board Name *</label>
+                        <input type="text" id="aAuth" class="w-full bg-slate-50 border p-3 rounded-xl text-xs outline-none focus:border-indigo-500 font-semibold text-slate-800" placeholder="PRPB Board">
+                    </div>
+                </div>
+
+                <div id="workspaceVisualBlockContainer" class="grid grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1">Registration Fees Structure</label>
+                        <input type="text" id="aFees" class="w-full bg-slate-50 border p-3 rounded-xl text-xs outline-none focus:border-indigo-500 font-semibold" placeholder="Gen: Rs 400, SC/ST: 0">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1">Eligibility Criteria</label>
+                        <input type="text" id="aElig" class="w-full bg-slate-50 border p-3 rounded-xl text-xs outline-none focus:border-indigo-500 font-semibold" placeholder="10+2 Passed Inside India">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1">Target End Last Date</label>
+                        <input type="text" id="aLastDate" class="w-full bg-slate-50 border p-3 rounded-xl text-xs outline-none focus:border-indigo-500 font-semibold" placeholder="31/12/2026">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1">Assigned Stream Category</label>
+                        <select id="aType" class="w-full bg-slate-50 border p-3 rounded-xl text-xs outline-none focus:border-indigo-500 font-bold text-slate-700"></select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1">Image Presentation Channel Visibility</label>
+                        <select id="aImageVisibilityMode" class="w-full bg-slate-50 border p-3 rounded-xl text-xs outline-none focus:border-indigo-500 font-bold text-slate-700">
+                            <option value="both">Display Everywhere (Main Grid Feed & Post Page Content)</option>
+                            <option value="main_only">Show on Main Cards Stream Grid Feed Only</option>
+                            <option value="post_only">Show inside Deep Post Description Content Area Page Only</option>
+                            <option value="none">Block & Suppress Images Context Completely</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label id="mainContentTextBoxLabel" class="block text-xs font-bold text-slate-500 mb-1">Description Content Workspace Area</label>
+                    <div id="visualEditorContainerBox" class="border rounded-xl overflow-hidden bg-slate-50 mb-2">
+                        <div class="bg-slate-200/80 px-3 py-2 border-b flex flex-wrap items-center gap-2 text-xs font-black text-slate-700">
+                            <button onclick="window.executeMasterFormatStyleCommand('bold')" class="bg-white px-2 py-1 rounded shadow-sm border">B</button>
+                            <button onclick="window.executeMasterFormatStyleCommand('italic')" class="bg-white px-2 py-1 rounded shadow-sm border italic">I</button>
+                            <button onclick="window.executeMasterFormatStyleCommand('link')" class="bg-white px-2 py-1 rounded shadow-sm border text-indigo-600">🔗 Add Link</button>
+                            <button onclick="window.executeMasterFormatStyleCommand('img')" class="bg-white px-2 py-1 rounded shadow-sm border text-emerald-600">🖼️ Image Inject</button>
+                            <button onclick="window.executeMasterFormatStyleCommand('size')" class="bg-white px-2 py-1 rounded shadow-sm border">Text Heading XL</button>
+                            <input type="color" id="masterTextHexColorPicker" onchange="window.executeMasterFormatStyleCommand('color')" class="w-6 h-6 rounded cursor-pointer p-0 bg-white border">
+                        </div>
+                        <div id="richVisualEditorField" contenteditable="true" class="w-full p-4 min-h-[250px] bg-white outline-none text-sm leading-relaxed overflow-y-auto max-h-[400px]"></div>
+                    </div>
+                    <textarea id="aDesc" class="hidden w-full bg-slate-900 text-emerald-400 font-mono text-xs p-4 rounded-xl min-h-[300px] outline-none border focus:border-indigo-500" placeholder="<div>Enter raw production custom html tags here...</div>"></textarea>
+                </div>
+
+                <div class="flex items-center gap-3 pt-2">
+                    <button onclick="window.publishDirectAdminNode()" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-black text-sm py-3.5 rounded-xl transition-all shadow-md">Deploy & Live Broadcast Content Target Matrix 🚀</button>
+                    <button onclick="window.clearAdminEditingFormFieldsState()" class="bg-slate-100 hover:bg-slate-200 text-slate-500 font-bold text-xs px-5 py-3.5 rounded-xl border">Clear Canvas Fields</button>
+                </div>
+            </div>
+
+            <div class="lg:col-span-5 space-y-6">
+                
+                <div class="bg-white border p-5 rounded-2xl shadow-sm space-y-4">
+                    <div>
+                        <h3 class="text-sm font-black text-slate-900">🧰 Premium Useful Tools & Custom Live Pages Deployer</h3>
+                        <p class="text-[10px] font-bold text-slate-400 mt-0.5">Create custom modules or static system landing layout sheets easily.</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-500 mb-1">Module / Route Slug Target Label Name</label>
+                            <input type="text" id="pageSlug" class="w-full bg-slate-50 border p-2.5 rounded-lg text-xs outline-none" placeholder="e.g. up-results-tool or disclaimer">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-500 mb-1">Redirect URL (Only for Useful Tools field link)</label>
+                            <input type="text" id="toolUrlField" class="w-full bg-slate-50 border p-2.5 rounded-lg text-xs outline-none" placeholder="https://example.com/tool">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-500 mb-1">Target Mapping Presentation Layer Placement Location Target:</label>
+                        <div class="grid grid-cols-3 gap-2 text-[10px] font-bold text-slate-700 pt-0.5">
+                            <label class="flex items-center gap-1.5 p-2 border bg-slate-50 rounded-lg cursor-pointer">
+                                <input type="radio" name="placementTargetSelector" value="sidebar" checked> Left Sidebar Nav
+                            </label>
+                            <label class="flex items-center gap-1.5 p-2 border bg-slate-50 rounded-lg cursor-pointer">
+                                <input type="radio" name="placementTargetSelector" value="header"> Header Nav Bar
+                            </label>
+                            <label class="flex items-center gap-1.5 p-2 border bg-slate-50 rounded-lg cursor-pointer">
+                                <input type="radio" name="placementTargetSelector" value="footer"> Slim Footer Row
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2 items-center">
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-500 mb-1">Custom Styling Base Theme Color Mapping</label>
+                            <input type="color" id="toolPageThemeHexColor" class="w-full h-9 rounded-lg border cursor-pointer p-0 bg-white">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-500 mb-1">Module Processing Deployment Selection</label>
+                            <select id="moduleDeploymentEngineType" class="w-full bg-slate-50 border p-2.5 rounded-lg text-xs font-bold text-slate-700">
+                                <option value="tool">Compile as Useful External Redirect Link Tool Mode</option>
+                                <option value="page">Compile as High Density Custom Live Static Content Page Mode</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-500 mb-1">Dynamic Live Page Payload Markup Content Content Area</label>
+                        <textarea id="pageContent" class="w-full bg-slate-900 text-amber-400 font-mono text-xs p-3 rounded-xl min-h-[120px] outline-none" placeholder="<h1 class='text-xl'>Privacy Policy Docs</h1><p>Enter clean production system custom elements code.</p>"></textarea>
+                    </div>
+
+                    <button onclick="window.executeDeployHybridModulePipeline()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-black text-xs py-3 rounded-xl shadow-md transition-all">Compile and Deploy Custom Asset Live Matrix ⚡</button>
+                    
+                    <div class="pt-2 border-t space-y-2">
+                        <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">📦 Live Custom Assets Core Manager (Edit / Delete / Color)</p>
+                        <div id="adminLiveHybridAssetsMonitoringDeck" class="space-y-1 max-h-[220px] overflow-y-auto"></div>
+                    </div>
+                </div>
+
+                <div class="bg-white border p-5 rounded-2xl shadow-sm space-y-4">
+                    <div>
+                        <h3 class="text-sm font-black text-slate-900">🏷️ Global Stream Badge Category Settings</h3>
+                        <p class="text-[10px] font-bold text-slate-400 mt-0.5">Create custom badge rows with localized dynamic hex colors parameters.</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="text" id="newCatName" class="bg-slate-50 border p-2.5 rounded-xl text-xs font-semibold outline-none" placeholder="Category Name (Latest Job)">
+                        <input type="color" id="newCatHex" class="w-full h-10 rounded-xl cursor-pointer p-0 border bg-white">
+                    </div>
+                    <button onclick="window.executeAddNewCategoryNode()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs py-2.5 rounded-xl shadow-sm">Save Stream Category Badge ✔</button>
+                    <div id="adminLiveCategoriesDeleteListStack" class="grid grid-cols-2 gap-2 max-h-[150px] overflow-y-auto pt-2"></div>
+                </div>
+
+                <div class="bg-white border p-5 rounded-2xl shadow-sm space-y-3">
+                    <h3 class="text-xs font-black text-slate-500 uppercase tracking-wider">📊 Platform Engine Monitor Metrics Logs</h3>
+                    <div class="grid grid-cols-3 gap-2 text-center text-xs font-bold text-slate-700">
+                        <div class="bg-slate-50 p-2.5 border rounded-xl"><span id="statTotalCount" class="block text-lg font-black text-indigo-600">0</span>Live Postings</div>
+                        <div class="bg-slate-50 p-2.5 border rounded-xl"><span id="statPendingCount" class="block text-lg font-black text-amber-600">0</span>Contributor Submits</div>
+                        <div class="bg-slate-50 p-2.5 border rounded-xl"><span id="statCustomPagesCount" class="block text-lg font-black text-purple-600">0</span>Custom Assets</div>
+                    </div>
+                    <div class="pt-2">
+                        <p class="text-[10px] font-bold text-slate-400 mb-1">Adjust Live Grid Layout Columns Viewport Width Scope Rendering Target:</p>
+                        <div class="grid grid-cols-4 gap-1.5 text-[10px] font-black text-slate-700">
+                            <button onclick="window.executeSetGridLayoutColumnsNode('grid-cols-1')" class="bg-slate-100 p-2 rounded-lg border">1 Col</button>
+                            <button onclick="window.executeSetGridLayoutColumnsNode('grid-cols-2')" class="bg-slate-100 p-2 rounded-lg border">2 Cols</button>
+                            <button onclick="window.executeSetGridLayoutColumnsNode('grid-cols-3')" class="bg-slate-100 p-2 rounded-lg border">3 Cols Grid</button>
+                            <button onclick="window.executeSetGridLayoutColumnsNode('grid-cols-4')" class="bg-slate-100 p-2 rounded-lg border">4 Cols Ultra</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white border p-5 rounded-2xl shadow-sm space-y-3">
+                    <h3 class="text-xs font-black text-slate-500 uppercase tracking-wider">✏️ Edit Live Broadcast Postings Matrix</h3>
+                    <div id="adminLivePostsListEditableTargetStack" class="space-y-1.5 max-h-[250px] overflow-y-auto"></div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="admin-core.js"></script>
+</body>
+</html>
