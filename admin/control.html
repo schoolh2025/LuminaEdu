@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LuminaEdu | Secure Super Admin Desk</title>
+    <title>LuminaEdu | Admin Dashboard Gateway</title>
     
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -12,122 +12,113 @@
     <style>
         body { 
             font-family: 'Plus Jakarta Sans', 'Noto Sans Devanagari', sans-serif; 
-            background: linear-gradient(135deg, #e0f2fe 0%, #fae8ff 100%);
-            color: #1e293b;
-            background-attachment: fixed;
+            background-color: #f1f5f9;
+            color: #0f172a;
         }
-        .premium-glass-card {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            border-radius: 1.25rem;
-            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
-        }
-        .rich-editor-btn { background: #f1f5f9; border: 1px solid #cbd5e1; padding: 4px 12px; border-radius: 8px; font-size: 11px; font-weight: bold; display: inline-flex; items-center: center; gap: 4px; cursor: pointer; color: #475569; transition: all 0.2s; user-select: none; }
-        .rich-editor-btn:hover { background: #6366f1; color: #ffffff; border-color: #4f46e5; }
+        .rich-editor-btn { background: #ffffff; border: 1px solid #cbd5e1; padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; display: inline-flex; items-center: center; gap: 4px; cursor: pointer; color: #334155; transition: all 0.15s ease; user-select: none; }
+        .rich-editor-btn:hover { background: #4f46e5; color: #ffffff; border-color: #4f46e5; }
         .tab-active { background-color: #4f46e5 !important; color: #ffffff !important; }
-        .editable-editor-div { background: #ffffff; min-height: 180px; max-height: 400px; overflow-y: auto; outline: none; border: 1px solid #cbd5e1; padding: 12px; border-radius: 0 0 12px 12px; }
-        .editable-editor-div:focus { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15); }
+        .editable-editor-div { background: #ffffff; min-height: 220px; max-height: 500px; overflow-y: auto; outline: none; border: 1px solid #cbd5e1; padding: 14px; border-radius: 0 0 12px 12px; font-size: 14px; }
+        .editable-editor-div:focus { border-color: #4f46e5; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15); }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
-    <header class="w-full bg-white/70 backdrop-blur-md border-b border-slate-200/60 px-4 lg:px-10 py-3.5 flex items-center justify-between shadow-sm shrink-0">
-        <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='../index.html'">
-            <div class="bg-indigo-600 text-white font-black p-2.5 rounded-xl text-lg shadow-md">LE</div>
-            <h1 class="text-xl md:text-2xl font-black text-slate-900 tracking-tight">Lumina<span class="text-indigo-600">Edu</span> <span class="text-xs px-2 py-1 rounded bg-slate-100 text-slate-600 border font-bold">Admin Panel</span></h1>
+    <header class="w-full bg-white border-b border-slate-200 px-4 lg:px-8 py-4 flex items-center justify-between shadow-sm shrink-0">
+        <div class="flex items-center gap-2.5 cursor-pointer" onclick="window.location.href='../index.html'">
+            <div class="bg-indigo-600 text-white font-black px-3 py-2 rounded-xl text-lg shadow-sm">LE</div>
+            <h1 class="text-xl font-extrabold text-slate-900 tracking-tight">Lumina<span class="text-indigo-600">Edu</span> <span class="text-xs px-2 py-0.5 rounded ml-1 bg-slate-100 text-slate-500 border font-bold">Control Area</span></h1>
         </div>
         <div class="flex items-center gap-3">
-            <button id="adminLogoutBtn" onclick="window.performSecurePlatformLogout()" class="hidden bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow-md transition-all">Logout Securely 🚪</button>
+            <button id="adminLogoutBtn" onclick="window.performSecurePlatformLogout()" class="hidden bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow-sm transition-all">Secure Logout 🚪</button>
         </div>
     </header>
 
-    <main class="flex-1 max-w-[1600px] w-full mx-auto p-4 lg:p-6">
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 lg:p-6">
         
-        <div id="adminAuthCover" class="max-w-md mx-auto my-12 p-6 bg-white premium-glass-card space-y-4">
+        <div id="adminAuthCover" class="max-w-md mx-auto my-16 bg-white border p-6 rounded-2xl shadow-xl space-y-4">
             <div class="text-center space-y-1">
-                <h2 class="text-xl font-black text-slate-900">🔒 System Authentication Gateway</h2>
-                <p class="text-xs text-slate-500 font-medium">डैशबोर्ड को अनलॉक करने के लिए क्रेडेंशiyals दर्ज करें।</p>
+                <h2 class="text-lg font-extrabold text-slate-900">🔒 Super Admin Gateway</h2>
+                <p class="text-xs text-slate-400 font-medium">Console ko unsecure access se bachane ke liye enter karein.</p>
             </div>
-            <div class="space-y-4 text-slate-800">
+            <div class="space-y-3.5 text-slate-800">
                 <div>
-                    <label class="block text-xs font-bold text-slate-600 mb-1">रूटर सिक्योरिटी पासवर्ड</label>
-                    <input type="password" id="adminSecretKey" class="w-full bg-slate-50 border border-slate-200 text-sm p-3 rounded-xl outline-none font-mono tracking-widest text-slate-900" placeholder="••••••••••••" onkeydown="if(event.key==='Enter') window.executeAdminGatewayUnlockEngine()">
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Root Terminal Secret Passkey</label>
+                    <input type="password" id="adminSecretKey" class="w-full bg-slate-50 border text-sm p-3 rounded-xl outline-none text-center font-mono tracking-widest text-slate-900" placeholder="••••••••••••" onkeydown="if(event.key==='Enter') window.executeAdminGatewayUnlockEngine()">
                 </div>
-                <button id="unlockAdminBtn" onclick="window.executeAdminGatewayUnlockEngine()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm py-3.5 rounded-xl shadow-md transition-all">Unlock Command Desk ⚡</button>
+                <button id="unlockAdminBtn" onclick="window.executeAdminGatewayUnlockEngine()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm py-3.5 rounded-xl shadow-md transition-all">Unlock Dashboard Terminal ⚡</button>
             </div>
         </div>
 
         <div id="adminConsoleWorkspace" style="display: none !important;" class="w-full space-y-6">
             
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
-                <div class="bg-white premium-glass-card p-5 border-l-4 border-indigo-600 flex items-center justify-between">
-                    <div><p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Total Active Posts</p><h3 id="statTotalCount" class="text-2xl font-black text-slate-800 mt-1">0</h3></div>
-                    <div class="text-xl bg-indigo-50 p-2.5 rounded-xl text-indigo-600">📊</div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="bg-white p-5 rounded-2xl border flex items-center justify-between shadow-sm">
+                    <div><p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Total Active Live Posts</p><h3 id="statTotalCount" class="text-2xl font-black text-slate-800 mt-1">0</h3></div>
+                    <div class="text-xl bg-slate-50 p-2.5 rounded-xl border">📋</div>
                 </div>
-                <div class="bg-white premium-glass-card p-5 border-l-4 border-rose-600 flex items-center justify-between">
-                    <div><p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Pending Approvals</p><h3 id="statPendingCount" class="text-2xl font-black text-rose-600 mt-1">0</h3></div>
-                    <div class="text-xl bg-rose-50 p-2.5 rounded-xl text-rose-600">⏳</div>
+                <div class="bg-white p-5 rounded-2xl border flex items-center justify-between shadow-sm">
+                    <div><p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Pending Moderations</p><h3 id="statPendingCount" class="text-2xl font-black text-rose-600 mt-1">0</h3></div>
+                    <div class="text-xl bg-rose-50 p-2.5 rounded-xl border border-rose-100">⏳</div>
                 </div>
-                <div class="bg-white premium-glass-card p-5 border-l-4 border-purple-600 flex items-center justify-between">
-                    <div><p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Active Sidebar Tools</p><h3 id="statToolsCount" class="text-2xl font-black text-purple-600 mt-1">0</h3></div>
-                    <div class="text-xl bg-purple-50 p-2.5 rounded-xl text-purple-600">🧰</div>
+                <div class="bg-white p-5 rounded-2xl border flex items-center justify-between shadow-sm">
+                    <div><p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Custom Pages Node</p><h3 id="statCustomPagesCount" class="text-2xl font-black text-amber-600 mt-1">0</h3></div>
+                    <div class="text-xl bg-amber-50 p-2.5 rounded-xl border border-amber-100">📄</div>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
                 
-                <div class="lg:col-span-8 space-y-6 bg-white premium-glass-card p-5 border">
+                <div class="lg:col-span-8 space-y-6 bg-white p-5 rounded-2xl border shadow-sm">
                     
-                    <div class="bg-slate-50 border p-4 rounded-xl space-y-3">
-                        <h4 class="font-extrabold text-xs text-indigo-950 uppercase tracking-wide">📱 Front-Page Responsive Grid Columns Layout Controller</h4>
+                    <div class="bg-slate-50 border p-4 rounded-xl space-y-2.5">
+                        <h4 class="font-extrabold text-xs text-slate-700 uppercase tracking-wide">📱 Main Grid Feed Viewport Column Engine</h4>
                         <div class="flex gap-2 flex-wrap" id="gridLayoutActionContainer">
-                            <button onclick="window.executeSetGridLayoutColumnsNode('grid-cols-2')" class="layout-grid-btn px-4 py-1.5 text-xs font-bold rounded-xl border bg-white shadow-sm">2 Columns</button>
-                            <button onclick="window.executeSetGridLayoutColumnsNode('grid-cols-3')" class="layout-grid-btn px-4 py-1.5 text-xs font-bold rounded-xl border bg-white shadow-sm">3 Columns</button>
-                            <button onclick="window.executeSetGridLayoutColumnsNode('grid-cols-4')" class="layout-grid-btn px-4 py-1.5 text-xs font-bold rounded-xl border bg-white shadow-sm">4 Columns</button>
-                            <button onclick="window.executeSetGridLayoutColumnsNode('grid-cols-6')" class="layout-grid-btn px-4 py-1.5 text-xs font-bold rounded-xl border bg-white shadow-sm">6 Columns</button>
+                            <button onclick="window.executeSetGridLayoutColumnsNode('grid-cols-2')" class="px-4 py-2 text-xs font-bold rounded-xl border bg-white shadow-sm hover:bg-slate-50">2 Columns</button>
+                            <button onclick="window.executeSetGridLayoutColumnsNode('grid-cols-3')" class="px-4 py-2 text-xs font-bold rounded-xl border bg-white shadow-sm hover:bg-slate-50">3 Columns</button>
+                            <button onclick="window.executeSetGridLayoutColumnsNode('grid-cols-4')" class="px-4 py-2 text-xs font-bold rounded-xl border bg-white shadow-sm hover:bg-slate-50">4 Columns</button>
+                            <button onclick="window.executeSetGridLayoutColumnsNode('grid-cols-6')" class="px-4 py-2 text-xs font-bold rounded-xl border bg-white shadow-sm hover:bg-slate-50">6 Columns</button>
                         </div>
                     </div>
 
                     <div class="bg-slate-50 border p-4 rounded-xl space-y-3">
-                        <h4 class="font-extrabold text-xs text-amber-700 uppercase tracking-wide">🏷️ Dynamic Category Master Configurator</h4>
+                        <h4 class="font-extrabold text-xs text-slate-700 uppercase tracking-wide">🏷️ Dynamic Category Creator Engine</h4>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end">
-                            <div><label class="block text-[10px] font-black text-slate-600 uppercase mb-1">Category Name</label><input type="text" id="newCatName" class="w-full bg-white border text-xs p-2.5 rounded-xl outline-none" placeholder="e.g. Admit Card"></div>
+                            <div><label class="block text-[10px] font-black text-slate-500 uppercase mb-1">New Category Title</label><input type="text" id="newCatName" class="w-full bg-white border text-xs p-2.5 rounded-xl outline-none font-bold" placeholder="e.g. Admit Card"></div>
                             <div>
-                                <label class="block text-[10px] font-black text-slate-600 uppercase mb-1">Select Chip Color Accent</label>
+                                <label class="block text-[10px] font-black text-slate-500 uppercase mb-1">Accent Badge Color</label>
                                 <div class="flex items-center gap-2 bg-white border p-1 rounded-xl">
-                                    <input type="color" id="newCatHex" class="w-12 h-8 rounded-lg border cursor-pointer bg-transparent" value="#6366f1">
-                                    <span class="text-xs font-bold text-slate-500">Color Palette</span>
+                                    <input type="color" id="newCatHex" class="w-12 h-8 rounded-lg border cursor-pointer bg-transparent border-0" value="#4f46e5">
+                                    <span class="text-xs font-bold text-slate-400">Color Palette</span>
                                 </div>
                             </div>
-                            <button onclick="window.executeAddNewCategoryNode()" class="bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs py-3 rounded-xl shadow">Create Category ➕</button>
+                            <button onclick="window.executeAddNewCategoryNode()" class="bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs py-3 rounded-xl shadow-sm">Save Category ➕</button>
                         </div>
                     </div>
 
-                    <div class="bg-amber-50/50 border border-amber-200/80 p-4 rounded-xl space-y-3">
-                        <h4 class="font-extrabold text-xs text-amber-800 uppercase tracking-wide">📄 Custom Page Route Node Engine Creator</h4>
+                    <div class="bg-slate-50 border p-4 rounded-xl space-y-3">
+                        <h4 class="font-extrabold text-xs text-amber-700 uppercase tracking-wide">📄 Custom Static Page Engine Builder</h4>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 items-start">
                             <div class="sm:col-span-1">
-                                <label class="block text-[10px] font-black text-slate-600 uppercase mb-1">Page URL Slug Title</label>
+                                <label class="block text-[10px] font-black text-slate-500 uppercase mb-1">Url Sub-Slug Root</label>
                                 <input type="text" id="pageSlug" class="w-full bg-white border text-xs p-2.5 rounded-xl outline-none font-bold text-amber-900" placeholder="e.g. privacy-policy">
                             </div>
                             <div class="sm:col-span-2">
-                                <label class="block text-[10px] font-black text-slate-600 uppercase mb-1">HTML Content Markup Body Node</label>
-                                <textarea id="pageContent" rows="1" class="w-full bg-white border text-xs p-2 rounded-xl outline-none font-mono" placeholder="<h1>Privacy Statement</h1><p>Data is safe...</p>"></textarea>
+                                <label class="block text-[10px] font-black text-slate-500 uppercase mb-1">HTML Markup Body Content String</label>
+                                <textarea id="pageContent" rows="1" class="w-full bg-white border text-xs p-2.5 rounded-xl outline-none font-mono text-slate-700" placeholder="<h1>Privacy Hub</h1><p>Data is secure...</p>"></textarea>
                             </div>
                         </div>
-                        <button onclick="window.executeBuildCustomPageNodeData()" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs py-2.5 rounded-xl shadow">Build Document Page Route Live 🛠️</button>
+                        <button onclick="window.executeBuildCustomPageNodeData()" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs py-2.5 rounded-xl shadow-sm">Compile & Deploy Page Route 🛠️</button>
                     </div>
 
-                    <div class="bg-slate-100 border p-3 rounded-xl sticky top-2 z-30 flex flex-wrap gap-2 items-center shadow-inner">
-                        <span class="text-[10px] font-black text-slate-500 uppercase mr-1">📝 Selector Toolbar:</span>
-                        <button onclick="window.executeMasterFormatStyleCommand('link')" class="rich-editor-btn">🔗 Link</button>
-                        <button onclick="window.executeMasterFormatStyleCommand('img')" class="rich-editor-btn">🖼️ Add Image</button>
-                        <button onclick="window.executeMasterFormatStyleCommand('size')" class="rich-editor-btn">📐 Font Size</button>
-                        <div class="flex items-center gap-1.5 bg-white border px-2 py-1 rounded-lg">
+                    <div class="bg-slate-50 border p-3 rounded-xl flex flex-wrap gap-2 items-center">
+                        <span class="text-[10px] font-black text-slate-400 uppercase mr-1">Toolbar Controls:</span>
+                        <button onclick="window.executeMasterFormatStyleCommand('link')" class="rich-editor-btn">🔗 Hyperlink</button>
+                        <button onclick="window.executeMasterFormatStyleCommand('img')" class="rich-editor-btn">🖼️ Embed Image</button>
+                        <button onclick="window.executeMasterFormatStyleCommand('size')" class="rich-editor-btn">📐 Font Scale</button>
+                        <div class="flex items-center gap-1.5 bg-white border px-3 py-1.5 rounded-lg">
                             <input type="color" id="masterTextHexColorPicker" onchange="window.executeMasterFormatStyleCommand('color')" class="w-6 h-5 rounded cursor-pointer bg-transparent border-0">
-                            <span class="text-[11px] font-bold text-slate-600">🎨 Color Picker</span>
+                            <span class="text-[11px] font-bold text-slate-600">Palette Marker</span>
                         </div>
                     </div>
 
@@ -135,79 +126,79 @@
                         <div class="flex items-center justify-between border-b pb-2">
                             <h3 id="adminFormHeadlineLabel" class="font-extrabold text-base text-slate-900">Create Direct Live Post Node</h3>
                             <div class="bg-slate-100 p-1 rounded-xl flex gap-1 border">
-                                <button id="modeVisualBtn" onclick="window.togglePostInputWorkspaceMode('visual')" class="tab-active px-3 py-1 text-xs font-bold rounded-lg transition-all">Post in Visual</button>
-                                <button id="modeHtmlBtn" onclick="window.togglePostInputWorkspaceMode('html')" class="px-3 py-1 text-xs font-bold rounded-lg transition-all">Post in HTML</button>
+                                <button id="modeVisualBtn" onclick="window.togglePostInputWorkspaceMode('visual')" class="tab-active px-3 py-1 text-xs font-bold rounded-lg transition-all">Visual Mode</button>
+                                <button id="modeHtmlBtn" onclick="window.togglePostInputWorkspaceMode('html')" class="px-3 py-1 text-xs font-bold rounded-lg transition-all">Raw HTML Mode</button>
                             </div>
                         </div>
                         <input type="hidden" id="adminTargetEditingId" value="">
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-slate-800">
                             <div class="md:col-span-2">
-                                <label class="block text-xs font-bold mb-1.5">Advertisement Job Title</label>
-                                <input type="text" id="aTitle" class="w-full bg-slate-50 border text-sm p-3 rounded-xl outline-none font-bold">
+                                <label class="block text-xs font-bold mb-1">Post Main Headline Title</label>
+                                <input type="text" id="aTitle" class="w-full bg-slate-50 border text-sm p-3 rounded-xl outline-none font-bold text-slate-900">
                             </div>
                             <div>
-                                <label class="block text-xs font-bold mb-1.5">Authority Organization Board</label>
-                                <input type="text" id="aAuth" class="w-full bg-white border text-sm p-3 rounded-xl outline-none">
+                                <label class="block text-xs font-bold mb-1">Recruitment Board Authority</label>
+                                <input type="text" id="aAuth" class="w-full bg-white border text-sm p-3 rounded-xl outline-none text-slate-700">
                             </div>
                             <div>
-                                <label class="block text-xs font-bold mb-1.5">Select Target Category</label>
+                                <label class="block text-xs font-bold mb-1">Assigned Operational Category</label>
                                 <select id="aType" class="w-full bg-white border text-sm p-3 rounded-xl outline-none font-bold text-slate-800"></select>
                             </div>
                             <div>
-                                <label class="block text-xs font-bold mb-1.5">Last Date Submission</label>
+                                <label class="block text-xs font-bold mb-1">Closing Last Date</label>
                                 <input type="text" id="aLastDate" class="w-full bg-white border text-sm p-3 rounded-xl outline-none">
                             </div>
                             <div>
-                                <label class="block text-xs font-bold mb-1.5">Image Display Matrix Visibility</label>
-                                <select id="aImageVisibilityMode" class="w-full bg-white border text-sm p-3.5 rounded-xl outline-none font-bold text-indigo-700 border-indigo-200">
-                                    <option value="both" selected>Show Image Both (Main & Post Page)</option>
-                                    <option value="main_only">Show Only on Main Feed Grid Page</option>
-                                    <option value="post_only">Show Only on Post Deep Detail Page</option>
-                                    <option value="none">Without Image (Hide Everywhere)</option>
+                                <label class="block text-xs font-bold mb-1">Thumbnail Rendering Rule Scope</label>
+                                <select id="aImageVisibilityMode" class="w-full bg-white border text-sm p-3 rounded-xl outline-none font-bold text-indigo-600 border-slate-200">
+                                    <option value="both" selected>Show Image on Grid Feed & Inside Pages</option>
+                                    <option value="main_only">Show Image on Main Stream Feed Only</option>
+                                    <option value="post_only">Show Image inside Detailed Layout Pages Only</option>
+                                    <option value="none">Completely Blind Post (Hide Everywhere)</option>
                                 </select>
                             </div>
 
                             <div id="workspaceVisualBlockContainer" class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-xs font-bold mb-1.5">Application Fees Info Text</label>
-                                    <input type="text" id="aFees" class="w-full bg-white border text-xs p-3 rounded-xl outline-none">
+                                    <label class="block text-xs font-bold mb-1">Application Fees Metric Node</label>
+                                    <input type="text" id="aFees" class="w-full bg-white border text-xs p-3 rounded-xl outline-none" placeholder="General/OBC: ₹100, SC/ST: 0">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold mb-1.5">Eligibility Criteria Text</label>
-                                    <input type="text" id="aElig" class="w-full bg-white border text-xs p-3 rounded-xl outline-none">
+                                    <label class="block text-xs font-bold mb-1">Qualification Eligibility Bounds</label>
+                                    <input type="text" id="aElig" class="w-full bg-white border text-xs p-3 rounded-xl outline-none" placeholder="10th, 12th Pass, Degree or Equivalent">
                                 </div>
                             </div>
                         </div>
 
                         <div class="text-slate-800">
-                            <label id="mainContentTextBoxLabel" class="block text-xs font-bold mb-1.5">Description Content Workspace Area</label>
+                            <label id="mainContentTextBoxLabel" class="block text-xs font-bold mb-1.5">Description Box Area Blueprint</label>
                             <div id="visualEditorContainerBox" class="block">
-                                <div class="bg-slate-200 border border-b-0 px-3 py-1 text-[10px] font-black text-slate-500 uppercase rounded-t-xl select-none">Live Visual Mode Viewport Panel</div>
+                                <div class="bg-slate-100 border border-b-0 px-3 py-1.5 text-[10px] font-black text-slate-400 uppercase rounded-t-xl select-none">Live Inline Rich Visual Workspace View</div>
                                 <div id="richVisualEditorField" contenteditable="true" class="editable-editor-div bg-white"></div>
                             </div>
-                            <textarea id="aDesc" rows="8" class="hidden w-full text-sm p-3 rounded-xl border outline-none font-mono tracking-wide bg-white" placeholder=""></textarea>
+                            <textarea id="aDesc" rows="8" class="hidden w-full text-sm p-3 rounded-xl border outline-none font-mono tracking-wide bg-white text-slate-800" placeholder=""></textarea>
                         </div>
 
                         <div class="flex gap-2">
-                            <button id="adminSubmitPrimaryActionBtn" onclick="window.publishDirectAdminNode()" class="flex-1 bg-emerald-600 text-white font-bold text-xs py-3.5 rounded-xl shadow-md transition-all">Publish Instantly Live ⚡</button>
-                            <button id="adminCancelEditNodeBtn" onclick="window.clearAdminEditingFormFieldsState()" class="hidden bg-slate-400 text-white font-bold text-xs px-4 py-3.5 rounded-xl">Cancel Edit</button>
+                            <button id="adminSubmitPrimaryActionBtn" onclick="window.publishDirectAdminNode()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs py-3.5 rounded-xl shadow-sm transition-all">Publish Content Node Live ⚡</button>
+                            <button id="adminCancelEditNodeBtn" onclick="window.clearAdminEditingFormFieldsState()" class="hidden bg-slate-400 text-white font-bold text-xs px-5 py-3.5 rounded-xl">Cancel Session</button>
                         </div>
                     </div>
                 </div>
 
                 <div class="lg:col-span-4 space-y-5">
-                    <div class="bg-white premium-glass-card p-4 border">
-                        <h3 class="font-bold text-sm text-rose-600 border-b pb-1">User Contributor Approval Queue</h3>
-                        <div id="adminApprovalQueueTargetList" class="space-y-3 max-h-[200px] overflow-y-auto pt-2"></div>
+                    <div class="bg-white p-4 rounded-2xl border shadow-sm">
+                        <h3 class="font-extrabold text-xs uppercase tracking-wider text-rose-600 border-b pb-1.5">User Contributor Processing Queue</h3>
+                        <div id="adminApprovalQueueTargetList" class="space-y-3 max-h-[220px] overflow-y-auto pt-2"></div>
                     </div>
-                    <div class="bg-white premium-glass-card p-4 border">
-                        <h3 class="font-bold text-sm text-amber-600 border-b pb-1">Erase / Delete Active Categories</h3>
-                        <div id="adminLiveCategoriesDeleteListStack" class="space-y-2 max-h-[200px] overflow-y-auto pt-2"></div>
+                    <div class="bg-white p-4 rounded-2xl border shadow-sm">
+                        <h3 class="font-extrabold text-xs uppercase tracking-wider text-amber-600 border-b pb-1.5">Active Categorized Target Cleaners</h3>
+                        <div id="adminLiveCategoriesDeleteListStack" class="space-y-2 max-h-[220px] overflow-y-auto pt-2"></div>
                     </div>
-                    <div class="bg-white premium-glass-card p-4 border">
-                        <h3 class="font-bold text-sm text-slate-800 border-b pb-1">Edit Live Published Cards</h3>
-                        <div id="adminLivePostsListEditableTargetStack" class="space-y-2 max-h-[250px] overflow-y-auto pt-2"></div>
+                    <div class="bg-white p-4 rounded-2xl border shadow-sm">
+                        <h3 class="font-extrabold text-xs uppercase tracking-wider text-slate-700 border-b pb-1.5">Deployed Active Broadcast Feeds</h3>
+                        <div id="adminLivePostsListEditableTargetStack" class="space-y-2 max-h-[280px] overflow-y-auto pt-2"></div>
                     </div>
                 </div>
 
@@ -218,28 +209,28 @@
     <div id="premiumRichFormatModalOverlay" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[150] flex items-center justify-center hidden opacity-0 transition-all duration-200">
         <div class="bg-white max-w-sm w-full m-4 p-5 rounded-2xl shadow-2xl border text-slate-800 space-y-4 relative">
             <div>
-                <h4 id="premiumModalTitleLabel" class="text-sm font-black text-slate-800 uppercase tracking-wide">Dynamic Input Engine</h4>
-                <p id="premiumModalSubLabel" class="text-[11px] text-slate-400 font-semibold mt-0.5">Please provide value below.</p>
+                <h4 id="premiumModalTitleLabel" class="text-xs font-black text-slate-800 uppercase tracking-wide">Data Matrix Node Input</h4>
+                <p id="premiumModalSubLabel" class="text-[10px] text-slate-400 font-bold mt-0.5">Please map the values below.</p>
             </div>
-            <input type="text" id="premiumModalInputField" class="w-full bg-slate-50 border text-sm p-2.5 rounded-xl outline-none text-slate-800 font-medium">
+            <input type="text" id="premiumModalInputField" class="w-full bg-slate-50 border text-sm p-3 rounded-xl outline-none text-slate-900 font-medium">
             <div class="flex justify-end gap-2 text-xs font-bold">
-                <button onclick="window.closePremiumTextEditorModal(false)" class="px-4 py-2 text-slate-500 bg-slate-100 hover:bg-slate-200 rounded-lg">Cancel</button>
-                <button onclick="window.closePremiumTextEditorModal(true)" class="px-4 py-2 text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-md">Apply Tag</button>
+                <button onclick="window.closePremiumTextEditorModal(false)" class="px-4 py-2 text-slate-500 bg-slate-100 rounded-lg">Abort</button>
+                <button onclick="window.closePremiumTextEditorModal(true)" class="px-4 py-2 text-white bg-indigo-600 rounded-lg shadow-sm">Confirm & Append</button>
             </div>
         </div>
     </div>
 
     <div id="premiumToastNotification" class="fixed top-5 left-1/2 transform -translate-x-1/2 z-[200] max-w-sm w-full mx-4 bg-white border p-4 rounded-2xl shadow-2xl flex items-start gap-3 opacity-0 pointer-events-none transition-all duration-300">
-        <div id="toastIconSlot" class="text-lg">✨</div>
+        <div id="toastIconSlot" class="text-base">✨</div>
         <div class="flex-1">
-            <h4 id="toastTitleSlot" class="text-xs font-black uppercase text-slate-900">System Notify</h4>
-            <p id="toastMessageSlot" class="text-xs font-semibold text-slate-600 mt-0.5"></p>
+            <h4 id="toastTitleSlot" class="text-xs font-black uppercase text-slate-900">System Trace</h4>
+            <p id="toastMessageSlot" class="text-xs font-bold text-slate-500 mt-0.5"></p>
         </div>
         <button onclick="document.getElementById('premiumToastNotification').classList.add('opacity-0','pointer-events-none')" class="text-slate-400 hover:text-slate-600 font-bold text-sm px-1.5">✕</button>
     </div>
 
-    <footer class="w-full bg-white/60 border-t p-5 text-xs text-slate-500 text-center shrink-0">
-        <p class="font-semibold">LuminaEdu Network © 2026 | Powered by Isolated Admin Core Protocol</p>
+    <footer class="w-full bg-white border-t p-5 text-xs text-slate-400 font-medium text-center shrink-0">
+        <p>LuminaEdu Systems © 2026 | Pure Functional Isolated Clean Grid Framework Admin</p>
     </footer>
 
     <script type="module" src="admin-core.js"></script>
