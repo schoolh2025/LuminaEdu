@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Central Admin Desk | LuminaEdu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen p-4 md:p-8">
+
+    <div id="adminAuthCover" class="max-w-md mx-auto my-16 bg-slate-800 p-6 rounded-2xl border border-slate-700 space-y-4">
+        <h2 class="text-center font-bold text-lg text-white">🔒 Super Admin Crypt Desk</h2>
+        <input type="password" id="adminSecretKey" class="w-full bg-slate-950 border border-slate-700 p-3 rounded-xl outline-none text-center tracking-widest text-emerald-400 font-mono" placeholder="••••••••••••">
+        <button id="unlockAdminBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl">Unlock Absolute Terminal ⚡</button>
+    </div>
+
+    <div id="adminConsoleWorkspace" class="hidden space-y-6 max-w-6xl mx-auto">
+        <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+            <h1 class="text-xl font-black text-white">🎛️ Master Control Console <span class="text-xs bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded font-bold">ROOT ACTIVE</span></h1>
+            <button id="adminLogoutBtn" class="bg-rose-600 text-white text-xs font-bold px-4 py-2 rounded-xl">Secure Logout 🚪</button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <div class="lg:col-span-2 bg-slate-800 p-5 rounded-2xl border border-slate-700/60 space-y-4">
+                <h3 class="font-bold text-sm text-indigo-400 border-b border-slate-700 pb-1">Create Direct Live Post Card</h3>
+                <div class="grid grid-cols-2 gap-3 text-xs text-slate-200">
+                    <div class="col-span-2">
+                        <label class="block mb-1">Job Title Headline</label>
+                        <input type="text" id="aTitle" class="w-full bg-slate-950 border border-slate-700 p-2.5 rounded-lg outline-none text-white font-bold">
+                    </div>
+                    <div>
+                        <label class="block mb-1">Organization Board</label>
+                        <input type="text" id="aAuth" class="w-full bg-slate-950 border border-slate-700 p-2.5 rounded-lg outline-none text-white">
+                    </div>
+                    <div>
+                        <label class="block mb-1">Category Type</label>
+                        <input type="text" id="aType" class="w-full bg-slate-950 border border-slate-700 p-2.5 rounded-lg outline-none text-white">
+                    </div>
+                    <div>
+                        <label class="block mb-1">Last Date Submission</label>
+                        <input type="text" id="aLastDate" class="w-full bg-slate-950 border border-slate-700 p-2.5 rounded-lg outline-none text-white">
+                    </div>
+                </div>
+                <button id="adminPublishBtn" class="w-full bg-emerald-600 text-white text-xs font-bold py-3 rounded-xl shadow-md">Publish Instantly Front-Page ⚡</button>
+            </div>
+
+            <div class="bg-slate-800 p-5 rounded-2xl border border-slate-700/60 space-y-4">
+                <h3 class="font-bold text-sm text-amber-400 border-b border-slate-700 pb-1">📄 Custom Page Engine Creator</h3>
+                <p class="text-[11px] text-slate-400">Yahan se aap system ke liye naye sub-informational static routes create kar sakte hain.</p>
+                <div class="space-y-3 text-xs">
+                    <div>
+                        <label class="block mb-1 text-slate-300">Page Route Slug Title</label>
+                        <input type="text" id="pageSlug" class="w-full bg-slate-950 border border-slate-700 p-2.5 rounded-lg outline-none text-white" placeholder="e.g. privacy-policy">
+                    </div>
+                    <div>
+                        <label class="block mb-1 text-slate-300">HTML Code / Content Markup</label>
+                        <textarea id="pageContent" rows="4" class="w-full bg-slate-950 border border-slate-700 p-2.5 rounded-lg outline-none text-mono text-emerald-400 font-mono text-xs" placeholder="<h1>Hello World</h1>"></textarea>
+                    </div>
+                    <button id="createNewPageBtn" class="w-full bg-amber-600 text-white font-bold py-2.5 rounded-xl transition-all">Build Live Document Page 🛠️</button>
+                </div>
+            </div>
+
+            <div class="lg:col-span-3 bg-slate-800 p-5 rounded-2xl border border-slate-700/60">
+                <h3 class="font-bold text-sm text-rose-400 border-b border-slate-700 pb-1">Incoming User Proposal Audit Stream</h3>
+                <div id="adminQueueStack" class="space-y-3 mt-3 max-h-[300px] overflow-y-auto">
+                    <p class="text-xs text-slate-500 text-center py-4">No submissions pending audit nodes.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script type="module" src="admin-core.js"></script>
+</body>
+</html>
