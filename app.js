@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, collection, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, collection, doc, onSnapshot, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDEXmjIN8w2s2uXk0FTzC7ri4HhLetzV4E",
@@ -22,23 +22,56 @@ window.performSinglePageRoutingView = function(targetViewMode, postId = null) {
     const feedView = document.getElementById('mainFeedRouterBlock');
     const detailView = document.getElementById('postDetailView');
     const leftSidebar = document.getElementById('mainLeftSidebarNode');
-    const rightSidebar = document.getElementById('subPageRightSidebarNode');
     const mainContentRegion = document.getElementById('coreContentLayoutViewRegion');
 
     feedView?.classList.add('hidden'); detailView?.classList.add('hidden');
-    leftSidebar?.classList.add('hidden'); rightSidebar?.classList.add('hidden');
+    leftSidebar?.classList.add('hidden'); 
     if(mainContentRegion) mainContentRegion.className = "lg:col-span-12 space-y-6 min-w-0 w-full";
 
     if(targetViewMode === 'detail') {
         detailView?.classList.remove('hidden');
-        rightSidebar?.classList.remove('hidden');
-        if(mainContentRegion) mainContentRegion.className = "lg:col-span-8 space-y-6 min-w-0 w-full";
         window.renderPostDeepContentView(postId);
         window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
         leftSidebar?.classList.remove('hidden');
         feedView?.classList.remove('hidden');
         window.executeUIRenderPipeline();
+    }
+};
+
+// 🌟 ADSENSE PAGES DYNAMIC INLINE OVERRIDE FETCH SYNCER (SAME UNIFORM DESIGN)
+window.triggerRenderAdSensePolicyPage = async function(slugName) {
+    window.performSinglePageRoutingView('detail', null);
+    const payloadBox = document.getElementById('detailViewContentPayload');
+    if(!payloadBox) return;
+
+    payloadBox.innerHTML = `<p class="text-center text-xs font-bold text-slate-400 py-6 animate-pulse">Loading compliance schema documents...</p>`;
+    
+    try {
+        const q = query(collection(db, "created_pages"), where("slug", "==", slugName));
+        const querySnapshot = await getDocs(q);
+        
+        let contentHtml = "";
+        querySnapshot.forEach((docNode) => {
+            contentHtml = docNode.data().content;
+        });
+
+        if(contentHtml) {
+            payloadBox.innerHTML = `
+                <div class="bg-white rounded-xl p-2 space-y-4">
+                    <h2 class="text-2xl font-black text-slate-900 border-b pb-2 capitalize">${slugName.replace('-', ' ')}</h2>
+                    <div class="text-sm font-medium leading-relaxed text-slate-700">${contentHtml}</div>
+                </div>`;
+        } else {
+            // Static Default fallbacks if pages are yet to be populated via Admin panel
+            payloadBox.innerHTML = `
+                <div class="bg-white rounded-xl p-2 space-y-4">
+                    <h2 class="text-2xl font-black text-slate-900 border-b pb-2 capitalize">${slugName.replace('-', ' ')}</h2>
+                    <p class="text-sm text-slate-500 font-bold">This page data node is active under index registers but has no markup block built yet inside admin dashboard workspace.</p>
+                </div>`;
+        }
+    } catch(err) {
+        payloadBox.innerHTML = `<p class="text-xs font-bold text-rose-500">Failed to render policy document node layout.</p>`;
     }
 };
 
@@ -111,19 +144,8 @@ window.executeUIRenderPipeline = function() {
     styleTag.innerHTML = ".hide-embedded-images-context img { display: none !important; }";
 };
 
-window.executeSidebarLiveSearchFilters = function() {
-    const query = document.getElementById('sidebarLiveSearchBox')?.value.trim().toLowerCase() || "";
-    const stack = document.getElementById('rightSidebarLiveCollectionStack');
-    if(!stack) return;
-    const filteredStack = cachedJobsArray.filter(j => j.approvalStatus === 'Live' && (j.title.toLowerCase().includes(query) || j.authority.toLowerCase().includes(query)));
-    stack.innerHTML = filteredStack.slice(0, 6).map(j => `
-        <div onclick="window.performSinglePageRoutingView('detail', '${j.id}')" class="bg-white hover:bg-indigo-50 p-2.5 rounded-xl border cursor-pointer text-xs shadow-sm">
-            <h5 class="font-bold text-slate-800 truncate">${j.title}</h5>
-        </div>
-    `).join('');
-};
-
 window.renderPostDeepContentView = function(postId) {
+    if(!postId) return; // Ignore fallback calls from static triggers
     const payload = document.getElementById('detailViewContentPayload');
     const matched = cachedJobsArray.find(item => item.id === postId);
     if(!matched || !payload) return;
@@ -159,7 +181,6 @@ function bootstrapApplicationEngine() {
         cachedJobsArray = [];
         snapshot.forEach(docSnap => { cachedJobsArray.push({ id: docSnap.id, ...docSnap.data() }); });
         window.executeUIRenderPipeline();
-        window.executeSidebarLiveSearchFilters();
     });
 
     onSnapshot(collection(db, "pdf_tools"), (snapshot) => {
