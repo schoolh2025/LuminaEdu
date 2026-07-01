@@ -14,12 +14,12 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 let cachedJobsArray = [];
-let trackedSelectionInputBoxId = "aDesc"; 
-let activePostEditorMode = "visual"; 
 let formattingTargetMode = "";
+let currentActiveEditorModeType = "visual";
+let capturedWindowSavedRangeNode = null;
 
 // ==========================================
-// 🔒 LOGIN ENGINE COMPONENT
+// 🔒 SYSTEM GATEWAY PIPELINE
 // ==========================================
 window.executeDashboardIdentityLoginPipeline = async function() {
     const enteredPassword = document.getElementById('dashPass').value.trim();
@@ -55,11 +55,6 @@ window.executeDashboardIdentityLoginPipeline = async function() {
     }
 };
 
-window.toggleLockRevealField = function() {
-    const input = document.getElementById('dashPass');
-    if(input) input.type = input.type === 'password' ? 'text' : 'password';
-};
-
 window.performSecurePlatformLogout = function() {
     sessionStorage.clear();
     window.location.replace("../index.html");
@@ -75,43 +70,49 @@ window.spawnPremiumToastAlert = function(title, message, type) {
 };
 
 // ==========================================
-// 🎛️ DYNAMIC POST INPUT WORKSPACE LAYOUT SWITCHER
+// 🎛️ POST ENGINE WORKSPACE PANEL MODES SWITCHER
 // ==========================================
 window.togglePostInputWorkspaceMode = function(mode) {
-    activePostEditorMode = mode;
-    const visualBox = document.getElementById('workspaceVisualBlockContainer');
-    const label = document.getElementById('mainContentTextBoxLabel');
-    const descArea = document.getElementById('aDesc');
+    currentActiveEditorModeType = mode;
+    const visualEditorBox = document.getElementById('visualEditorContainerBox');
+    const rawHtmlTextArea = document.getElementById('aDesc');
+    const visualFieldsBox = document.getElementById('workspaceVisualBlockContainer');
+    const labelLabel = document.getElementById('mainContentTextBoxLabel');
 
     document.getElementById('modeVisualBtn').className = mode === 'visual' ? 'tab-active px-3 py-1 text-xs font-bold rounded-lg' : 'px-3 py-1 text-xs font-bold rounded-lg';
     document.getElementById('modeHtmlBtn').className = mode === 'html' ? 'tab-active px-3 py-1 text-xs font-bold rounded-lg' : 'px-3 py-1 text-xs font-bold rounded-lg';
 
     if (mode === 'html') {
-        visualBox?.classList.add('hidden');
-        if (label) label.innerText = "📋 Paste Complete Full HTML Post Payload Code Here:";
-        if (descArea) descArea.placeholder = "<!-- Paste your absolute custom table style raw <html> code string node here -->";
+        visualFieldsBox?.classList.add('hidden');
+        visualEditorBox?.classList.add('hidden');
+        rawHtmlTextArea?.classList.remove('hidden');
+        if (labelLabel) labelLabel.innerText = "📋 Paste / Edit Complete Custom HTML Code Payload Node:";
+        // Convert current visual text data block into html formatting string parameters on switch
+        rawHtmlTextArea.value = document.getElementById('richVisualEditorField').innerHTML;
     } else {
-        visualBox?.classList.remove('hidden');
-        if (label) label.innerText = "Description Meta Text Content";
-        if (descArea) descArea.placeholder = "";
+        visualFieldsBox?.classList.remove('hidden');
+        visualEditorBox?.classList.remove('hidden');
+        rawHtmlTextArea?.classList.add('hidden');
+        if (labelLabel) labelLabel.innerText = "Description Content Workspace Area";
+        document.getElementById('richVisualEditorField').innerHTML = rawHtmlTextArea.value;
     }
 };
 
-window.setSelectionTrackInputFocus = function(id) {
-    trackedSelectionInputBoxId = id;
-};
-
 // ==========================================
-// 🪄 CENTRALIZED INDEPENDENT MASTER TEXT FORMATTING SELECTION SYSTEM
+// 🪄 ULTRA PREMIUM CONTENT-EDITABLE TEXT SELECTION HANDLING COMMANDS
 // ==========================================
-window.triggerMasterSelectionFormatInjection = function(mode) {
+window.executeMasterFormatStyleCommand = function(mode) {
     formattingTargetMode = mode;
-    const txtArea = document.getElementById(trackedSelectionInputBoxId);
-    if (!txtArea) return;
+    
+    // Capture and cache current selected text range before clicking overlay modal panels
+    const activeSelection = window.getSelection();
+    if (activeSelection.rangeCount > 0) {
+        capturedWindowSavedRangeNode = activeSelection.getRangeAt(0).cloneRange();
+    }
 
     if (mode === 'color') {
-        const pickerColor = document.getElementById('masterTextHexColorPicker').value;
-        injectFormattedTagsIntoInputRange(pickerColor);
+        const selectedHexColorValue = document.getElementById('masterTextHexColorPicker').value;
+        executeApplyInlineStyleTagInjection(selectedHexColorValue);
         return;
     }
 
@@ -121,10 +122,10 @@ window.triggerMasterSelectionFormatInjection = function(mode) {
     const subLabel = document.getElementById('premiumModalSubLabel');
     
     if(!overlay || !input) return;
-    input.value = mode === 'link' ? 'https://' : '16px';
+    input.value = mode === 'link' ? 'https://' : mode === 'img' ? 'https://' : '16px';
     
     if(mode === 'link') { title.innerText = "🔗 Insert Action URL Link"; subLabel.innerText = "Enter redirect destination path:"; }
-    else if(mode === 'img') { title.innerText = "🖼️ Insert Graphic Asset URL"; subLabel.innerText = "Enter media complete web path:"; input.value = "https://"; }
+    else if(mode === 'img') { title.innerText = "🖼️ Insert Graphic Asset URL"; subLabel.innerText = "Enter media complete web path:"; }
     else if(mode === 'size') { title.innerText = "📐 Configure Selection Font Bounds"; subLabel.innerText = "Provide custom typography size (e.g. 18px):"; }
     
     overlay.classList.remove('hidden');
@@ -137,45 +138,70 @@ window.closePremiumTextEditorModal = function(shouldApply) {
     if(!overlay) return;
 
     if (shouldApply && input && input.value.trim()) {
-        injectFormattedTagsIntoInputRange(input.value.trim());
+        executeApplyInlineStyleTagInjection(input.value.trim());
     }
     overlay.classList.add('hidden');
 };
 
-function injectFormattedTagsIntoInputRange(valuePayload) {
-    const txtArea = document.getElementById(trackedSelectionInputBoxId);
-    if (!txtArea) return;
+function executeApplyInlineStyleTagInjection(valuePayloadString) {
+    // Restore exact selected selection context focus matrix layer
+    if (!capturedWindowSavedRangeNode) return;
+    const currentSelection = window.getSelection();
+    currentSelection.removeAllRanges();
+    currentSelection.addRange(capturedWindowSavedRangeNode);
 
-    const start = txtArea.selectionStart;
-    const end = txtArea.selectionEnd;
-    const selectedText = txtArea.value.substring(start, end);
-    let replacement = "";
+    let createdMarkupElement = null;
 
-    if (formattingTargetMode === 'link') replacement = `<a href="${valuePayload}" target="_blank" style="color:#2563eb;text-decoration:underline;font-weight:bold;">${selectedText || 'Link'}</a>`;
-    else if (formattingTargetMode === 'img') replacement = `<img src="${valuePayload}" class="max-w-full h-auto rounded-xl my-4 border block mx-auto" alt="Visual Asset Grid Component">`;
-    else if (formattingTargetMode === 'color') replacement = `<span style="color:${valuePayload};font-weight:bold;">${selectedText || 'Colored Text'}</span>`;
-    else if (formattingTargetMode === 'size') replacement = `<span style="font-size:${valuePayload};font-weight:800;line-height:1.4;">${selectedText || 'Sized Text'}</span>`;
+    if (formattingTargetMode === 'link') {
+        createdMarkupElement = document.createElement('a');
+        createdMarkupElement.href = valuePayloadString;
+        createdMarkupElement.target = "_blank";
+        createdMarkupElement.style.cssText = "color:#2563eb;text-decoration:underline;font-weight:bold;";
+        createdMarkupElement.innerText = capturedWindowSavedRangeNode.toString() || "Link";
+    } else if (formattingTargetMode === 'img') {
+        createdMarkupElement = document.createElement('img');
+        createdMarkupElement.src = valuePayloadString;
+        createdMarkupElement.className = "max-w-full h-auto rounded-xl my-4 border block mx-auto";
+    } else if (formattingTargetMode === 'color') {
+        createdMarkupElement = document.createElement('span');
+        createdMarkupElement.style.color = valuePayloadString;
+        createdMarkupElement.style.fontWeight = "bold";
+        createdMarkupElement.innerText = capturedWindowSavedRangeNode.toString() || "Text";
+    } else if (formattingTargetMode === 'size') {
+        createdMarkupElement = document.createElement('span');
+        createdMarkupElement.style.fontSize = valuePayloadString;
+        createdMarkupElement.style.fontWeight = "800";
+        createdMarkupElement.style.display = "inline-block";
+        createdMarkupElement.innerText = capturedWindowSavedRangeNode.toString() || "Text";
+    }
 
-    txtArea.value = txtArea.value.substring(0, start) + replacement + txtArea.value.substring(end);
+    if (createdMarkupElement) {
+        capturedWindowSavedRangeNode.deleteContents();
+        capturedWindowSavedRangeNode.insertNode(createdMarkupElement);
+    }
+    
+    capturedWindowSavedRangeNode = null;
+    currentSelection.removeAllRanges();
 }
 
 // ==========================================
-// 🚀 ENGINE DATA SYNC DEPLOYMENTS
+// 🚀 INGESTION AND SYNCHRONIZATIONS PIPELINE
 // ==========================================
 window.publishDirectAdminNode = async function() {
     const editId = document.getElementById('adminTargetEditingId').value;
     const imgMode = document.getElementById('aImageVisibilityMode').value;
     
     let completeDescriptionPayload = "";
-    if (activePostEditorMode === 'html') {
+    if (currentActiveEditorModeType === 'html') {
         completeDescriptionPayload = document.getElementById('aDesc').value.trim();
     } else {
+        const customVisualHtml = document.getElementById('richVisualEditorField').innerHTML;
         completeDescriptionPayload = `
             <div class="p-4 bg-indigo-50/50 border rounded-xl my-4 text-xs font-bold text-slate-600">
                 <p>💰 Application Fee: ${document.getElementById('aFees').value.trim() || 'Review Details'}</p>
                 <p class="mt-1">🎓 Eligibility Matrix: ${document.getElementById('aElig').value.trim() || 'Review Details'}</p>
             </div>
-            <div class="text-sm font-medium mt-2">${document.getElementById('aDesc').value.trim()}</div>`;
+            <div class="text-sm font-medium mt-2">${customVisualHtml}</div>`;
     }
 
     const postPayload = {
@@ -184,8 +210,8 @@ window.publishDirectAdminNode = async function() {
         type: document.getElementById('aType').value,
         lastDate: document.getElementById('aLastDate').value.trim(),
         description: completeDescriptionPayload,
-        imageVisibilityMode: imgMode, // Stores dynamic view constraint string configuration
-        postRenderFormat: activePostEditorMode,
+        imageVisibilityMode: imgMode, 
+        postRenderFormat: currentActiveEditorModeType,
         approvalStatus: "Live"
     };
 
@@ -219,7 +245,13 @@ window.triggerAdminPostEditSelectMode = function(id) {
     document.getElementById('aImageVisibilityMode').value = post.imageVisibilityMode || "both";
 
     window.togglePostInputWorkspaceMode(post.postRenderFormat || "visual");
-    document.getElementById('aDesc').value = post.description || "";
+    
+    if (post.postRenderFormat === 'html') {
+        document.getElementById('aDesc').value = post.description || "";
+    } else {
+        // Strip down injected fees wrappers when parsing details into visual textboxes fields
+        document.getElementById('richVisualEditorField').innerHTML = post.description || "";
+    }
 };
 
 window.clearAdminEditingFormFieldsState = function() {
@@ -231,6 +263,7 @@ window.clearAdminEditingFormFieldsState = function() {
     
     document.getElementById('aTitle').value = ""; document.getElementById('aAuth').value = "";
     document.getElementById('aLastDate').value = ""; document.getElementById('aDesc').value = "";
+    document.getElementById('richVisualEditorField').innerHTML = "";
     document.getElementById('aFees').value = ""; document.getElementById('aElig').value = "";
 };
 
@@ -360,7 +393,7 @@ function startDatabaseListenersEngine() {
         if(document.getElementById('statPendingCount')) document.getElementById('statPendingCount').innerText = totalPending;
         
         const qBox = document.getElementById('adminApprovalQueueTargetList'); if(qBox) qBox.innerHTML = approvalQueueHTML || `<p class="text-xs text-slate-400 text-center py-4">कोई लंबित पोस्ट नहीं है।</p>`;
-        const eBox = document.getElementById('adminLivePostsListEditableTargetStack'); if(eBox) eBox.innerHTML = editablePostsHTML || `<p class="text-xs text-slate-400 text-center py-4">कोई लाइव पोस्ट नहीं है।</p>`;
+        const eBox = document.getElementById('adminLivePostsListEditableTargetStack'); if(eBox) eBox.innerHTML = editablePostsHTML || `<p class="text-xs text-slate-400 text-center py-4">कोई लाइव POST नहीं है।</p>`;
     });
 
     onSnapshot(collection(db, "pdf_tools"), (snapshot) => {
@@ -377,7 +410,7 @@ function startDatabaseListenersEngine() {
                 </div>`;
         });
         if(document.getElementById('statToolsCount')) document.getElementById('statToolsCount').innerText = toolCount;
-        if(adminToolsContainer) adminToolsContainer.innerHTML = adminHtml || `<p class="text-xs text-slate-400 text-center py-4">No tools active.</p>`;
+        if(adminToolsContainer) adminToolsContainer.innerHTML = adminHtml || `<p class="text-xs text-slate-500 text-center py-4">No tools active.</p>`;
     });
 }
 
