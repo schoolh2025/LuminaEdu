@@ -1,6 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore, collection, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDEXmjIN8w2s2uXk0FTzC7ri4HhLetzV4E",
@@ -13,7 +12,6 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const auth = getAuth(app);
 
 let selectedCategoryFilter = 'All';
 let cachedJobsArray = [];
@@ -44,29 +42,6 @@ window.performSinglePageRoutingView = function(targetViewMode, postId = null) {
     }
 };
 
-window.toggleAuthOverlay = function(show) {
-    const overlay = document.getElementById('authModalOverlay');
-    if(show) { overlay?.classList.remove('hidden'); setTimeout(() => { overlay?.classList.remove('opacity-0'); }, 10); }
-    else { overlay?.classList.add('opacity-0'); setTimeout(() => { overlay?.classList.add('hidden'); }, 300); }
-};
-
-window.spawnPremiumToastAlert = function(title, message, type) {
-    const toast = document.getElementById('premiumToastNotification');
-    if(!toast) return;
-    document.getElementById('toastTitleSlot').innerText = title;
-    document.getElementById('toastMessageSlot').innerText = message;
-    toast.className = `fixed top-5 left-1/2 transform -translate-x-1/2 z-[100] max-w-sm w-full mx-4 bg-white border p-4 rounded-2xl shadow-2xl flex items-start gap-3 transition-all duration-300 opacity-100 translate-y-0 ${type==='error'?'border-rose-200 bg-rose-50':'border-emerald-200 bg-emerald-50'}`;
-    setTimeout(() => { toast.classList.add('opacity-0','pointer-events-none'); }, 4000);
-};
-
-window.executeAuthActionPipeline = function() {
-    const password = document.getElementById('usrPass').value.trim();
-    if(password) {
-        sessionStorage.setItem("lumina_token", "active");
-        window.location.href = "dashboard/admin.html";
-    }
-};
-
 window.setJobFilter = function(categoryName) {
     selectedCategoryFilter = categoryName;
     renderDynamicCategoryChips();
@@ -80,7 +55,6 @@ function renderDynamicCategoryChips() {
     let allChips = [{ name: 'All', hexColor: '#4f46e5' }, ...dynamicLoadedCategoriesArray];
     box.innerHTML = allChips.map(b => {
         let isActive = selectedCategoryFilter.toLowerCase() === b.name.toLowerCase();
-        // 🌟 SYNCS SELECTIVE CHIP COLOR INLINE FROM THE FIREBASE DATA STREAMS
         let currentStyle = isActive 
             ? `style="background-color: ${b.hexColor}; color: white; border-color: ${b.hexColor};"` 
             : `style="background-color: white; color: #1e293b; border-color: #cbd5e1;"`;
@@ -110,7 +84,6 @@ window.executeUIRenderPipeline = function() {
         let isNewAd = (Date.now() - (j.timestamp || 0)) < (2 * 24 * 60 * 60 * 1000);
         let blinkBadge = isNewAd ? `<span class="blinking-new-badge ml-2 text-[10px] font-black px-1.5 py-0.5 rounded bg-rose-100 text-rose-700 border border-rose-200 tracking-wide">NEW</span>` : "";
 
-        // 🌟 CONDITIONAL IMAGE DISPLAY STRATEGY ACCORDING TO IMAGE_C67EDE.JPG
         const visibility = j.imageVisibilityMode || "both";
         let shouldHideImg = (visibility === 'post_only' || visibility === 'none');
 
@@ -129,7 +102,6 @@ window.executeUIRenderPipeline = function() {
         `;
     }).join('');
     
-    // Inject global stylesheet overrides into runtime frame safely to drop images on demand
     let styleTag = document.getElementById('override-img-visibility-ruleset');
     if(!styleTag){
         styleTag = document.createElement('style');
@@ -156,7 +128,6 @@ window.renderPostDeepContentView = function(postId) {
     const matched = cachedJobsArray.find(item => item.id === postId);
     if(!matched || !payload) return;
 
-    // 🌟 DETAIL PAGE IMAGE VISIBILITY MATRIX CHECKER RULES
     const visibility = matched.imageVisibilityMode || "both";
     const hideOnPostPage = (visibility === 'main_only' || visibility === 'none');
     
@@ -167,8 +138,7 @@ window.renderPostDeepContentView = function(postId) {
 };
 
 function bootstrapApplicationEngine() {
-    sessionStorage.removeItem("lumina_token"); 
-    signOut(auth);
+    window.navigateToHub = window.performSinglePageRoutingView;
 
     onSnapshot(doc(db, "admin_settings", "layout_config"), (d) => {
         if(d.exists()) {
