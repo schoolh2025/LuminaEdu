@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contributor Workspace | LuminaEdu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 min-h-screen flex flex-col justify-between">
+    <header class="bg-white border-b px-6 py-4 flex justify-between items-center shadow-sm">
+        <h1 class="font-bold text-lg text-slate-800">🧑‍💻 Contributor Proposal Desk</h1>
+        <button id="userLogoutBtn" class="bg-rose-600 text-white text-xs font-bold px-4 py-2 rounded-xl">Logout 🚪</button>
+    </header>
+
+    <main class="max-w-2xl w-full mx-auto p-4 flex-1 my-6">
+        <div class="bg-white p-6 rounded-2xl border shadow-md space-y-4">
+            <h3 class="font-bold text-base text-slate-900 border-b pb-2">Propose New Post Advertisement</h3>
+            <div class="space-y-3 text-slate-800">
+                <div>
+                    <label class="block text-xs font-bold mb-1">Post Title</label>
+                    <input type="text" id="pTitle" class="w-full bg-slate-50 border p-2.5 rounded-xl text-sm outline-none font-bold">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold mb-1">Authority Board</label>
+                    <input type="text" id="pAuth" class="w-full bg-white border p-2.5 rounded-xl text-sm outline-none">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold mb-1">Category Type</label>
+                        <input type="text" id="pType" class="w-full bg-white border p-2.5 rounded-xl text-sm outline-none" placeholder="e.g. Admit Card">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold mb-1">Last Date</label>
+                        <input type="text" id="pLastDate" class="w-full bg-white border p-2.5 rounded-xl text-sm outline-none" placeholder="DD-MM-YYYY">
+                    </div>
+                </div>
+                <button id="submitProposalBtn" class="w-full bg-indigo-600 text-white font-bold text-xs py-3.5 rounded-xl shadow-md">Submit to Admin Queue ⚡</button>
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="user-auth.js"></script>
+</body>
+</html>
