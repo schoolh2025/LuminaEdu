@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LuminaEdu | Authentication Center</title>
+    <title>LuminaEdu | Authentication Hub</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -25,68 +25,103 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
-    <!-- Header -->
+    <!-- Navbar Header -->
     <header class="w-full bg-white/60 backdrop-blur-md border-b border-slate-200/50 px-6 py-4 flex items-center justify-between shadow-sm">
         <div class="flex items-center gap-2.5 cursor-pointer" onclick="window.location.href='../index.html'">
             <div class="bg-indigo-600 text-white font-black p-2 rounded-xl text-sm">LE</div>
             <h1 class="text-lg font-black text-slate-900">Lumina<span class="text-indigo-600">Edu</span></h1>
         </div>
-        <a href="../index.html" class="text-xs font-bold text-slate-500 hover:text-slate-900 transition-all">← Back to Portal</a>
+        <a href="../index.html" class="text-xs font-bold text-slate-500 hover:text-slate-900 transition-all">← Back to Home</a>
     </header>
 
-    <!-- AUTH CENTER CONTAINER HUB -->
+    <!-- MAIN SINGLE-PAGE AUTH HUB -->
     <main class="flex-1 flex items-center justify-center p-4 my-6">
         <div class="max-w-md w-full premium-glass-card p-6 md:p-8 space-y-6 border">
             
+            <!-- Dynamic Headers -->
             <div class="text-center space-y-1.5">
-                <h2 id="authInterfaceHeading" class="text-xl font-black text-slate-900 tracking-tight">Contributor Desk</h2>
-                <p id="authInterfaceSubLabel" class="text-xs text-slate-400 font-medium">Verify credentials to input proposed updates.</p>
+                <h2 id="authInterfaceHeading" class="text-2xl font-black text-slate-900 tracking-tight">Contributor Sign In</h2>
+                <p id="authInterfaceSubLabel" class="text-xs text-slate-400 font-medium">Verify email & password to input proposed updates.</p>
             </div>
 
-            <!-- TAB 1: LOGIN -->
+            <!-- TAB 1: LOGIN SEGMENT (EMAIL & PASSWORD) -->
             <div id="authLoginSegment" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-bold text-slate-600 mb-1.5">Account Secret Passkey</label>
-                    <input type="password" id="userPassKey" class="w-full bg-white border border-slate-200 p-3 rounded-xl text-sm font-mono tracking-widest outline-none focus:border-indigo-500" placeholder="••••••••••••">
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Email Address</label>
+                    <input type="email" id="loginEmail" class="w-full bg-white border border-slate-200 p-3 rounded-xl text-sm outline-none focus:border-indigo-500" placeholder="name@example.com">
                 </div>
-                <button id="executeLoginTriggerBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-black text-sm py-3.5 rounded-xl shadow-md transition-all">Authenticate Entry ⚡</button>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Password</label>
+                    <input type="password" id="loginPassword" class="w-full bg-white border border-slate-200 p-3 rounded-xl text-sm outline-none focus:border-indigo-500" placeholder="••••••••">
+                </div>
+                <button id="executeLoginTriggerBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-black text-sm py-3.5 rounded-xl shadow-md transition-all">Log In Securely ⚡</button>
                 <div class="flex items-center justify-between text-xs pt-1">
-                    <button onclick="window.shiftAuthSegmentView('forgot')" class="text-slate-400 font-bold hover:text-slate-600 hover:underline">Forgot Key?</button>
+                    <button onclick="window.shiftAuthSegmentView('forgot')" class="text-slate-400 font-bold hover:text-slate-600 hover:underline">Forgot Password?</button>
                     <button onclick="window.shiftAuthSegmentView('register')" class="text-indigo-600 font-black hover:text-indigo-700 hover:underline">Create Account</button>
                 </div>
             </div>
 
-            <!-- TAB 2: REGISTER -->
+            <!-- TAB 2: REGISTER SEGMENT (NAME, EMAIL, PASSWORD, DOB) -->
             <div id="authRegisterSegment" class="hidden space-y-4">
                 <div>
-                    <label class="block text-xs font-bold text-slate-600 mb-1.5">Choose New Secure Passkey</label>
-                    <input type="password" id="regPassKey" class="w-full bg-white border border-slate-200 p-3 rounded-xl text-sm font-mono tracking-widest outline-none focus:border-emerald-500" placeholder="Set secret code">
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Full Name</label>
+                    <input type="text" id="regName" class="w-full bg-white border border-slate-200 p-3 rounded-xl text-sm outline-none focus:border-emerald-500" placeholder="John Doe">
                 </div>
-                <button id="executeRegisterTriggerBtn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm py-3.5 rounded-xl shadow-md transition-all">Register Profile 🚀</button>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Email Address</label>
+                    <input type="email" id="regEmail" class="w-full bg-white border border-slate-200 p-3 rounded-xl text-sm outline-none focus:border-emerald-500" placeholder="name@example.com">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">Password</label>
+                        <input type="password" id="regPassword" class="w-full bg-white border border-slate-200 p-3 rounded-xl text-sm outline-none focus:border-emerald-500" placeholder="••••••••">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">Date of Birth (DOB)</label>
+                        <input type="date" id="regDob" class="w-full bg-white border border-slate-200 p-2.5 rounded-xl text-sm outline-none focus:border-emerald-500 text-slate-500">
+                    </div>
+                </div>
+                <button id="executeRegisterTriggerBtn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm py-3.5 rounded-xl shadow-md transition-all">Sign Up Profile 🚀</button>
                 <div class="text-center text-xs pt-1">
-                    <button onclick="window.shiftAuthSegmentView('login')" class="text-slate-500 font-bold hover:text-indigo-600 hover:underline">Return to Login Gateway</button>
+                    <button onclick="window.shiftAuthSegmentView('login')" class="text-slate-500 font-bold hover:text-indigo-600 hover:underline">Already have an account? Login</button>
                 </div>
             </div>
 
-            <!-- TAB 3: FORGOTTEN PROTOCOLS -->
+            <!-- TAB 3: FORGOT PASSWORD SEGMENT (EMAIL, NAME, DOB) -->
             <div id="authForgotSegment" class="hidden space-y-4">
-                <div class="p-3.5 bg-amber-50 border border-amber-100 rounded-xl text-[11px] font-bold text-amber-800 leading-relaxed">
-                    💡 **Security Matrix Rule:** LuminaEdu an anonymous credential node layer. If passkey profile signature is missing, contact server webmaster directly to re-index your data nodes.
+                <div class="p-3 bg-amber-50 border border-amber-100 rounded-xl text-[11px] font-semibold text-amber-800 leading-snug mb-1">
+                    🔒 Account verify karne ke liye apna registered Name aur DOB fill karein.
                 </div>
-                <button onclick="window.shiftAuthSegmentView('login')" class="w-full bg-slate-900 text-white font-black text-xs py-3 rounded-xl shadow-sm">← Return to Login</button>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Registered Full Name</label>
+                    <input type="text" id="forgotName" class="w-full bg-white border border-slate-200 p-3 rounded-xl text-sm outline-none focus:border-amber-500" placeholder="John Doe">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Registered Email</label>
+                    <input type="email" id="forgotEmail" class="w-full bg-white border border-slate-200 p-3 rounded-xl text-sm outline-none focus:border-amber-500" placeholder="name@example.com">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Date of Birth (DOB)</label>
+                    <input type="date" id="forgotDob" class="w-full bg-white border border-slate-200 p-2.5 rounded-xl text-sm outline-none focus:border-amber-500 text-slate-500">
+                </div>
+                <button id="executeForgotTriggerBtn" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-black text-sm py-3.5 rounded-xl shadow-md transition-all">Verify & Reset Password 🛠️</button>
+                <div class="text-center text-xs pt-1">
+                    <button onclick="window.shiftAuthSegmentView('login')" class="text-slate-500 font-bold hover:text-indigo-600 hover:underline">Back to Login</button>
+                </div>
             </div>
 
         </div>
     </main>
 
+    <!-- FOOTER -->
     <footer class="w-full bg-slate-900 text-slate-400 p-4 text-xs font-medium text-center tracking-wide shrink-0 border-t border-slate-800">
-        <p>© 2026 LuminaEdu Networks. Secure Isolation Mesh Active.</p>
+        <p>© 2026 LuminaEdu Networks. Secure Node Verification System Active.</p>
     </footer>
 
-    <!-- REALTIME RUNTIME SCRIPT PORTS -->
+    <!-- DYNAMIC TRANSACTION LOGIC LAYER -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, doc, setDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
           apiKey: "AIzaSyDEXmjIN8w2s2uXk0FTzC7ri4HhLetzV4E",
@@ -99,7 +134,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // 🌟 FLUID SYSTEM TRANSITION SWITCHER RENDERERS
+        // 🌟 FLUID VIEWPORT SWITCHER BETWEEN ROUTING PANELS
         window.shiftAuthSegmentView = function(viewMode) {
             const loginBlock = document.getElementById('authLoginSegment');
             const registerBlock = document.getElementById('authRegisterSegment');
@@ -111,35 +146,54 @@
 
             if (viewMode === 'register') {
                 registerBlock.classList.remove('hidden');
-                heading.innerText = "Contributor Register";
-                subLabel.innerText = "Setup your secure master passkey token node.";
+                heading.innerText = "Create Account";
+                subLabel.innerText = "Join the workspace to manage proposed boards data.";
             } else if (viewMode === 'forgot') {
                 forgotBlock.classList.remove('hidden');
-                heading.innerText = "Passkey Reset Protocol";
-                subLabel.innerText = "Anonymous profile reset instructions mapping.";
+                heading.innerText = "Recover Password";
+                subLabel.innerText = "Verify credentials profile logs to trace your key.";
             } else {
                 loginBlock.classList.remove('hidden');
-                heading.innerText = "Contributor Desk";
-                subLabel.innerText = "Verify credentials to input proposed updates.";
+                heading.innerText = "Contributor Sign In";
+                subLabel.innerText = "Verify email & password to input proposed updates.";
             }
         };
 
-        // Execution Core Trigger Links Hooks
+        // 🚀 REGISTRATION ACTION PIPELINE
         document.getElementById('executeRegisterTriggerBtn').addEventListener('click', async () => {
-            const keyVal = document.getElementById('regPassKey').value.trim();
-            if(!keyVal) return alert("Secret key node can't be empty!");
+            const name = document.getElementById('regName').value.trim();
+            const email = document.getElementById('regEmail').value.trim().toLowerCase();
+            const password = document.getElementById('regPassword').value.trim();
+            const dob = document.getElementById('regDob').value;
+
+            if(!name || !email || !password || !dob) {
+                alert("❌ Saari fields (Name, Email, Password, DOB) bharna mandatory hai!");
+                return;
+            }
+
             try {
-                await addDoc(collection(db, "user_registry"), { password: keyVal, role: "Contributor", created: Date.now() });
-                alert("Account node created! Please login.");
+                await addDoc(collection(db, "user_registry"), {
+                    name: name,
+                    email: email,
+                    password: password,
+                    dob: dob,
+                    role: "Contributor",
+                    timestamp: Date.now()
+                });
+                alert("🎉 Account successfully registered! Ab login karein.");
                 window.shiftAuthSegmentView('login');
-            } catch(e) { alert(e.message); }
+            } catch(e) { alert("Error: " + e.message); }
         });
 
+        // 🚀 LOGIN ACTION PIPELINE
         document.getElementById('executeLoginTriggerBtn').addEventListener('click', async () => {
-            const keyInput = document.getElementById('userPassKey').value.trim();
-            if(!keyInput) return;
+            const emailInput = document.getElementById('loginEmail').value.trim().toLowerCase();
+            const passInput = document.getElementById('loginPassword').value.trim();
 
-            if (keyInput === "LuminaUser@2026") {
+            if(!emailInput || !passInput) return alert("Email aur Password dono bharein!");
+
+            // Hardcoded structural backup bypass for owner verification testing node
+            if(emailInput === "admin@lumina.com" && passInput === "LuminaUser@2026") {
                 sessionStorage.setItem("user_token", "verified_user");
                 window.location.href = "dashboard.html";
                 return;
@@ -147,14 +201,54 @@
 
             try {
                 const snap = await getDocs(collection(db, "user_registry"));
-                let isPassed = false;
-                snap.forEach(d => { if(d.data().password === keyInput) isPassed = true; });
+                let isAuthPassed = false;
 
-                if(isPassed) {
+                snap.forEach(docNode => {
+                    const u = docNode.data();
+                    if(u.email === emailInput && u.password === passInput) {
+                        isAuthPassed = true;
+                    }
+                });
+
+                if(isAuthPassed) {
                     sessionStorage.setItem("user_token", "verified_user");
                     window.location.href = "dashboard.html";
-                } else { alert("❌ Invalid Key signature profile!"); }
-            } catch(e) { alert(e.message); }
+                } else {
+                    alert("❌ Invalid email address or login password signature.");
+                }
+            } catch(e) { alert("Sync Error: " + e.message); }
+        });
+
+        // 🚀 FORGOT PASSWORD VERIFICATION PIPELINE (EMAIL + NAME + DOB CHANNELS)
+        document.getElementById('executeForgotTriggerBtn').addEventListener('click', async () => {
+            const nameInput = document.getElementById('forgotName').value.trim();
+            const emailInput = document.getElementById('forgotEmail').value.trim().toLowerCase();
+            const dobInput = document.getElementById('forgotDob').value;
+
+            if(!nameInput || !emailInput || !dobInput) {
+                alert("❌ Verification ke liye Name, Email, aur DOB teeno bharna zaroori hai!");
+                return;
+            }
+
+            try {
+                const snap = await getDocs(collection(db, "user_registry"));
+                let foundPassword = "";
+
+                snap.forEach(docNode => {
+                    const u = docNode.data();
+                    // Match all 3 channels safely to maintain high security privacy matrix
+                    if(u.email === emailInput && u.name.toLowerCase() === nameInput.toLowerCase() && u.dob === dobInput) {
+                        foundPassword = u.password;
+                    }
+                });
+
+                if(foundPassword) {
+                    alert(`🔑 Profile Verified!\nAapka Password hai: ${foundPassword}`);
+                    window.shiftAuthSegmentView('login');
+                } else {
+                    alert("❌ Data matched nahi hua! Kripya sahi details entered karein.");
+                }
+            } catch(e) { alert("Error database sync: " + e.message); }
         });
     </script>
 </body>
