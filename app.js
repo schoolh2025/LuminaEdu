@@ -39,40 +39,34 @@ window.performSinglePageRoutingView = function(targetViewMode, postId = null) {
     }
 };
 
-// 🌟 ADSENSE PAGES DYNAMIC INLINE OVERRIDE FETCH SYNCER (SAME UNIFORM DESIGN)
-window.triggerRenderAdSensePolicyPage = async function(slugName) {
+// 🌟 ADSENSE STANDARD DYNAMIC PAGES MARKUP HOOK
+window.handleRenderPolicyDocumentNode = async function(slug) {
     window.performSinglePageRoutingView('detail', null);
-    const payloadBox = document.getElementById('detailViewContentPayload');
-    if(!payloadBox) return;
+    const payload = document.getElementById('detailViewContentPayload');
+    if(!payload) return;
 
-    payloadBox.innerHTML = `<p class="text-center text-xs font-bold text-slate-400 py-6 animate-pulse">Loading compliance schema documents...</p>`;
+    payload.innerHTML = `<p class="text-center text-xs font-bold text-slate-400 py-8 animate-pulse">Loading compliance pages template...</p>`;
     
     try {
-        const q = query(collection(db, "created_pages"), where("slug", "==", slugName));
-        const querySnapshot = await getDocs(q);
-        
+        const q = query(collection(db, "created_pages"), where("slug", "==", slug));
+        const snap = await getDocs(q);
         let contentHtml = "";
-        querySnapshot.forEach((docNode) => {
-            contentHtml = docNode.data().content;
-        });
+        snap.forEach(d => { contentHtml = d.data().content; });
 
         if(contentHtml) {
-            payloadBox.innerHTML = `
-                <div class="bg-white rounded-xl p-2 space-y-4">
-                    <h2 class="text-2xl font-black text-slate-900 border-b pb-2 capitalize">${slugName.replace('-', ' ')}</h2>
-                    <div class="text-sm font-medium leading-relaxed text-slate-700">${contentHtml}</div>
+            payload.innerHTML = `
+                <div class="space-y-4">
+                    <h2 class="text-2xl font-black text-slate-900 border-b pb-2 capitalize">${slug.replace('-', ' ')}</h2>
+                    <div class="text-sm font-medium text-slate-700 leading-relaxed">${contentHtml}</div>
                 </div>`;
         } else {
-            // Static Default fallbacks if pages are yet to be populated via Admin panel
-            payloadBox.innerHTML = `
-                <div class="bg-white rounded-xl p-2 space-y-4">
-                    <h2 class="text-2xl font-black text-slate-900 border-b pb-2 capitalize">${slugName.replace('-', ' ')}</h2>
-                    <p class="text-sm text-slate-500 font-bold">This page data node is active under index registers but has no markup block built yet inside admin dashboard workspace.</p>
+            payload.innerHTML = `
+                <div class="space-y-4">
+                    <h2 class="text-2xl font-black text-slate-900 border-b pb-2 capitalize">${slug.replace('-', ' ')}</h2>
+                    <p class="text-xs font-bold text-slate-400">Please populate this page content markup from your server master control area dashboard terminal desk.</p>
                 </div>`;
         }
-    } catch(err) {
-        payloadBox.innerHTML = `<p class="text-xs font-bold text-rose-500">Failed to render policy document node layout.</p>`;
-    }
+    } catch(e) { payload.innerHTML = `<p class="text-xs text-rose-500 font-bold">Failed to load system documents parameters.</p>`; }
 };
 
 window.setJobFilter = function(categoryName) {
@@ -134,18 +128,10 @@ window.executeUIRenderPipeline = function() {
             </div>
         `;
     }).join('');
-    
-    let styleTag = document.getElementById('override-img-visibility-ruleset');
-    if(!styleTag){
-        styleTag = document.createElement('style');
-        styleTag.id = 'override-img-visibility-ruleset';
-        document.head.appendChild(styleTag);
-    }
-    styleTag.innerHTML = ".hide-embedded-images-context img { display: none !important; }";
 };
 
 window.renderPostDeepContentView = function(postId) {
-    if(!postId) return; // Ignore fallback calls from static triggers
+    if(!postId) return; 
     const payload = document.getElementById('detailViewContentPayload');
     const matched = cachedJobsArray.find(item => item.id === postId);
     if(!matched || !payload) return;
