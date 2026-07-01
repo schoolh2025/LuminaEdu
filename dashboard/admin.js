@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, collection, addDoc, doc, onSnapshot, updateDoc, deleteDoc, setDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, doc, onSnapshot, updateDoc, deleteDoc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDEXmjIN8w2s2uXk0FTzC7ri4HhLetzV4E",
@@ -25,59 +25,29 @@ window.executeDashboardIdentityLoginPipeline = async function() {
     const enteredPassword = document.getElementById('dashPass').value.trim();
     if(!enteredPassword) return;
 
-    // 🛡️ HARD KICK BACKUP FOR SUPER ADMIN PASS
+    // Strict Admin Verification Rule
     if(enteredPassword === "LuminaAdmin@2026") {
         sessionStorage.setItem("lumina_token", "super_admin_active");
         document.getElementById('dashboardAuthGatewayGate').classList.add('hidden');
-        document.getElementById('adminMasterConsoleView').classList.remove('hidden');
+        
+        const consoleView = document.getElementById('adminMasterConsoleView');
+        consoleView.style.setProperty('display', 'block', 'important');
+        
         document.getElementById('dashboardLogoutBtn').classList.remove('hidden');
         window.spawnPremiumToastAlert("Super Admin Unlocked", "🚀 Welcome Owner! Super Admin Desk decrypted.", "success");
         startDatabaseListenersEngine();
         return; 
     }
     
-    try {
-        const snapshot = await getDocs(collection(db, "admin_settings"));
-        let correctSecureKey = "";
-        let contributorSecureKey = "LuminaUser@2026"; // Default User Contributor Pass
-
-        snapshot.forEach(d => { 
-            if(d.id === "root_config") correctSecureKey = d.data().master_password; 
-            if(d.id === "contributor_config") contributorSecureKey = d.data().user_password || "LuminaUser@2026";
-        });
-
-        if (correctSecureKey && enteredPassword === correctSecureKey) {
-            // 👨‍💼 ONLY ADMIN GETS ACCESS TO MASTER CONTROLS
-            sessionStorage.setItem("lumina_token", "super_admin_active");
-            document.getElementById('dashboardAuthGatewayGate').classList.add('hidden');
-            document.getElementById('adminMasterConsoleView').classList.remove('hidden');
-            document.getElementById('dashboardLogoutBtn').classList.remove('hidden');
-            window.spawnPremiumToastAlert("Unlocked", "🎉 एडमिन कंसोल सफलतापूर्वक लोड हो गया है!", "success");
-            startDatabaseListenersEngine();
-        } else if (enteredPassword === contributorSecureKey || enteredPassword === "LuminaUser@2026") {
-            // 🧑‍💻 USER CONTRIBUTOR SEGREGATION LOCK
-            sessionStorage.setItem("lumina_token", "user_contributor_active");
-            document.getElementById('dashboardAuthGatewayGate').classList.add('hidden');
-            document.getElementById('dashboardLogoutBtn').classList.remove('hidden');
-            
-            // Hard Secure Lock: Injecting only the user proposal workspace and destroying admin nodes
-            const mainWorkspace = document.getElementById('adminMasterConsoleView');
-            if(mainWorkspace) mainWorkspace.innerHTML = ""; // Wipe admin tools from DOM completely for safety
-            
-            // Dynamically show the Contributor Post Form from Index definitions if required or open access
-            window.location.href = "../index.html#login"; // Re-route to standard contributor queue
-            window.spawnPremiumToastAlert("User Access", "🎉 Contributor Panel Unlocked!", "success");
-        } else {
-            window.spawnPremiumToastAlert("Failed", "❌ पासवर्ड गलत है, कृपया दोबारा जांचें।", "error");
-        }
-    } catch(err) {
-        window.spawnPremiumToastAlert("Sync Fault", "डेटाबेस सिंक एरर!", "error");
+    // Contributor Verification Block - Redirect immediately to index space
+    if (enteredPassword === "LuminaUser@2026") {
+        sessionStorage.setItem("lumina_token", "user_contributor_active");
+        window.spawnPremiumToastAlert("Redirecting", "🎉 Opening Contributor Post Workspace...", "success");
+        setTimeout(() => { window.location.replace("../index.html"); }, 1000);
+        return;
     }
-};
-
-window.toggleLockRevealField = function() {
-    const input = document.getElementById('dashPass');
-    if(input) input.type = input.type === 'password' ? 'text' : 'password';
+    
+    window.spawnPremiumToastAlert("Failed", "❌ पासवर्ड गलत है, कृपया दोबारा जांचें।", "error");
 };
 
 window.performSecurePlatformLogout = function() {
@@ -95,7 +65,7 @@ window.spawnPremiumToastAlert = function(title, message, type) {
 };
 
 // ==========================================
-// 🎛️ POST ENGINE WORKSPACE PANEL MODES SWITCHER
+// 🎛️ POST ENGINE WORKSPACE LAYOUT SWITCHER
 // ==========================================
 window.togglePostInputWorkspaceMode = function(mode) {
     currentActiveEditorModeType = mode;
@@ -111,7 +81,7 @@ window.togglePostInputWorkspaceMode = function(mode) {
         visualFieldsBox?.classList.add('hidden');
         visualEditorBox?.classList.add('hidden');
         rawHtmlTextArea?.classList.remove('hidden');
-        if (labelLabel) labelLabel.innerText = "📋 Paste / Edit Complete Custom HTML Code Payload Node:";
+        if (labelLabel) labelLabel.innerText = "📋 Paste / Edit Complete Custom HTML Code:";
         rawHtmlTextArea.value = document.getElementById('richVisualEditorField').innerHTML;
     } else {
         visualFieldsBox?.classList.remove('hidden');
@@ -123,7 +93,7 @@ window.togglePostInputWorkspaceMode = function(mode) {
 };
 
 // ==========================================
-// 🪄 ULTRA PREMIUM CONTENT-EDITABLE TEXT SELECTION HANDLING COMMANDS
+// 🪄 LIVE PREVIEW FORMATTING COMMAND ENGINE
 // ==========================================
 window.executeMasterFormatStyleCommand = function(mode) {
     formattingTargetMode = mode;
@@ -146,8 +116,8 @@ window.executeMasterFormatStyleCommand = function(mode) {
     if(!overlay || !input) return;
     input.value = mode === 'link' ? 'https://' : mode === 'img' ? 'https://' : '16px';
     
-    if(mode === 'link') { title.innerText = "🔗 Insert Action URL Link"; subLabel.innerText = "Enter redirect destination path:"; }
-    else if(mode === 'img') { title.innerText = "🖼️ Insert Graphic Asset URL"; subLabel.innerText = "Enter media complete web path:"; }
+    if(mode === 'link') { title.innerText = "🔗 Insert Action URL Link"; subLabel.innerText = "Enter destination URL path:"; }
+    else if(mode === 'img') { title.innerText = "🖼️ Insert Image Box Component"; subLabel.innerText = "Enter media complete web path:"; }
     else if(mode === 'size') { title.innerText = "📐 Configure Selection Font Bounds"; subLabel.innerText = "Provide custom typography size (e.g. 18px):"; }
     
     overlay.classList.remove('hidden');
@@ -209,7 +179,7 @@ function executeApplyInlineStyleTagInjection(valuePayloadString) {
 // 🚀 ENGINE DATA SYNC DEPLOYMENTS
 // ==========================================
 window.publishDirectAdminNode = async function() {
-    if (sessionStorage.getItem("lumina_token") !== "super_admin_active") return; // API Level Block
+    if (sessionStorage.getItem("lumina_token") !== "super_admin_active") return; 
     
     const editId = document.getElementById('adminTargetEditingId').value;
     const imgMode = document.getElementById('aImageVisibilityMode').value;
@@ -432,7 +402,7 @@ function startDatabaseListenersEngine() {
                 </div>`;
         });
         if(document.getElementById('statToolsCount')) document.getElementById('statToolsCount').innerText = toolCount;
-        if(adminToolsContainer) adminToolsContainer.innerHTML = adminHtml || `<p class="text-xs text-slate-400 text-center py-2">No tools active.</p>`;
+        if(adminToolsContainer) adminToolsContainer.innerHTML = adminHtml || `<p class="text-xs text-slate-400 text-center py-4">No tools active.</p>`;
     });
 }
 
@@ -440,11 +410,14 @@ function verifyPreExistingSession() {
     const sessionToken = sessionStorage.getItem("lumina_token");
     if (sessionToken === "super_admin_active") {
         document.getElementById('dashboardAuthGatewayGate').classList.add('hidden');
-        document.getElementById('adminMasterConsoleView').classList.remove('hidden');
+        
+        const consoleView = document.getElementById('adminMasterConsoleView');
+        consoleView.style.setProperty('display', 'block', 'important');
+        
         document.getElementById('dashboardLogoutBtn').classList.remove('hidden');
         startDatabaseListenersEngine();
     } else if (sessionToken === "user_contributor_active") {
-        window.location.replace("../index.html#login");
+        window.location.replace("../index.html");
     } else {
         document.getElementById("dashboardAuthGatewayGate").classList.remove("hidden");
     }
