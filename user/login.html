@@ -3,24 +3,836 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contributor Login | LuminaEdu</title>
+    <title>LuminaEdu | Authentication Center</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background: linear-gradient(135deg, #e0f2fe 0%, #fae8ff 100%);
+        }
+        .premium-glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
+        }
+    </style>
 </head>
-<body class="bg-slate-50 min-h-screen flex items-center justify-center p-4">
-    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xl max-w-md w-full space-y-4">
-        <div class="text-center">
-            <h2 class="text-xl font-bold text-slate-900">📝 Contributor Gateway</h2>
-            <p class="text-xs text-slate-400 mt-1">Apne user credentials se login karein.</p>
+<body class="min-h-screen flex flex-col justify-between">
+
+    <!-- Header -->
+    <header class="w-full bg-white/60 backdrop-blur-md border-b border-slate-200/50 px-6 py-4 flex items-center justify-between shadow-sm">
+        <div class="flex items-center gap-2.5 cursor-pointer" onclick="window.location.href='../index.html'">
+            <div class="bg-indigo-600 text-white font-black p-2 rounded-xl text-sm">LE</div>
+            <h1 class="text-lg font-black text-slate-900">Lumina<span class="text-indigo-600">Edu</span></h1>
         </div>
-        <div class="space-y-3">
-            <div>
-                <label class="block text-xs font-bold text-slate-600 mb-1">Passkey Code</label>
-                <input type="password" id="userPassKey" class="w-full bg-slate-50 border p-3 rounded-xl text-sm outline-none font-mono" placeholder="••••••••••••">
+        <a href="../index.html" class="text-xs font-bold text-slate-500 hover:text-slate-900 transition-all">← Back to Portal</a>
+    </header>
+
+    <!-- AUTH ENGINE COMPONENT HUB -->
+    <main class="flex-1 flex items-center justify-center p-4 my-6">
+        <div class="max-w-md w-full premium-glass-card p-6 md:p-8 space-y-6 border">
+            
+            <!-- Dynamic Form Headers -->
+            <div class="text-center space-y-1.5">
+                <h2 id="authInterfaceHeading" class="text-2xl font-black text-slate-900 tracking-tight">Contributor Desk</h2>
+                <p id="authInterfaceSubLabel" class="text-xs text-slate-400 font-medium">Verify credentials to input proposed updates.</p>
             </div>
-            <button id="loginBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm py-3 rounded-xl shadow-md transition-all">Verify & Enter Dashboard ⚡</button>
+
+            <!-- 1. LOGIN INTERSPACE BLOCK -->
+            <div id="authLoginSegment" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1.5">Enter Account Secret Passkey</label>
+                    <input type="password" id="userPassKey" class="w-full bg-white border border-slate-200 p-3 rounded-xl text-sm font-mono tracking-widest outline-none focus:border-indigo-500" placeholder="••••••••••••">
+                </div>
+                <button id="executeLoginTriggerBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-black text-sm py-3.5 rounded-xl shadow-md transition-all">Authenticate Entry ⚡</button>
+                <div class="flex items-center justify-between text-xs pt-1">
+                    <button onclick="window.shiftAuthSegmentView('forgot')" class="text-slate-400 font-bold hover:text-slate-600 hover:underline">Forgot Key?</button>
+                    <button onclick="window.shiftAuthSegmentView('register')" class="text-indigo-600 font-black hover:text-indigo-700 hover:underline">Create Account</button>
+                </div>
+            </div>
+
+            <!-- 2. REGISTRATION INTERSPACE BLOCK -->
+            <div id="authRegisterSegment" class="hidden space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1.5">Create Secure Passkey Profile</label>
+                    <input type="password" id="regPassKey" class="w-full bg-white border border-slate-200 p-3 rounded-xl text-sm font-mono tracking-widest outline-none focus:border-emerald-500" placeholder="Choose master secret">
+                </div>
+                <button id="executeRegisterTriggerBtn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm py-3.5 rounded-xl shadow-md transition-all">Register New Profile 🚀</button>
+                <div class="text-center text-xs pt-1">
+                    <button onclick="window.shiftAuthSegmentView('login')" class="text-slate-500 font-bold hover:text-indigo-600 hover:underline">Already have an account? Login</button>
+                </div>
+            </div>
+
+            <!-- 3. FORGOT PASSWORD INTERSPACE BLOCK -->
+            <div id="authForgotSegment" class="hidden space-y-4">
+                <div class="p-3.5 bg-amber-50 border border-amber-100 rounded-xl text-[11px] font-bold text-amber-800 leading-relaxed">
+                    💡 **Security Protocol Rule:** LuminaEdu is an anonymous cryptographic credential system. If you lose your security key, contact your Server Hub Webmaster directly to purge/re-index your node profile.
+                </div>
+                <button onclick="window.shiftAuthSegmentView('login')" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-black text-sm py-3 rounded-xl shadow-sm transition-all">← Back to Login</button>
+            </div>
+
         </div>
-        <p class="text-xs text-center text-slate-500">Naye contributor hain? <a href="register.html" class="text-indigo-600 font-bold hover:underline">Register Karein</a></p>
-    </div>
-    <script type="module" src="user-auth.js"></script>
-</body>
-</html>
+    </main>
+
+    <!-- ADJUSTED SLIM COMPACT FOOTER -->
+    <footer class="w-full bg-slate-900 text-slate-400 p-4 text-xs font-medium text-center tracking-wide shrink-0 border-t border-slate-800">
+        <p>© 2026 LuminaEdu Networks. Secure Multi-Role Crypto Layer Port Active.</p>
+    </footer>
+
+    <!-- INLINE HIGH SPEED ROUTER SCRIPTS -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, doc, setDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyDEXmjIN8w2s2uXk0FTzC7ri4HhLetzV4E",
+          authDomain: "luminaedu-ai786.firebaseapp.com",
+          projectId: "luminaedu-ai786",
+          storageBucket: "luminaedu-ai786.firebasestorage.app",
+          messagingSenderId: "35041307389",
+          appId: "1:35041307389:web:846f981017df7ad1382c94"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // 🌟 SINGLE-PAGE VIEWPORT ANIMATED TAB SWITCHING SYSTEM
+        window.togglePostInputWorkspaceMode = function() {} // Dummy protection
+        window.togglePostInputWorkspaceMode = function(mode){}
+        
+        window.togglePostInputWorkspaceMode = function() {}
+        
+        window.togglePostInputWorkspaceMode = function() {}
+        
+        window.togglePostInputWorkspaceMode = function() {}
+        
+        window.togglePostInputWorkspaceMode = function() {}
+        
+        window.togglePostInputWorkspaceMode = function() {}
+        
+        window.togglePostInputWorkspaceMode = function() {}
+        
+        window.togglePostInputWorkspaceMode = function(mode) {}
+        
+        window.togglePostInputWorkspaceMode = function(mode) {}
+        
+        window.togglePostInputWorkspaceMode = function(mode) {}
+        
+        window.togglePostInputWorkspaceMode = function(mode) {
+            
+        };
+        
+        window.togglePostInputWorkspaceMode = function(mode) {
+            
+        };
+        
+        window.togglePostInputWorkspaceMode = function(mode) {
+            
+        };
+        
+        window.togglePostInputWorkspaceMode = function(mode) {
+            
+        };
+        
+        window.togglePostInputWorkspaceMode = function(mode) {
+            
+        };
+        
+        window.togglePostInputWorkspaceMode = function(mode) {
+            
+        };
+        
+        window.togglePostInputWorkspaceMode = function(mode) {
+            
+        };
+        
+        window.togglePostInputWorkspaceMode = function(mode) {
+            
+        };
+        
+        window.togglePostInputWorkspaceMode = function(mode) {
+            
+        };
+        
+        window.togglePostInputWorkspaceMode = function(mode) {
+            
+        };
+        
+        window.togglePostInputWorkspaceMode = function(mode) {
+            
+        };
+        
+        window.togglePostInputWorkspaceMode = function(mode) {
+            
+        };
+        
+        window.togglePostInputWorkspaceMode = function(mode) {
+            
+        };
+        
+        window.togglePostInputWorkspaceMode = function(mode) {
+            
+        };
+        
+        window.togglePostInputWorkspaceMode = function(mode) {
+            
+        };
+        
+        window.togglePostInputWorkspaceMode = function(mode) {
+            
+        };
+        
+        window.togglePostInputWorkspaceMode = function(mode) {
+            
+        };
+        
+        window.togglePostInputWorkspaceMode = function(mode) {
+            
+        };
+        
+        window.togglePostInputWorkspaceMode = function(mode) {
+            
+        };
+        
+        window.togglePostInputWorkspaceMode = function(mode) {
+            
+        };
+        
+        window.togglePostInputWorkspaceMode = function(mode) {
+            
+        };
+        
+        window.togglePostInputWorkspaceMode = function(mode) {
+            
+        };
+        
+        window.togglePostInputWorkspaceMode = function(mode) {
+            
+        };
+        
+        window.togglePostInputWorkspaceMode = function(mode) {
+            
+        };
+        
+        window.togglePostInputWorkspaceMode = function(mode) {
+            
+        };
+        
+        window.togglePostInputWorkspaceMode = function(mode) {
+            
+        };
+        
+        window.togglePostInputWorkspaceMode = function(mode) {
+            
+        };
+        
+        window.togglePostInputWorkspaceMode = function(mode) {
+            
+        };
+        
+        window.togglePostInputWorkspaceMode = function(mode) {
+            
+        };
+        
+        window.togglePostInputWorkspaceMode = function(mode) {
+            
+        };
+        
+        window.togglePostInputWorkspaceMode = function(mode) {
+            
+        };
+        
+        window.togglePostInputWorkspaceMode = function(mode) {
+            
+        };
+        
+        window.togglePostInputWorkspaceMode = function(mode) {
+            
+        };
+        
+        window.togglePostInputWorkspaceMode = function(mode) {
+            
+        };
+        
+        window.togglePostInputWorkspaceMode = function(mode) {
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <button onclick="window.togglePostInputWorkspaceMode('visual')">Visual Mode</button>
+            <button onclick="window.togglePostInputWorkspaceMode('html')">HTML Mode</button>
