@@ -50,24 +50,19 @@ window.toggleAuthOverlay = function(show) {
     else { overlay?.classList.add('opacity-0'); setTimeout(() => { overlay?.classList.add('hidden'); }, 300); }
 };
 
-window.togglePasswordRevealNode = function() {
-    const element = document.getElementById('usrPass');
-    if(element) element.type = element.type === 'password' ? 'text' : 'password';
-};
-
 window.spawnPremiumToastAlert = function(title, message, type) {
     const toast = document.getElementById('premiumToastNotification');
     if(!toast) return;
     document.getElementById('toastTitleSlot').innerText = title;
     document.getElementById('toastMessageSlot').innerText = message;
     toast.className = `fixed top-5 left-1/2 transform -translate-x-1/2 z-[100] max-w-sm w-full mx-4 bg-white border p-4 rounded-2xl shadow-2xl flex items-start gap-3 transition-all duration-300 opacity-100 translate-y-0 ${type==='error'?'border-rose-200 bg-rose-50':'border-emerald-200 bg-emerald-50'}`;
-    setTimeout(() => { toast.classList.add('opacity-0','pointer-events-none'); }, 5000);
+    setTimeout(() => { toast.classList.add('opacity-0','pointer-events-none'); }, 4000);
 };
 
 window.executeAuthActionPipeline = function() {
     const password = document.getElementById('usrPass').value.trim();
     if(password) {
-        sessionStorage.setItem("lumina_token", password);
+        sessionStorage.setItem("lumina_token", "active");
         window.location.href = "dashboard/admin.html";
     }
 };
@@ -82,11 +77,14 @@ function renderDynamicCategoryChips() {
     const box = document.getElementById('categoryFilterContainer');
     if(!box) return;
     
-    let allChips = [{ name: 'All' }, ...dynamicLoadedCategoriesArray];
+    let allChips = [{ name: 'All', hexColor: '#4f46e5' }, ...dynamicLoadedCategoriesArray];
     box.innerHTML = allChips.map(b => {
         let isActive = selectedCategoryFilter.toLowerCase() === b.name.toLowerCase();
-        let currentStyle = isActive ? 'bg-indigo-600 text-white font-bold border-indigo-600 shadow-md' : 'bg-white text-slate-800 border-slate-200';
-        return `<button onclick="window.setJobFilter('${b.name}')" class="px-3.5 py-1.5 text-xs font-bold rounded-xl border transition-all duration-150 ${currentStyle}">${b.name}</button>`;
+        // 🌟 SYNCS SELECTIVE CHIP COLOR INLINE FROM THE FIREBASE DATA STREAMS
+        let currentStyle = isActive 
+            ? `style="background-color: ${b.hexColor}; color: white; border-color: ${b.hexColor};"` 
+            : `style="background-color: white; color: #1e293b; border-color: #cbd5e1;"`;
+        return `<button onclick="window.setJobFilter('${b.name}')" ${currentStyle} class="px-3.5 py-1.5 text-xs font-bold rounded-xl border shadow-sm transition-all duration-150">${b.name}</button>`;
     }).join('');
 }
 
@@ -112,8 +110,12 @@ window.executeUIRenderPipeline = function() {
         let isNewAd = (Date.now() - (j.timestamp || 0)) < (2 * 24 * 60 * 60 * 1000);
         let blinkBadge = isNewAd ? `<span class="blinking-new-badge ml-2 text-[10px] font-black px-1.5 py-0.5 rounded bg-rose-100 text-rose-700 border border-rose-200 tracking-wide">NEW</span>` : "";
 
+        // 🌟 CONDITIONAL IMAGE DISPLAY STRATEGY ACCORDING TO IMAGE_C67EDE.JPG
+        const visibility = j.imageVisibilityMode || "both";
+        let shouldHideImg = (visibility === 'post_only' || visibility === 'none');
+
         return `
-            <div class="premium-glass-card p-5 flex flex-col justify-between bg-white">
+            <div class="premium-glass-card p-5 flex flex-col justify-between bg-white ${shouldHideImg ? 'hide-embedded-images-context' : ''}">
                 <div>
                     <div class="flex justify-between items-center mb-2.5">
                         <span style="background-color: ${badgeColorHex}15; color: ${badgeColorHex}; border-color: ${badgeColorHex}30;" class="text-[10px] font-black px-2.5 py-0.5 rounded-md uppercase border">${j.type}</span>
@@ -126,6 +128,15 @@ window.executeUIRenderPipeline = function() {
             </div>
         `;
     }).join('');
+    
+    // Inject global stylesheet overrides into runtime frame safely to drop images on demand
+    let styleTag = document.getElementById('override-img-visibility-ruleset');
+    if(!styleTag){
+        styleTag = document.createElement('style');
+        styleTag.id = 'override-img-visibility-ruleset';
+        document.head.appendChild(styleTag);
+    }
+    styleTag.innerHTML = ".hide-embedded-images-context img { display: none !important; }";
 };
 
 window.executeSidebarLiveSearchFilters = function() {
@@ -144,46 +155,53 @@ window.renderPostDeepContentView = function(postId) {
     const payload = document.getElementById('detailViewContentPayload');
     const matched = cachedJobsArray.find(item => item.id === postId);
     if(!matched || !payload) return;
+
+    // 🌟 DETAIL PAGE IMAGE VISIBILITY MATRIX CHECKER RULES
+    const visibility = matched.imageVisibilityMode || "both";
+    const hideOnPostPage = (visibility === 'main_only' || visibility === 'none');
+    
     payload.innerHTML = matched.description || 'No data uploaded.';
+    if(hideOnPostPage) {
+        payload.querySelectorAll('img').forEach(img => img.remove());
+    }
 };
 
 function bootstrapApplicationEngine() {
-    try {
-        onSnapshot(doc(db, "admin_settings", "layout_config"), (d) => {
-            if(d.exists()) {
-                let cls = d.data().activeGridClass;
-                currentActiveGridLayoutClass = cls === 'grid-cols-2' ? 'xl:grid-cols-2' : cls === 'grid-cols-4' ? 'xl:grid-cols-4' : cls === 'grid-cols-6' ? 'xl:grid-cols-4 2xl:grid-cols-6' : 'xl:grid-cols-3';
-                window.executeUIRenderPipeline();
-            }
-        });
+    sessionStorage.removeItem("lumina_token"); 
+    signOut(auth);
 
-        onSnapshot(collection(db, "dynamic_categories"), (snapshot) => {
-            dynamicLoadedCategoriesArray = [];
-            snapshot.forEach(docSnap => { dynamicLoadedCategoriesArray.push(docSnap.data()); });
-            renderDynamicCategoryChips();
+    onSnapshot(doc(db, "admin_settings", "layout_config"), (d) => {
+        if(d.exists()) {
+            let cls = d.data().activeGridClass;
+            currentActiveGridLayoutClass = cls === 'grid-cols-2' ? 'xl:grid-cols-2' : cls === 'grid-cols-4' ? 'xl:grid-cols-4' : cls === 'grid-cols-6' ? 'xl:grid-cols-4 2xl:grid-cols-6' : 'xl:grid-cols-3';
             window.executeUIRenderPipeline();
-        });
+        }
+    });
 
-        onSnapshot(collection(db, "jobs"), (snapshot) => {
-            cachedJobsArray = [];
-            snapshot.forEach(docSnap => { cachedJobsArray.push({ id: docSnap.id, ...docSnap.data() }); });
-            window.executeUIRenderPipeline();
-            window.executeSidebarLiveSearchFilters();
-        });
+    onSnapshot(collection(db, "dynamic_categories"), (snapshot) => {
+        dynamicLoadedCategoriesArray = [];
+        snapshot.forEach(docSnap => { dynamicLoadedCategoriesArray.push(docSnap.data()); });
+        renderDynamicCategoryChips();
+        window.executeUIRenderPipeline();
+    });
 
-        onSnapshot(collection(db, "pdf_tools"), (snapshot) => {
-            const container = document.getElementById('publicPdfToolsListTargetStack');
-            if(!container) return;
-            let html = "";
-            snapshot.forEach(d => {
-                const t = d.data();
-                html += `<a href="${t.url}" target="_blank" class="block w-full text-left bg-slate-50 hover:bg-purple-50 text-slate-700 text-xs font-bold p-2.5 rounded-xl border truncate transition-all">🛠️ ${t.title}</a>`;
-            });
-            container.innerHTML = html || `<p class="text-[10px] font-bold text-slate-400 px-2">No tools active.</p>`;
+    onSnapshot(collection(db, "jobs"), (snapshot) => {
+        cachedJobsArray = [];
+        snapshot.forEach(docSnap => { cachedJobsArray.push({ id: docSnap.id, ...docSnap.data() }); });
+        window.executeUIRenderPipeline();
+        window.executeSidebarLiveSearchFilters();
+    });
+
+    onSnapshot(collection(db, "pdf_tools"), (snapshot) => {
+        const container = document.getElementById('publicPdfToolsListTargetStack');
+        if(!container) return;
+        let html = "";
+        snapshot.forEach(d => {
+            const t = d.data();
+            html += `<a href="${t.url}" target="_blank" class="block w-full text-left bg-slate-50 hover:bg-purple-50 text-slate-700 text-xs font-bold p-2.5 rounded-xl border truncate transition-all">🛠️ ${t.title}</a>`;
         });
-    } catch(err) {
-        console.log("Firebase sync warning safely bypassed on client feed initialization.");
-    }
+        container.innerHTML = html || `<p class="text-[10px] font-bold text-slate-400 px-2">No tools active.</p>`;
+    });
 }
 
 window.addEventListener('DOMContentLoaded', bootstrapApplicationEngine);
