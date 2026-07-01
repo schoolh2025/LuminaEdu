@@ -4,98 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LuminaEdu | Premium Career Hub</title>
-    
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Noto+Sans+Devanagari:wght@400;600;700;800&display=swap" rel="stylesheet">
-    
     <style>
-        body { 
-            font-family: 'Plus Jakarta Sans', 'Noto Sans Devanagari', sans-serif; 
-            background: linear-gradient(135deg, #e0f2fe 0%, #fae8ff 100%);
-            color: #1e293b;
-            background-attachment: fixed;
-        }
-        .premium-glass-card {
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            border-radius: 1.25rem;
-            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-        }
-        .premium-glass-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 15px 30px -5px rgba(99, 102, 241, 0.15);
-        }
-        @keyframes blinkMode { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-        .blinking-new-badge { animation: blinkMode 1.2s infinite; }
+        body { font-family: 'Plus Jakarta Sans', 'Noto Sans Devanagari', sans-serif; background: linear-gradient(135deg, #e0f2fe 0%, #fae8ff 100%); background-attachment: fixed; }
+        .premium-glass-card { background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 1.25rem; box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05); transition: all 0.3s ease; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
-    <!-- TOP HEADER (ADMIN LINK REMOVED FOR ABSOLUTE SECURITY) -->
     <header class="w-full bg-white/70 backdrop-blur-md border-b border-slate-200/60 px-4 lg:px-10 py-3.5 flex items-center justify-between shadow-sm shrink-0">
         <div class="flex items-center gap-3 cursor-pointer" onclick="window.navigateToHub('front')">
             <div class="bg-indigo-600 text-white font-black p-2.5 rounded-xl text-lg shadow-md">LE</div>
             <h1 class="text-xl md:text-2xl font-black text-slate-900 tracking-tight">Lumina<span class="text-indigo-600">Edu</span></h1>
         </div>
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2">
+            <button onclick="window.handleRenderPolicyDocumentNode('privacy-policy')" class="bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs md:text-sm px-4 py-2.5 rounded-xl transition-all whitespace-nowrap">📄 Page Builder Info</button>
             <a href="user/login.html" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs md:text-sm px-5 py-2.5 rounded-xl shadow-md transition-all whitespace-nowrap">Contributor Login 🚀</a>
         </div>
     </header>
 
-    <!-- HUB CONTENT WRAPPER -->
     <div class="flex-1 w-full flex flex-col md:flex-row min-h-0">
         
-        <!-- SIDEBAR LEFT NAV PANEL -->
-        <aside id="mainLeftSidebarNode" class="w-full md:w-64 bg-white/80 backdrop-blur-md border-r border-slate-200/60 p-5 flex flex-col justify-between shrink-0">
-            <div class="space-y-6">
-                <!-- Push Subscription Box -->
-                <div class="mb-4 bg-indigo-50/80 border border-indigo-100 p-3.5 rounded-2xl space-y-2">
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs font-black text-indigo-950 uppercase tracking-wide flex items-center gap-1.5">🔔 Push Alerts</span>
-                        <span id="pushStatusBadge" class="text-[9px] font-black px-1.5 py-0.5 rounded-md bg-slate-200 text-slate-600 uppercase">Active</span>
-                    </div>
-                    <p class="text-[10px] font-bold text-slate-500 leading-snug">नए जॉब और अपडेट्स का तुरंत अलर्ट पाने के लिए सब्सक्राइब करें।</p>
-                    <button class="w-full bg-indigo-600 text-white font-bold text-xs py-2 rounded-xl shadow-sm">📢 Active Subscribed</button>
-                </div>
-
-                <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-2 mb-2">Navigation Links</p>
+        <aside id="mainLeftSidebarNode" class="w-full md:w-64 bg-white/80 backdrop-blur-md border-r p-5 flex flex-col shrink-0">
+            <div class="space-y-4">
+                <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-2">Navigation Links</p>
                 <nav class="space-y-1">
                     <button onclick="window.setJobFilter('All')" class="w-full flex items-center gap-3 px-4 py-2.5 bg-indigo-50 text-indigo-700 font-bold text-sm rounded-xl">💼 All Updates</button>
+                    <button onclick="window.handleRenderPolicyDocumentNode('privacy-policy')" class="w-full flex items-center gap-3 px-4 py-2.5 text-slate-700 hover:bg-slate-100 font-bold text-sm rounded-xl text-left">📄 Custom Pages Node</button>
                 </nav>
                 
-                <!-- PUBLIC SIDEBAR TOOLS ACCESSIBLE LAYER -->
-                <div class="pt-4 border-t px-2">
+                <div class="pt-4 border-t">
                     <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">🧰 Useful Tools</p>
                     <div id="publicPdfToolsListTargetStack" class="space-y-1"></div>
                 </div>
             </div>
         </aside>
 
-        <!-- CANVAS MAIN CENTRAL FRAME CONTAINER -->
         <div class="flex-1 flex flex-col w-full min-w-0">
-            <div class="p-4 lg:p-8 max-w-[1400px] w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                
-                <div id="coreContentLayoutViewRegion" class="lg:col-span-12 space-y-6 min-w-0 w-full">
+            <div class="p-4 lg:p-8 max-w-[1400px] w-full mx-auto">
+                <div id="coreContentLayoutViewRegion" class="space-y-6 w-full">
                     
-                    <!-- VIEW 1: FRONT FEED SYSTEM -->
                     <div id="mainFeedRouterBlock" class="space-y-6">
-                        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white/40 p-4 rounded-2xl border border-white/60">
+                        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white/40 p-4 rounded-2xl border">
                             <div>
-                                <h2 class="text-xl lg:text-2xl font-black text-slate-900 tracking-tight">Sarkari Yojana, Jobs & Results</h2>
-                                <p class="text-xs font-semibold text-slate-500">Real-time verification portal dashboard stream.</p>
+                                <h2 class="text-xl font-black text-slate-900">Sarkari Yojana, Jobs & Results</h2>
                             </div>
                             <div class="flex flex-wrap gap-1.5" id="categoryFilterContainer"></div>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="publicCardsFeed"></div>
                     </div>
 
-                    <!-- VIEW 2: SUB PAGE POST DETAILS & DYNAMIC ADSENSE PAGES -->
-                    <div id="postDetailView" class="hidden premium-glass-card p-6 lg:p-8 bg-white w-full">
-                        <button onclick="window.performSinglePageRoutingView('front')" class="mb-6 inline-flex items-center gap-2 text-xs font-bold text-indigo-600 bg-indigo-50 border border-indigo-100 px-4 py-2 rounded-xl">← मुख्य पृष्ठ (Back to Home)</button>
+                    <div id="postDetailView" class="hidden premium-glass-card p-6 bg-white w-full">
+                        <button onclick="window.performSinglePageRoutingView('front')" class="mb-6 text-xs font-bold text-indigo-600 bg-indigo-50 px-4 py-2 rounded-xl">← Back to Home</button>
                         <div id="detailViewContentPayload" class="prose max-w-none text-slate-800"></div>
                     </div>
 
@@ -104,22 +65,13 @@
         </div>
     </div>
 
-    <!-- 🌟 ADJUSTED SLIM COMPACT FOOTER WITH ADSENSE COMPLIANT PAGES -->
-    <footer class="w-full bg-slate-900 border-t border-slate-800 px-4 lg:px-10 py-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400 shrink-0">
-        <div class="flex items-center gap-2">
-            <div class="bg-indigo-600 text-white font-black px-1.5 py-0.5 rounded text-[10px]">LE</div>
-            <p>© 2026 LuminaEdu Systems Network. All Rights Reserved.</p>
-        </div>
-        
-        <!-- AdSense Required Dynamic Core Page Node Routers -->
-        <div class="flex flex-wrap items-center gap-x-4 gap-y-1 font-semibold text-slate-300">
-            <button onclick="window.triggerRenderAdSensePolicyPage('privacy-policy')" class="hover:text-white transition-colors">Privacy Policy</button>
-            <span class="text-slate-700">|</span>
-            <button onclick="window.triggerRenderAdSensePolicyPage('terms-of-service')" class="hover:text-white transition-colors">Terms of Service</button>
-            <span class="text-slate-700">|</span>
-            <button onclick="window.triggerRenderAdSensePolicyPage('disclaimer')" class="hover:text-white transition-colors">Disclaimer</button>
-            <span class="text-slate-700">|</span>
-            <button onclick="window.triggerRenderAdSensePolicyPage('contact-us')" class="hover:text-white transition-colors">Contact Us</button>
+    <footer class="w-full bg-slate-900 border-t px-4 lg:px-10 py-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400 shrink-0">
+        <p>© 2026 LuminaEdu Systems. All Rights Reserved.</p>
+        <div class="flex flex-wrap gap-x-4 font-semibold text-slate-300">
+            <button onclick="window.handleRenderPolicyDocumentNode('privacy-policy')" class="hover:text-white">Privacy Policy</button>
+            <button onclick="window.handleRenderPolicyDocumentNode('terms-of-service')" class="hover:text-white">Terms of Service</button>
+            <button onclick="window.handleRenderPolicyDocumentNode('disclaimer')" class="hover:text-white">Disclaimer</button>
+            <button onclick="window.handleRenderPolicyDocumentNode('contact-us')" class="hover:text-white">Contact Us</button>
         </div>
     </footer>
 
