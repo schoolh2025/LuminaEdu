@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, collection, addDoc, doc, onSnapshot, updateDoc, deleteDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, doc, onSnapshot, updateDoc, deleteDoc, setDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDEXmjIN8w2s2uXk0FTzC7ri4HhLetzV4E",
@@ -18,9 +18,6 @@ let formattingTargetMode = "";
 let currentActiveEditorModeType = "visual";
 let capturedWindowSavedRangeNode = null;
 
-// ==========================================
-// 🔒 SYSTEM GATEWAY AUTHS PROTOCAL
-// ==========================================
 window.executeAdminGatewayUnlockEngine = function() {
     const entered = document.getElementById('adminSecretKey').value.trim();
     if(!entered) return;
@@ -28,9 +25,9 @@ window.executeAdminGatewayUnlockEngine = function() {
     if(entered === "LuminaAdmin@2026") {
         sessionStorage.setItem("admin_token", "active_root");
         verifyPreExistingSession();
-        window.spawnPremiumToastAlert("Unlocked", "🚀 Welcome Owner! Console initialized.", "success");
+        window.spawnPremiumToastAlert("Unlocked", "Console loaded successfully.", "success");
     } else {
-        window.spawnPremiumToastAlert("Denied", "❌ Invalid Admin Signature Key Pass.", "error");
+        window.spawnPremiumToastAlert("Denied", "Invalid Master Security Token Key.", "error");
     }
 };
 
@@ -44,19 +41,16 @@ window.spawnPremiumToastAlert = function(title, message, type) {
     if(!toast) return;
     document.getElementById('toastTitleSlot').innerText = title;
     document.getElementById('toastMessageSlot').innerText = message;
-    toast.className = `fixed top-5 left-1/2 transform -translate-x-1/2 z-[200] max-w-sm w-full mx-4 bg-white border p-4 rounded-2xl shadow-2xl flex items-start gap-3 transition-all duration-300 opacity-100 translate-y-0 ${type==='error'?'border-rose-200 bg-rose-50':'border-emerald-200 bg-emerald-50'}`;
-    setTimeout(() => { toast.classList.add('opacity-0','pointer-events-none'); }, 4000);
+    toast.className = `fixed top-5 left-1/2 transform -translate-x-1/2 z-[200] max-w-sm w-full mx-4 bg-white border p-4 rounded-2xl shadow-2xl flex items-start gap-3 transition-all duration-300 opacity-100 translate-y-0 ${type==='error'?'border-rose-200 bg-rose-50 text-rose-800':'border-emerald-200 bg-emerald-50 text-emerald-800'}`;
+    setTimeout(() => { toast.classList.add('opacity-0','pointer-events-none'); }, 3500);
 };
 
-// ==========================================
-// 📄 CUSTOM PAGES CREATION NODE HANDLER
-// ==========================================
 window.executeBuildCustomPageNodeData = async function() {
     const slug = document.getElementById('pageSlug').value.trim();
     const content = document.getElementById('pageContent').value.trim();
     
     if(!slug || !content) {
-        window.spawnPremiumToastAlert("Fields Empty", "❌ Please provide slug and content nodes.", "error");
+        window.spawnPremiumToastAlert("Missing Data", "Please fill Page Route Slug and Markup fields.", "error");
         return;
     }
 
@@ -66,17 +60,12 @@ window.executeBuildCustomPageNodeData = async function() {
             content: content,
             timestamp: Date.now()
         });
-        window.spawnPremiumToastAlert("Page Live", `🎉 Custom Page "/${slug}" has been built!`, "success");
+        window.spawnPremiumToastAlert("Deployed", `Custom dynamic page "/${slug}" built successfully!`, "success");
         document.getElementById('pageSlug').value = "";
         document.getElementById('pageContent').value = "";
-    } catch(e) {
-        window.spawnPremiumToastAlert("Error", e.message, "error");
-    }
+    } catch(e) { window.spawnPremiumToastAlert("Error", e.message, "error"); }
 };
 
-// ==========================================
-// 🎛️ SYSTEM CONTROLS ENGINE
-// ==========================================
 window.togglePostInputWorkspaceMode = function(mode) {
     currentActiveEditorModeType = mode;
     const visualEditorBox = document.getElementById('visualEditorContainerBox');
@@ -91,13 +80,13 @@ window.togglePostInputWorkspaceMode = function(mode) {
         visualFieldsBox?.classList.add('hidden');
         visualEditorBox?.classList.add('hidden');
         rawHtmlTextArea?.classList.remove('hidden');
-        if (labelLabel) labelLabel.innerText = "📋 Paste / Edit Complete Custom HTML Code:";
+        if (labelLabel) labelLabel.innerText = "📋 Paste / Manage Complete Custom Native HTML Content Code:";
         rawHtmlTextArea.value = document.getElementById('richVisualEditorField').innerHTML;
     } else {
         visualFieldsBox?.classList.remove('hidden');
         visualEditorBox?.classList.remove('hidden');
         rawHtmlTextArea?.classList.add('hidden');
-        if (labelLabel) labelLabel.innerText = "Description Content Workspace Area";
+        if (labelLabel) labelLabel.innerText = "Description Box Area Blueprint";
         document.getElementById('richVisualEditorField').innerHTML = rawHtmlTextArea.value;
     }
 };
@@ -110,8 +99,7 @@ window.executeMasterFormatStyleCommand = function(mode) {
     }
 
     if (mode === 'color') {
-        const selectedHexColorValue = document.getElementById('masterTextHexColorPicker').value;
-        executeApplyInlineStyleTagInjection(selectedHexColorValue);
+        executeApplyInlineStyleTagInjection(document.getElementById('masterTextHexColorPicker').value);
         return;
     }
 
@@ -123,9 +111,9 @@ window.executeMasterFormatStyleCommand = function(mode) {
     if(!overlay || !input) return;
     input.value = mode === 'link' ? 'https://' : mode === 'img' ? 'https://' : '16px';
     
-    if(mode === 'link') { title.innerText = "🔗 Insert Action URL Link"; subLabel.innerText = "Enter destination URL path:"; }
-    else if(mode === 'img') { title.innerText = "🖼️ Insert Image Box Component"; subLabel.innerText = "Enter media complete web path:"; }
-    else if(mode === 'size') { title.innerText = "📐 Configure Selection Font Bounds"; subLabel.innerText = "Provide custom typography size (e.g. 18px):"; }
+    if(mode === 'link') { title.innerText = "🔗 Append Action Target Url Link"; subLabel.innerText = "Provide clean web routing path:"; }
+    else if(mode === 'img') { title.innerText = "🖼️ Map Custom Graphics Image URL"; subLabel.innerText = "Paste public absolute image resource link:"; }
+    else if(mode === 'size') { title.innerText = "📐 Configure Selection Font Bounds"; subLabel.innerText = "Map text size in pixels (e.g., 20px):"; }
     
     overlay.classList.remove('hidden');
     setTimeout(() => { overlay.classList.remove('opacity-0'); input.focus(); }, 20);
@@ -154,12 +142,12 @@ function executeApplyInlineStyleTagInjection(valuePayloadString) {
         createdMarkupElement = document.createElement('a');
         createdMarkupElement.href = valuePayloadString;
         createdMarkupElement.target = "_blank";
-        createdMarkupElement.style.cssText = "color:#2563eb;text-decoration:underline;font-weight:bold;";
+        createdMarkupElement.style.cssText = "color:#2563eb;text-decoration:underline;font-weight:700;";
         createdMarkupElement.innerText = capturedWindowSavedRangeNode.toString() || "Link";
     } else if (formattingTargetMode === 'img') {
         createdMarkupElement = document.createElement('img');
         createdMarkupElement.src = valuePayloadString;
-        createdMarkupElement.className = "max-w-full h-auto rounded-xl my-4 border block mx-auto";
+        createdMarkupElement.className = "max-w-full h-auto rounded-xl my-3 border block mx-auto shadow-sm";
     } else if (formattingTargetMode === 'color') {
         createdMarkupElement = document.createElement('span');
         createdMarkupElement.style.color = valuePayloadString;
@@ -194,7 +182,7 @@ window.publishDirectAdminNode = async function() {
     } else {
         const customVisualHtml = document.getElementById('richVisualEditorField').innerHTML;
         completeDescriptionPayload = `
-            <div class="p-4 bg-indigo-50/50 border rounded-xl my-4 text-xs font-bold text-slate-600">
+            <div class="p-4 bg-indigo-50/60 border rounded-xl my-4 text-xs font-bold text-slate-600 shadow-sm">
                 <p>💰 Application Fee: ${document.getElementById('aFees').value.trim() || 'Review Details'}</p>
                 <p class="mt-1">🎓 Eligibility Matrix: ${document.getElementById('aElig').value.trim() || 'Review Details'}</p>
             </div>
@@ -215,15 +203,15 @@ window.publishDirectAdminNode = async function() {
     try {
         if(editId) {
             await updateDoc(doc(db, "jobs", editId), postPayload);
-            window.spawnPremiumToastAlert("Updated", "🚀 विज्ञापन सफलतापूर्वक अपडेट हो गया है!", "success");
+            window.spawnPremiumToastAlert("Updated", "Post node modified inside database.", "success");
             window.clearAdminEditingFormFieldsState();
         } else {
             postPayload.timestamp = Date.now();
             await addDoc(collection(db, "jobs"), postPayload);
-            window.spawnPremiumToastAlert("Live", "🚀 फ्रंटपेज पर लाइव हो चुका है!", "success");
+            window.spawnPremiumToastAlert("Live", "Post successfully broadcasted live.", "success");
             window.clearAdminEditingFormFieldsState();
         }
-    } catch(e) { window.spawnPremiumToastAlert("System Error", e.message, "error"); }
+    } catch(e) { window.spawnPremiumToastAlert("Error", e.message, "error"); }
 };
 
 window.triggerAdminPostEditSelectMode = function(id) {
@@ -231,8 +219,8 @@ window.triggerAdminPostEditSelectMode = function(id) {
     if(!post) return;
     
     document.getElementById('adminTargetEditingId').value = id;
-    document.getElementById('adminFormHeadlineLabel').innerText = "📝 Edit / Update Post Node";
-    document.getElementById('adminSubmitPrimaryActionBtn').innerText = "Save Database Updates 💾";
+    document.getElementById('adminFormHeadlineLabel').innerText = "📝 Edit Selected Broadcast Node";
+    document.getElementById('adminSubmitPrimaryActionBtn').innerText = "Commit Structural Changes 💾";
     document.getElementById('adminCancelEditNodeBtn').classList.remove('hidden');
 
     document.getElementById('aTitle').value = post.title || "";
@@ -253,7 +241,7 @@ window.triggerAdminPostEditSelectMode = function(id) {
 window.clearAdminEditingFormFieldsState = function() {
     document.getElementById('adminTargetEditingId').value = "";
     document.getElementById('adminFormHeadlineLabel').innerText = "Create Direct Live Post Node";
-    document.getElementById('adminSubmitPrimaryActionBtn').innerText = "Publish Instantly Live ⚡";
+    document.getElementById('adminSubmitPrimaryActionBtn').innerText = "Publish Content Node Live ⚡";
     document.getElementById('adminCancelEditNodeBtn').classList.add('hidden');
     window.togglePostInputWorkspaceMode("visual");
     
@@ -270,7 +258,7 @@ window.executeAddNewCategoryNode = async function() {
     try {
         await setDoc(doc(db, "dynamic_categories", name), { name, hexColor: color });
         document.getElementById('newCatName').value = "";
-        window.spawnPremiumToastAlert("Added", "नई केटेगरी सफलतापूर्वक जुड़ चुकी है!", "success");
+        window.spawnPremiumToastAlert("Category Added", "New dynamic category badge active.", "success");
     } catch(e) { alert(e.message); }
 };
 
@@ -278,28 +266,28 @@ window.executeRemoveCategoryNode = async function(id) {
     if(!confirm("Erase this category mapping node permanently?")) return;
     try {
         await deleteDoc(doc(db, "dynamic_categories", id));
-        window.spawnPremiumToastAlert("Removed", "केटेगरी सफलतापूर्वक हटा दी गई है।", "error");
+        window.spawnPremiumToastAlert("Removed", "Category destroyed safely.", "error");
     } catch(e) { alert(e.message); }
 };
 
 window.executeSetGridLayoutColumnsNode = async function(columnStyleClass) {
     try {
         await setDoc(doc(db, "admin_settings", "layout_config"), { activeGridClass: columnStyleClass });
-        window.spawnPremiumToastAlert("Layout Synced", `ग्रिड अब ${columnStyleClass} पर Set है!`, "success");
+        window.spawnPremiumToastAlert("Layout Synced", `Responsive grid columns shifted to ${columnStyleClass}!`, "success");
     } catch(e) { alert(e.message); }
 };
 
 window.approvePostItemNode = async function(id) {
     try {
         await updateDoc(doc(db, "jobs", id), { approvalStatus: "Live" });
-        window.spawnPremiumToastAlert("Approved", "विज्ञापन लाइव हो चुका है!", "success");
+        window.spawnPremiumToastAlert("Approved", "Submission published to stream hub.", "success");
     } catch(e) { alert(e.message); }
 };
 
 window.rejectPostItemNode = async function(id) {
     try {
         await deleteDoc(doc(db, "jobs", id));
-        window.spawnPremiumToastAlert("Removed", "विज्ञापन हटा दिया गया है।", "error");
+        window.spawnPremiumToastAlert("Purged", "Post erased cleanly from logs.", "error");
     } catch(e) { alert(e.message); }
 };
 
@@ -314,13 +302,19 @@ function startDatabaseListenersEngine() {
             const cat = d.data();
             selectHtml += `<option value="${cat.name}">${cat.name}</option>`;
             deleteHtml += `
-                <div class="p-2 bg-slate-50 border rounded-xl flex items-center justify-between text-xs gap-2">
-                    <span class="font-bold text-slate-700 truncate" style="color: ${cat.hexColor}">${cat.name}</span>
+                <div class="p-2.5 bg-slate-50 border rounded-xl flex items-center justify-between text-xs gap-2">
+                    <span class="font-bold text-slate-800 truncate" style="color: ${cat.hexColor}">● ${cat.name}</span>
                     <button onclick="window.executeRemoveCategoryNode('${cat.name}')" class="text-rose-600 font-bold hover:underline text-[11px]">Delete</button>
                 </div>`;
         });
         selectElement.innerHTML = selectHtml;
-        if(adminDeleteContainer) adminDeleteContainer.innerHTML = deleteHtml || `<p class="text-xs text-slate-400 text-center py-2">No categories created.</p>`;
+        if(adminDeleteContainer) adminDeleteContainer.innerHTML = deleteHtml || `<p class="text-xs text-slate-400 text-center py-2">No category rules.</p>`;
+    });
+
+    onSnapshot(collection(db, "created_pages"), (snapshot) => {
+        if(document.getElementById('statCustomPagesCount')) {
+            document.getElementById('statCustomPagesCount').innerText = snapshot.size;
+        }
     });
 
     onSnapshot(collection(db, "jobs"), (snapshot) => {
@@ -338,8 +332,8 @@ function startDatabaseListenersEngine() {
                     <div class="p-3 bg-slate-50 border rounded-xl space-y-2 text-xs text-slate-800">
                         <h4 class="font-bold text-slate-800 leading-tight">${data.title}</h4>
                         <div class="flex gap-2">
-                            <button onclick="window.approvePostItemNode('${id}')" class="bg-emerald-600 text-white px-2.5 py-1 rounded-lg font-bold text-[10px]">Approve</button>
-                            <button onclick="window.rejectPostItemNode('${id}')" class="bg-rose-600 text-white px-2.5 py-1 rounded-lg font-bold text-[10px]">Reject</button>
+                            <button onclick="window.approvePostItemNode('${id}')" class="bg-emerald-600 text-white px-3 py-1 rounded-lg font-bold text-[10px]">Approve</button>
+                            <button onclick="window.rejectPostItemNode('${id}')" class="bg-rose-600 text-white px-3 py-1 rounded-lg font-bold text-[10px]">Reject</button>
                         </div>
                     </div>`;
             } else if(data.approvalStatus === 'Live') {
@@ -347,9 +341,9 @@ function startDatabaseListenersEngine() {
                 editablePostsHTML += `
                     <div class="p-2.5 bg-slate-50 border rounded-xl flex items-center justify-between text-xs gap-2 text-slate-800">
                         <span class="font-bold text-slate-700 truncate flex-1">${data.title}</span>
-                        <div class="flex gap-2">
-                            <button onclick="window.triggerAdminPostEditSelectMode('${id}')" class="bg-indigo-600 text-white px-2 py-1 rounded-lg font-bold text-[10px]">Edit 📝</button>
-                            <button onclick="window.rejectPostItemNode('${id}')" class="text-rose-600 font-bold hover:underline text-[11px]">Erase</button>
+                        <div class="flex gap-1.5">
+                            <button onclick="window.triggerAdminPostEditSelectMode('${id}')" class="bg-indigo-600 text-white px-2 py-1 rounded-lg font-bold text-[10px]">Edit</button>
+                            <button onclick="window.rejectPostItemNode('${id}')" class="text-rose-600 font-bold hover:underline text-[11px] px-1">Erase</button>
                         </div>
                     </div>`;
             }
@@ -358,8 +352,8 @@ function startDatabaseListenersEngine() {
         if(document.getElementById('statTotalCount')) document.getElementById('statTotalCount').innerText = totalLive;
         if(document.getElementById('statPendingCount')) document.getElementById('statPendingCount').innerText = totalPending;
         
-        const qBox = document.getElementById('adminApprovalQueueTargetList'); if(qBox) qBox.innerHTML = approvalQueueHTML || `<p class="text-xs text-slate-400 text-center py-4">कोई लंबित पोस्ट नहीं है।</p>`;
-        const eBox = document.getElementById('adminLivePostsListEditableTargetStack'); if(eBox) eBox.innerHTML = editablePostsHTML || `<p class="text-xs text-slate-400 text-center py-4">कोई लाइव POST नहीं है।</p>`;
+        const qBox = document.getElementById('adminApprovalQueueTargetList'); if(qBox) qBox.innerHTML = approvalQueueHTML || `<p class="text-xs text-slate-400 text-center py-4">No pending items.</p>`;
+        const eBox = document.getElementById('adminLivePostsListEditableTargetStack'); if(eBox) eBox.innerHTML = editablePostsHTML || `<p class="text-xs text-slate-400 text-center py-4">No live feeds deployed.</p>`;
     });
 }
 
@@ -371,7 +365,6 @@ function verifyPreExistingSession() {
         const workspaceView = document.getElementById('adminConsoleWorkspace');
         workspaceView.style.setProperty('display', 'block', 'important');
         
-        document.getElementById('dashboardLogoutBtn')?.classList.remove('hidden');
         document.getElementById('adminLogoutBtn')?.classList.remove('hidden');
         startDatabaseListenersEngine();
     } else {
