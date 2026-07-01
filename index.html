@@ -35,28 +35,31 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
+    <!-- TOP HEADER (ADMIN LINK REMOVED FOR ABSOLUTE SECURITY) -->
     <header class="w-full bg-white/70 backdrop-blur-md border-b border-slate-200/60 px-4 lg:px-10 py-3.5 flex items-center justify-between shadow-sm shrink-0">
-        <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.reload()">
+        <div class="flex items-center gap-3 cursor-pointer" onclick="window.navigateToHub('front')">
             <div class="bg-indigo-600 text-white font-black p-2.5 rounded-xl text-lg shadow-md">LE</div>
             <h1 class="text-xl md:text-2xl font-black text-slate-900 tracking-tight">Lumina<span class="text-indigo-600">Edu</span></h1>
         </div>
         <div class="flex items-center gap-3">
-            <a href="user/login.html" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs md:text-sm px-5 py-2.5 rounded-xl transition-all whitespace-nowrap">Contributor Login 🚀</a>
-            <a href="admin/control.html" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs md:text-sm px-5 py-2.5 rounded-xl shadow-md transition-all whitespace-nowrap">Admin Console 🛠️</a>
+            <a href="user/login.html" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs md:text-sm px-5 py-2.5 rounded-xl shadow-md transition-all whitespace-nowrap">Contributor Login 🚀</a>
         </div>
     </header>
 
+    <!-- HUB CONTENT WRAPPER -->
     <div class="flex-1 w-full flex flex-col md:flex-row min-h-0">
         
+        <!-- SIDEBAR LEFT NAV PANEL -->
         <aside id="mainLeftSidebarNode" class="w-full md:w-64 bg-white/80 backdrop-blur-md border-r border-slate-200/60 p-5 flex flex-col justify-between shrink-0">
             <div class="space-y-6">
+                <!-- Push Subscription Box -->
                 <div class="mb-4 bg-indigo-50/80 border border-indigo-100 p-3.5 rounded-2xl space-y-2">
                     <div class="flex items-center justify-between">
                         <span class="text-xs font-black text-indigo-950 uppercase tracking-wide flex items-center gap-1.5">🔔 Push Alerts</span>
-                        <span id="pushStatusBadge" class="text-[9px] font-black px-1.5 py-0.5 rounded-md bg-slate-200 text-slate-600 uppercase">Checking</span>
+                        <span id="pushStatusBadge" class="text-[9px] font-black px-1.5 py-0.5 rounded-md bg-slate-200 text-slate-600 uppercase">Active</span>
                     </div>
                     <p class="text-[10px] font-bold text-slate-500 leading-snug">नए जॉब और अपडेट्स का तुरंत अलर्ट पाने के लिए सब्सक्राइब करें।</p>
-                    <button id="btnSubscribePushAlerts" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs py-2 rounded-xl shadow-sm transition-all">📢 Subscribe Now</button>
+                    <button class="w-full bg-indigo-600 text-white font-bold text-xs py-2 rounded-xl shadow-sm">📢 Active Subscribed</button>
                 </div>
 
                 <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-2 mb-2">Navigation Links</p>
@@ -64,6 +67,7 @@
                     <button onclick="window.setJobFilter('All')" class="w-full flex items-center gap-3 px-4 py-2.5 bg-indigo-50 text-indigo-700 font-bold text-sm rounded-xl">💼 All Updates</button>
                 </nav>
                 
+                <!-- PUBLIC SIDEBAR TOOLS ACCESSIBLE LAYER -->
                 <div class="pt-4 border-t px-2">
                     <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">🧰 Useful Tools</p>
                     <div id="publicPdfToolsListTargetStack" class="space-y-1"></div>
@@ -71,11 +75,13 @@
             </div>
         </aside>
 
+        <!-- CANVAS MAIN CENTRAL FRAME CONTAINER -->
         <div class="flex-1 flex flex-col w-full min-w-0">
             <div class="p-4 lg:p-8 max-w-[1400px] w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                 
                 <div id="coreContentLayoutViewRegion" class="lg:col-span-12 space-y-6 min-w-0 w-full">
                     
+                    <!-- VIEW 1: FRONT FEED SYSTEM -->
                     <div id="mainFeedRouterBlock" class="space-y-6">
                         <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white/40 p-4 rounded-2xl border border-white/60">
                             <div>
@@ -87,53 +93,33 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="publicCardsFeed"></div>
                     </div>
 
+                    <!-- VIEW 2: SUB PAGE POST DETAILS & DYNAMIC ADSENSE PAGES -->
                     <div id="postDetailView" class="hidden premium-glass-card p-6 lg:p-8 bg-white w-full">
                         <button onclick="window.performSinglePageRoutingView('front')" class="mb-6 inline-flex items-center gap-2 text-xs font-bold text-indigo-600 bg-indigo-50 border border-indigo-100 px-4 py-2 rounded-xl">← मुख्य पृष्ठ (Back to Home)</button>
-                        <div id="detailViewContentPayload" class="prose max-w-none"></div>
+                        <div id="detailViewContentPayload" class="prose max-w-none text-slate-800"></div>
                     </div>
 
                 </div>
-
-                <aside id="subPageRightSidebarNode" class="hidden lg:col-span-4 space-y-4 w-full">
-                    <div class="premium-glass-card p-5 space-y-4 bg-white/90 border-slate-200">
-                        <div class="border-b pb-2"><h4 class="text-xs font-black uppercase text-slate-800 tracking-wider">🔎 Search & Filters Sidebar</h4></div>
-                        <div class="relative">
-                            <input type="text" id="sidebarLiveSearchBox" oninput="window.executeSidebarLiveSearchFilters()" class="w-full bg-slate-50 border text-xs p-2.5 pl-8 rounded-xl outline-none font-semibold text-slate-800" placeholder="Search keywords...">
-                            <span class="absolute left-2.5 top-3 text-slate-400 text-xs">🔍</span>
-                        </div>
-                        <div class="pt-2">
-                            <p class="text-[11px] font-bold text-slate-400 mb-2 uppercase">⚡ Top Live Advertisements</p>
-                            <div id="rightSidebarLiveCollectionStack" class="space-y-2"></div>
-                        </div>
-                    </div>
-                </aside>
-
             </div>
         </div>
     </div>
 
-    <footer class="bg-slate-900 text-slate-400 border-t border-slate-800 shrink-0">
-        <div class="max-w-7xl mx-auto px-6 py-8 grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
-            <div class="space-y-3">
-                <div class="flex items-center gap-2">
-                    <div class="bg-indigo-600 text-white font-black p-1.5 rounded-lg text-sm">LE</div>
-                    <span class="text-lg font-bold text-white">Lumina<span class="text-indigo-500">Edu</span></span>
-                </div>
-                <p class="text-xs text-slate-400 leading-relaxed">Bharat ka sabse surakshit aur tezz educational update portal. Privacy aur Security hamari pehli prathmikta hai.</p>
-            </div>
-            <div class="space-y-2">
-                <h4 class="text-white font-bold text-xs uppercase tracking-wider text-indigo-400">Useful Links</h4>
-                <ul class="space-y-1.5 text-xs">
-                    <li><a href="#" class="hover:text-white transition-colors">Latest Jobs</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors">Admit Cards</a></li>
-                    <li><a href="user/login.html" class="hover:text-white transition-colors">Contributor Desk</a></li>
-                </ul>
-            </div>
-            <div class="space-y-2">
-                <h4 class="text-white font-bold text-xs uppercase tracking-wider text-indigo-400">Security Shield</h4>
-                <p class="text-xs text-slate-500">Protected by Firebase Encrypted multi-role gateway routing framework engine node active.</p>
-                <p class="text-[11px] text-slate-500 mt-2">© 2026 LuminaEdu Network. All Rights Reserved.</p>
-            </div>
+    <!-- 🌟 ADJUSTED SLIM COMPACT FOOTER WITH ADSENSE COMPLIANT PAGES -->
+    <footer class="w-full bg-slate-900 border-t border-slate-800 px-4 lg:px-10 py-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400 shrink-0">
+        <div class="flex items-center gap-2">
+            <div class="bg-indigo-600 text-white font-black px-1.5 py-0.5 rounded text-[10px]">LE</div>
+            <p>© 2026 LuminaEdu Systems Network. All Rights Reserved.</p>
+        </div>
+        
+        <!-- AdSense Required Dynamic Core Page Node Routers -->
+        <div class="flex flex-wrap items-center gap-x-4 gap-y-1 font-semibold text-slate-300">
+            <button onclick="window.triggerRenderAdSensePolicyPage('privacy-policy')" class="hover:text-white transition-colors">Privacy Policy</button>
+            <span class="text-slate-700">|</span>
+            <button onclick="window.triggerRenderAdSensePolicyPage('terms-of-service')" class="hover:text-white transition-colors">Terms of Service</button>
+            <span class="text-slate-700">|</span>
+            <button onclick="window.triggerRenderAdSensePolicyPage('disclaimer')" class="hover:text-white transition-colors">Disclaimer</button>
+            <span class="text-slate-700">|</span>
+            <button onclick="window.triggerRenderAdSensePolicyPage('contact-us')" class="hover:text-white transition-colors">Contact Us</button>
         </div>
     </footer>
 
