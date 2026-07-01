@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LuminaEdu | Education Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; }</style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+    <nav class="bg-white border-b border-slate-200 px-6 py-4 flex justify-between items-center shadow-sm">
+        <div class="flex items-center gap-2 cursor-pointer" onclick="window.location.reload()">
+            <div class="bg-indigo-600 text-white font-black p-2 rounded-xl text-lg">LE</div>
+            <span class="text-xl font-bold text-slate-900">Lumina<span class="text-indigo-600">Edu</span></span>
+        </div>
+        <div class="flex items-center gap-3">
+            <a href="user/login.html" class="text-xs font-bold text-slate-700 bg-slate-100 px-4 py-2 rounded-xl hover:bg-slate-200">Contributor Login</a>
+            <a href="admin/control.html" class="text-xs font-bold text-white bg-indigo-600 px-4 py-2 rounded-xl hover:bg-indigo-700 shadow-md">Admin Area</a>
+        </div>
+    </nav>
+
+    <main class="flex-1 max-w-7xl w-full mx-auto p-6">
+        <div class="text-center my-12 space-y-3">
+            <h1 class="text-3xl md:text-5xl font-black text-slate-900 tracking-tight">Latest Educational Updates Matrix</h1>
+            <p class="text-sm text-slate-500 font-medium">Sarkari Jobs, Admit Cards, aur Results ki sateek jaankari.</p>
+        </div>
+
+        <div id="mainJobsGridContainer" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <p class="text-center text-slate-400 text-sm col-span-3">Loading latest feeds...</p>
+        </div>
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-6 py-8 grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
+            <div class="space-y-3">
+                <div class="flex items-center gap-2">
+                    <div class="bg-indigo-600 text-white font-black p-1.5 rounded-lg text-sm">LE</div>
+                    <span class="text-lg font-bold text-white">Lumina<span class="text-indigo-500">Edu</span></span>
+                </div>
+                <p class="text-xs text-slate-400 leading-relaxed">Bharat ka sabse surakshit aur tezz educational update portal. Privacy aur Security hamari pehli prathmikta hai.</p>
+            </div>
+            <div class="space-y-2">
+                <h4 class="text-white font-bold text-xs uppercase tracking-wider text-indigo-400">Useful Links</h4>
+                <ul class="space-y-1.5 text-xs">
+                    <li><a href="#" class="hover:text-white transition-colors">Latest Jobs</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Admit Cards</a></li>
+                    <li><a href="user/login.html" class="hover:text-white transition-colors">Contributor Desk</a></li>
+                </ul>
+            </div>
+            <div class="space-y-2">
+                <h4 class="text-white font-bold text-xs uppercase tracking-wider text-indigo-400">Security Guard</h4>
+                <p class="text-xs text-slate-500">Protected by Firebase Encrypted multi-role gateway routing framework node active.</p>
+                <p class="text-[11px] text-slate-500 mt-2">© 2026 LuminaEdu Network. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyDEXmjIN8w2s2uXk0FTzC7ri4HhLetzV4E",
+          authDomain: "luminaedu-ai786.firebaseapp.com",
+          projectId: "luminaedu-ai786",
+          storageBucket: "luminaedu-ai786.firebasestorage.app",
+          messagingSenderId: "35041307389",
+          appId: "1:35041307389:web:846f981017df7ad1382c94"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        onSnapshot(collection(db, "jobs"), (snapshot) => {
+            const grid = document.getElementById('mainJobsGridContainer');
+            let html = "";
+            snapshot.forEach(d => {
+                const data = d.data();
+                if(data.approvalStatus === "Live") {
+                    html += `
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between gap-4">
+                            <div>
+                                <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 bg-indigo-50 text-indigo-600 rounded-md border border-indigo-100">${data.type || 'Job'}</span>
+                                <h3 class="text-base font-bold text-slate-900 mt-2.5 leading-snug">${data.title}</h3>
+                                <p class="text-xs text-slate-400 font-medium mt-1">Authority: ${data.authority || 'N/A'}</p>
+                            </div>
+                            <div class="flex items-center justify-between border-t pt-3 text-xs">
+                                <span class="text-rose-600 font-bold">Last Date: ${data.lastDate || 'N/A'}</span>
+                                <button class="text-indigo-600 font-bold hover:underline">View Details →</button>
+                            </div>
+                        </div>`;
+                }
+            });
+            grid.innerHTML = html || `<p class="text-center text-slate-400 text-sm col-span-3">No active notifications found.</p>`;
+        });
+    </script>
+</body>
+</html>
